@@ -12,6 +12,7 @@ import ScorecardPage from '@/components/scorecard-page';
 import AdminOverview from '@/components/admin-overview';
 import AdminClientDetail from '@/components/admin-client-detail';
 import AdminOperations from '@/components/admin-operations';
+import AdminDocs from '@/components/admin-docs';
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
@@ -66,6 +67,9 @@ export default function Home() {
       }
       if (activePage === 'admin-operations') {
         return <AdminOperations />;
+      }
+      if (activePage === 'admin-docs') {
+        return <AdminDocs />;
       }
       return <AdminOverview onViewClient={handleViewClient} />;
     }
