@@ -16,11 +16,11 @@ interface AlertsPageProps {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: { opacity: 0, y: 12 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.04, duration: 0.25 },
+    transition: { delay: i * 0.04, duration: 0.3 },
   }),
 };
 
@@ -56,7 +56,7 @@ export default function AlertsPage({ onViewLead }: AlertsPageProps) {
       animate="visible"
       variants={cardVariants}
       onClick={() => onViewLead(a.leadId)}
-      className={`glass w-full p-4 md:p-5 text-left transition-all hover:bg-white/[0.04] ${
+      className={`glass w-full p-4 md:p-5 text-left interactive-card ${
         !a.read ? 'border-l-2 border-l-blue-500' : ''
       }`}
       whileTap={{ scale: 0.995 }}

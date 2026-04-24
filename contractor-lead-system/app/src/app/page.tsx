@@ -1,49 +1,93 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import SignIn from '@/components/sign-in';
-import DashboardShell from '@/components/dashboard-shell';
+import DashboardShell, { type AppMode } from '@/components/dashboard-shell';
 import OverviewPage from '@/components/overview-page';
 import LeadsPage from '@/components/leads-page';
 import LeadDetail from '@/components/lead-detail';
 import AlertsPage from '@/components/alerts-page';
 import ScorecardPage from '@/components/scorecard-page';
-
-type Page = 'overview' | 'leads' | 'alerts' | 'scorecard';
+import AdminOverview from '@/components/admin-overview';
+import AdminClientDetail from '@/components/admin-client-detail';
+import AdminOperations from '@/components/admin-operations';
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
-  const [activePage, setActivePage] = useState<Page>('overview');
+  const [mode, setMode] = useState<AppMode>('client');
+  const [activePage, setActivePage] = useState<string>('overview');
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
 
   if (!isAuthenticated) {
     return <SignIn />;
   }
+
+  const handleModeChange = (newMode: AppMode) => {
+    setMode(newMode);
+    setSelectedLeadId(null);
+    setSelectedClientId(null);
+    if (newMode === 'admin') {
+      setActivePage('admin-overview');
+    } else {
+      setActivePage('overview');
+    }
+  };
 
   const handleViewLead = (id: string) => {
     setSelectedLeadId(id);
     setActivePage('leads');
   };
 
-  const handleBackFromDetail = () => {
+  const handleBackFromLead = () => {
     setSelectedLeadId(null);
   };
 
-  const handleNavigate = (page: Page) => {
+  const handleViewClient = (id: string) => {
+    setSelectedClientId(id);
+  };
+
+  const handleBackFromClient = () => {
+    setSelectedClientId(null);
+  };
+
+  const handleNavigate = (page: string) => {
     setActivePage(page);
     setSelectedLeadId(null);
+    setSelectedClientId(null);
+  };
+
+  const renderContent = () => {
+    // Admin mode
+    if (mode === 'admin') {
+      if (selectedClientId) {
+        return <AdminClientDetail clientId={selectedClientId} onBack={handleBackFromClient} />;
+      }
+      if (activePage === 'admin-operations') {
+        return <AdminOperations />;
+      }
+      return <AdminOverview onViewClient={handleViewClient} />;
+    }
+
+    // Client mode
+    if (activePage === 'leads' && selectedLeadId) {
+      return <LeadDetail leadId={selectedLeadId} onBack={handleBackFromLead} />;
+    }
+    if (activePage === 'leads') return <LeadsPage onViewLead={handleViewLead} />;
+    if (activePage === 'alerts') return <AlertsPage onViewLead={handleViewLead} />;
+    if (activePage === 'scorecard') return <ScorecardPage />;
+    return <OverviewPage onViewLead={handleViewLead} />;
   };
 
   return (
-    <DashboardShell activePage={activePage} onNavigate={handleNavigate}>
-      {activePage === 'overview' && <OverviewPage onViewLead={handleViewLead} />}
-      {activePage === 'leads' && !selectedLeadId && <LeadsPage onViewLead={handleViewLead} />}
-      {activePage === 'leads' && selectedLeadId && (
-        <LeadDetail leadId={selectedLeadId} onBack={handleBackFromDetail} />
-      )}
-      {activePage === 'alerts' && <AlertsPage onViewLead={handleViewLead} />}
-      {activePage === 'scorecard' && <ScorecardPage />}
+    <DashboardShell
+      mode={mode}
+      onModeChange={handleModeChange}
+      activePage={activePage}
+      onNavigate={handleNavigate}
+    >
+      {renderContent()}
     </DashboardShell>
   );
 }

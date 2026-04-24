@@ -25,11 +25,11 @@ import {
 } from '@/lib/data';
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 12 },
+  hidden: { opacity: 0, y: 14 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.05, duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as const },
+    transition: { delay: i * 0.05, duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] as const },
   }),
 };
 
@@ -39,12 +39,12 @@ interface OverviewPageProps {
 
 export default function OverviewPage({ onViewLead }: OverviewPageProps) {
   const metrics = [
-    { label: 'Total Leads', value: dashboardMetrics.totalLeads, icon: Users, color: 'text-blue-400' },
-    { label: 'Missed Calls', value: dashboardMetrics.missedCalls, icon: PhoneMissed, color: 'text-red-400' },
-    { label: 'Recovered', value: dashboardMetrics.recoveredLeads, icon: PhoneForwarded, color: 'text-cyan-400' },
-    { label: 'Qualified', value: dashboardMetrics.qualifiedLeads, icon: UserCheck, color: 'text-emerald-400' },
-    { label: 'Estimates Booked', value: dashboardMetrics.estimatesBooked, icon: CalendarCheck, color: 'text-amber-400' },
-    { label: 'Avg Response', value: dashboardMetrics.avgResponseTime, icon: Clock, color: 'text-purple-400' },
+    { label: 'Total Leads', value: dashboardMetrics.totalLeads, icon: Users, color: 'text-blue-400', glow: 'rgba(59, 130, 246, 0.08)' },
+    { label: 'Missed Calls', value: dashboardMetrics.missedCalls, icon: PhoneMissed, color: 'text-red-400', glow: 'rgba(248, 113, 113, 0.08)' },
+    { label: 'Recovered', value: dashboardMetrics.recoveredLeads, icon: PhoneForwarded, color: 'text-cyan-400', glow: 'rgba(34, 211, 238, 0.08)' },
+    { label: 'Qualified', value: dashboardMetrics.qualifiedLeads, icon: UserCheck, color: 'text-emerald-400', glow: 'rgba(52, 211, 153, 0.08)' },
+    { label: 'Estimates Booked', value: dashboardMetrics.estimatesBooked, icon: CalendarCheck, color: 'text-amber-400', glow: 'rgba(251, 191, 36, 0.08)' },
+    { label: 'Avg Response', value: dashboardMetrics.avgResponseTime, icon: Clock, color: 'text-purple-400', glow: 'rgba(139, 92, 246, 0.08)' },
   ];
 
   const hotLeads = leads
@@ -79,7 +79,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
         </div>
       </div>
 
-      {/* Metric cards */}
+      {/* Metric cards — enhanced with glow and deeper glass */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {metrics.map((m, i) => {
           const Icon = m.icon;
@@ -90,11 +90,12 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
               initial="hidden"
               animate="visible"
               variants={cardVariants}
-              className="glass p-4 flex flex-col gap-2"
+              className="glass p-4 flex flex-col gap-2 interactive-card"
+              style={{ boxShadow: `0 0 24px ${m.glow}, 0 2px 8px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.15)` }}
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs text-[#64748b] font-medium">{m.label}</span>
-                <Icon className={`w-4 h-4 ${m.color} opacity-60`} />
+                <Icon className={`w-4 h-4 ${m.color} opacity-70`} />
               </div>
               <span className="text-2xl font-semibold metric-value">{m.value}</span>
             </motion.div>
@@ -123,7 +124,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
                   <span className="text-xs text-[#94a3b8]">{step.label}</span>
                   <span className="text-sm font-semibold metric-value">{step.value}</span>
                 </div>
-                <div className="h-2 bg-white/[0.04] rounded-full overflow-hidden">
+                <div className="h-2.5 bg-white/[0.04] rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${step.pct}%` }}
@@ -133,6 +134,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
                       background: `linear-gradient(90deg,
                         ${i === 0 ? '#3b82f6' : i === 1 ? '#22d3ee' : i === 2 ? '#34d399' : '#fbbf24'},
                         ${i === 0 ? '#60a5fa' : i === 1 ? '#67e8f9' : i === 2 ? '#6ee7b7' : '#fcd34d'})`,
+                      boxShadow: `0 0 8px ${i === 0 ? 'rgba(59,130,246,0.3)' : i === 1 ? 'rgba(34,211,238,0.3)' : i === 2 ? 'rgba(52,211,153,0.3)' : 'rgba(251,191,36,0.3)'}`,
                     }}
                   />
                 </div>
@@ -162,14 +164,14 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
               {Math.round((recoveredCount / missedCount) * 100)}% recovery rate
             </span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {leads.filter(l => l.recovered).slice(0, 4).map(l => (
               <button
                 key={l.id}
                 onClick={() => onViewLead(l.id)}
-                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-white/[0.03] transition-colors text-left"
+                className="w-full flex items-center justify-between p-2.5 rounded-xl interactive-row text-left"
               >
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-2.5 min-w-0">
                   <PhoneForwarded className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
                   <span className="text-sm truncate">{l.name}</span>
                 </div>
@@ -196,7 +198,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
               <button
                 key={l.id}
                 onClick={() => onViewLead(l.id)}
-                className="w-full glass-subtle p-3 flex flex-col gap-1.5 text-left hover:bg-white/[0.04] transition-colors"
+                className="w-full glass-subtle p-3 flex flex-col gap-1.5 text-left interactive-card"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{l.name}</span>
@@ -228,7 +230,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
             <Bell className="w-4 h-4 text-amber-400" />
             Recent Activity
           </h2>
-          <div className="space-y-1 max-h-[320px] overflow-y-auto">
+          <div className="space-y-0.5 max-h-[320px] overflow-y-auto">
             {recentActivity.slice(0, 8).map((evt) => {
               const iconMap = {
                 missed_call_recovered: <PhoneForwarded className="w-3.5 h-3.5 text-cyan-400" />,
@@ -240,7 +242,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
               return (
                 <div
                   key={evt.id}
-                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/[0.02] transition-colors"
+                  className="flex items-start gap-3 p-2.5 rounded-xl interactive-row"
                 >
                   <div className="mt-0.5 flex-shrink-0">
                     {iconMap[evt.type]}
@@ -267,16 +269,16 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
             <MessageSquare className="w-4 h-4 text-blue-400" />
             Today&apos;s Conversations
           </h2>
-          <div className="space-y-2 max-h-[320px] overflow-y-auto">
+          <div className="space-y-1.5 max-h-[320px] overflow-y-auto">
             {conversations.map((l) => {
               const lastMsg = l.conversation[l.conversation.length - 1];
               return (
                 <button
                   key={l.id}
                   onClick={() => onViewLead(l.id)}
-                  className="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-white/[0.03] transition-colors text-left"
+                  className="w-full flex items-start gap-3 p-3 rounded-xl interactive-row text-left"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center flex-shrink-0 text-sm font-medium text-[#94a3b8]">
+                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center flex-shrink-0 text-sm font-medium text-[#94a3b8] border border-white/[0.06]">
                     {l.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div className="min-w-0 flex-1">

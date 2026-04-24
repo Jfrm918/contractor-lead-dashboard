@@ -18,9 +18,11 @@ export default function SignIn() {
 
   return (
     <div className="min-h-dvh flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Tulsa background — sign-in variant */}
+      <div className="tulsa-bg" />
       <div className="ambient-glow" />
 
-      {/* Extra ambient elements for the sign-in page */}
+      {/* Extra ambient elements */}
       <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-blue-500/[0.03] rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-cyan-500/[0.03] rounded-full blur-3xl" />
 
@@ -28,7 +30,7 @@ export default function SignIn() {
         initial={{ opacity: 0, y: 16, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="glass w-full max-w-md p-8 md:p-10 relative z-10"
+        className="glass-elevated w-full max-w-md p-8 md:p-10 relative z-10"
       >
         {/* Logo / Brand */}
         <div className="flex flex-col items-center mb-8">
@@ -91,7 +93,7 @@ export default function SignIn() {
             <div className="w-full border-t border-white/[0.06]" />
           </div>
           <div className="relative flex justify-center">
-            <span className="px-3 text-xs text-[#64748b] bg-[#0f1219]/80">or</span>
+            <span className="px-3 text-xs text-[#64748b] bg-[#0a0d14]/80">or</span>
           </div>
         </div>
 

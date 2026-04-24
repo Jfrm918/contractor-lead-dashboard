@@ -24,7 +24,7 @@ import {
 } from 'recharts';
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: { opacity: 0, y: 12 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
@@ -38,12 +38,12 @@ export default function ScorecardPage() {
   const sc = scorecardData;
 
   const topMetrics = [
-    { label: 'Total Inbound', value: sc.totalInbound, icon: TrendingUp, color: 'text-blue-400' },
-    { label: 'Missed Calls', value: sc.missedCalls, icon: Phone, color: 'text-red-400' },
-    { label: 'Recovered', value: sc.recoveredMissedCalls, icon: PhoneForwarded, color: 'text-cyan-400' },
-    { label: 'Qualified', value: sc.qualifiedLeads, icon: UserCheck, color: 'text-emerald-400' },
-    { label: 'Booked', value: sc.bookedEstimates, icon: CalendarCheck, color: 'text-amber-400' },
-    { label: 'Avg Response', value: sc.avgResponseTime, icon: Clock, color: 'text-purple-400' },
+    { label: 'Total Inbound', value: sc.totalInbound, icon: TrendingUp, color: 'text-blue-400', glow: 'rgba(59, 130, 246, 0.08)' },
+    { label: 'Missed Calls', value: sc.missedCalls, icon: Phone, color: 'text-red-400', glow: 'rgba(248, 113, 113, 0.08)' },
+    { label: 'Recovered', value: sc.recoveredMissedCalls, icon: PhoneForwarded, color: 'text-cyan-400', glow: 'rgba(34, 211, 238, 0.08)' },
+    { label: 'Qualified', value: sc.qualifiedLeads, icon: UserCheck, color: 'text-emerald-400', glow: 'rgba(52, 211, 153, 0.08)' },
+    { label: 'Booked', value: sc.bookedEstimates, icon: CalendarCheck, color: 'text-amber-400', glow: 'rgba(251, 191, 36, 0.08)' },
+    { label: 'Avg Response', value: sc.avgResponseTime, icon: Clock, color: 'text-purple-400', glow: 'rgba(139, 92, 246, 0.08)' },
   ];
 
   return (
@@ -72,11 +72,12 @@ export default function ScorecardPage() {
               initial="hidden"
               animate="visible"
               variants={cardVariants}
-              className="glass p-4 flex flex-col gap-2"
+              className="glass p-4 flex flex-col gap-2 interactive-card"
+              style={{ boxShadow: `0 0 24px ${m.glow}, 0 2px 8px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.15)` }}
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs text-[#64748b] font-medium">{m.label}</span>
-                <Icon className={`w-4 h-4 ${m.color} opacity-60`} />
+                <Icon className={`w-4 h-4 ${m.color} opacity-70`} />
               </div>
               <span className="text-2xl font-semibold metric-value">{m.value}</span>
             </motion.div>
@@ -116,9 +117,10 @@ export default function ScorecardPage() {
                   contentStyle={{
                     background: 'rgba(22, 27, 38, 0.95)',
                     border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '12px',
+                    borderRadius: '14px',
                     color: '#f1f5f9',
                     fontSize: '13px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                   }}
                 />
                 <Bar dataKey="leads" radius={[6, 6, 0, 0]} maxBarSize={40}>
@@ -175,9 +177,10 @@ export default function ScorecardPage() {
                   contentStyle={{
                     background: 'rgba(22, 27, 38, 0.95)',
                     border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '12px',
+                    borderRadius: '14px',
                     color: '#f1f5f9',
                     fontSize: '13px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                   }}
                 />
                 <Bar dataKey="leads" fill="#3b82f6" fillOpacity={0.6} radius={[6, 6, 0, 0]} maxBarSize={36} />
@@ -255,7 +258,7 @@ export default function ScorecardPage() {
             </thead>
             <tbody>
               {sc.sourceBreakdown.map((s) => (
-                <tr key={s.source} className="border-b border-white/[0.03]">
+                <tr key={s.source} className="border-b border-white/[0.03] interactive-row">
                   <td className="px-5 py-3 font-medium">{s.source}</td>
                   <td className="px-5 py-3 text-right text-[#94a3b8] metric-value">{s.leads}</td>
                   <td className="px-5 py-3 text-right text-[#94a3b8] metric-value">{s.booked}</td>

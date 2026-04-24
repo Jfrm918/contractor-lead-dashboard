@@ -58,7 +58,7 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
       {/* Search and filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748b]" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748b]" />
           <input
             type="text"
             value={search}
@@ -73,7 +73,7 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
         >
           <Filter className="w-4 h-4" />
           Filters
-          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
         </button>
       </div>
 
@@ -84,7 +84,7 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
             <div className="flex flex-wrap gap-3 pb-2">
@@ -151,11 +151,11 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
                 <tr
                   key={l.id}
                   onClick={() => onViewLead(l.id)}
-                  className="border-b border-white/[0.03] hover:bg-white/[0.03] transition-colors cursor-pointer"
+                  className="border-b border-white/[0.03] interactive-row"
                 >
                   <td className="px-4 py-3.5">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center text-xs font-medium text-[#94a3b8]">
+                      <div className="w-8 h-8 rounded-lg bg-white/[0.06] border border-white/[0.06] flex items-center justify-center text-xs font-medium text-[#94a3b8]">
                         {l.name.split(' ').map(n => n[0]).join('')}
                       </div>
                       <div>
@@ -190,12 +190,12 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
           <motion.button
             key={l.id}
             onClick={() => onViewLead(l.id)}
-            className="glass w-full p-4 text-left"
+            className="glass w-full p-4 text-left interactive-card"
             whileTap={{ scale: 0.99 }}
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center text-xs font-medium text-[#94a3b8]">
+                <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/[0.06] flex items-center justify-center text-xs font-medium text-[#94a3b8]">
                   {l.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div>

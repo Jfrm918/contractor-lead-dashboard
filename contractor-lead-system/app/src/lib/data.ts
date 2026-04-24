@@ -660,6 +660,287 @@ export const scorecardData = {
   ],
 };
 
+// ---- ADMIN / MULTI-CLIENT DATA ----
+
+export type ClientStatus = 'Active' | 'Trial' | 'Paused' | 'Onboarding';
+export type PlanTier = 'Starter' | 'Growth' | 'Pro';
+export type WorkflowHealth = 'Healthy' | 'Needs Attention' | 'Critical';
+export type OnboardingStep = 'Phone Setup' | 'Script Approved' | 'Workflow Live' | 'First Lead' | 'Scorecard Sent';
+
+export interface ClientAccount {
+  id: string;
+  companyName: string;
+  ownerName: string;
+  trade: Trade;
+  city: string;
+  serviceArea: string;
+  status: ClientStatus;
+  plan: PlanTier;
+  workflowHealth: WorkflowHealth;
+  assignedNumber: string;
+  monthlyPrice: number;
+  onboardingSteps: { step: OnboardingStep; completed: boolean; completedDate?: string }[];
+  totalLeads: number;
+  recoveredLeads: number;
+  bookedEstimates: number;
+  openTasks: number;
+  lastActivity: string;
+  recentEvents: { description: string; timestamp: string }[];
+  openIssues: string[];
+  scriptNotes: string;
+}
+
+export interface AdminMetrics {
+  totalClients: number;
+  activeClients: number;
+  trialClients: number;
+  pausedClients: number;
+  onboardingClients: number;
+  totalLeadsAllClients: number;
+  recoveredLeadsAllClients: number;
+  bookedEstimatesAllClients: number;
+  workflowsNeedingAttention: number;
+  openSupportTasks: number;
+}
+
+export interface SupportTask {
+  id: string;
+  clientId: string;
+  clientName: string;
+  summary: string;
+  priority: 'High' | 'Medium' | 'Low';
+  status: 'Open' | 'In Progress' | 'Resolved';
+  createdAt: string;
+}
+
+export interface OperatorAction {
+  id: string;
+  action: string;
+  clientName: string;
+  timestamp: string;
+}
+
+export const clientAccounts: ClientAccount[] = [
+  {
+    id: 'client-001',
+    companyName: 'Tulsa Peak HVAC',
+    ownerName: 'Marcus Bell',
+    trade: 'HVAC',
+    city: 'Tulsa, OK',
+    serviceArea: 'Tulsa Metro',
+    status: 'Active',
+    plan: 'Pro',
+    workflowHealth: 'Healthy',
+    assignedNumber: '(918) 555-0100',
+    monthlyPrice: 799,
+    onboardingSteps: [
+      { step: 'Phone Setup', completed: true, completedDate: '2026-03-01' },
+      { step: 'Script Approved', completed: true, completedDate: '2026-03-03' },
+      { step: 'Workflow Live', completed: true, completedDate: '2026-03-05' },
+      { step: 'First Lead', completed: true, completedDate: '2026-03-06' },
+      { step: 'Scorecard Sent', completed: true, completedDate: '2026-03-31' },
+    ],
+    totalLeads: 62,
+    recoveredLeads: 28,
+    bookedEstimates: 19,
+    openTasks: 0,
+    lastActivity: '2026-04-24T10:15:00',
+    recentEvents: [
+      { description: 'Scorecard delivered for April week 3', timestamp: '2026-04-21T09:00:00' },
+      { description: 'Lead recovered — AC replacement urgent', timestamp: '2026-04-24T08:16:00' },
+      { description: 'Booking confirmed — duct cleaning', timestamp: '2026-04-23T14:30:00' },
+    ],
+    openIssues: [],
+    scriptNotes: 'Approved script v3 — focuses on emergency same-day dispatch and senior-friendly language.',
+  },
+  {
+    id: 'client-002',
+    companyName: 'Red Fork Roofing',
+    ownerName: 'Travis Dunn',
+    trade: 'Roofing',
+    city: 'Broken Arrow, OK',
+    serviceArea: 'Tulsa County + Wagoner County',
+    status: 'Active',
+    plan: 'Growth',
+    workflowHealth: 'Needs Attention',
+    assignedNumber: '(918) 555-0200',
+    monthlyPrice: 499,
+    onboardingSteps: [
+      { step: 'Phone Setup', completed: true, completedDate: '2026-03-10' },
+      { step: 'Script Approved', completed: true, completedDate: '2026-03-12' },
+      { step: 'Workflow Live', completed: true, completedDate: '2026-03-14' },
+      { step: 'First Lead', completed: true, completedDate: '2026-03-15' },
+      { step: 'Scorecard Sent', completed: true, completedDate: '2026-04-01' },
+    ],
+    totalLeads: 38,
+    recoveredLeads: 15,
+    bookedEstimates: 11,
+    openTasks: 2,
+    lastActivity: '2026-04-24T09:45:00',
+    recentEvents: [
+      { description: 'Missed call — storm damage lead not recovered', timestamp: '2026-04-24T09:45:00' },
+      { description: 'Follow-up workflow delayed — queue backup', timestamp: '2026-04-23T16:00:00' },
+      { description: 'Lead qualified — full roof replacement with insurance', timestamp: '2026-04-23T09:13:00' },
+    ],
+    openIssues: ['Follow-up SMS delay (avg 4min vs target 1min)', 'Storm surge queue needs capacity increase'],
+    scriptNotes: 'Script v2 — insurance claim handling added after April storm season feedback.',
+  },
+  {
+    id: 'client-003',
+    companyName: 'Green Country Plumbing',
+    ownerName: 'Nina Vasquez',
+    trade: 'Plumbing',
+    city: 'Owasso, OK',
+    serviceArea: 'North Tulsa Metro',
+    status: 'Active',
+    plan: 'Pro',
+    workflowHealth: 'Healthy',
+    assignedNumber: '(918) 555-0300',
+    monthlyPrice: 799,
+    onboardingSteps: [
+      { step: 'Phone Setup', completed: true, completedDate: '2026-02-15' },
+      { step: 'Script Approved', completed: true, completedDate: '2026-02-17' },
+      { step: 'Workflow Live', completed: true, completedDate: '2026-02-19' },
+      { step: 'First Lead', completed: true, completedDate: '2026-02-20' },
+      { step: 'Scorecard Sent', completed: true, completedDate: '2026-03-31' },
+    ],
+    totalLeads: 71,
+    recoveredLeads: 34,
+    bookedEstimates: 22,
+    openTasks: 1,
+    lastActivity: '2026-04-24T11:15:00',
+    recentEvents: [
+      { description: 'Lead recovered — slab leak emergency', timestamp: '2026-04-24T09:46:00' },
+      { description: 'Booking confirmed — water heater repair', timestamp: '2026-04-24T07:42:00' },
+      { description: 'Scorecard delivered for April week 3', timestamp: '2026-04-21T09:00:00' },
+    ],
+    openIssues: ['Owner requested bilingual script option — pending approval'],
+    scriptNotes: 'Script v4 — emergency plumbing focus with slab leak and water heater specialty paths.',
+  },
+  {
+    id: 'client-004',
+    companyName: 'Route 66 Electric',
+    ownerName: 'Derek Hale',
+    trade: 'Electrical',
+    city: 'Sapulpa, OK',
+    serviceArea: 'West Tulsa + Creek County',
+    status: 'Trial',
+    plan: 'Starter',
+    workflowHealth: 'Healthy',
+    assignedNumber: '(918) 555-0400',
+    monthlyPrice: 299,
+    onboardingSteps: [
+      { step: 'Phone Setup', completed: true, completedDate: '2026-04-15' },
+      { step: 'Script Approved', completed: true, completedDate: '2026-04-17' },
+      { step: 'Workflow Live', completed: true, completedDate: '2026-04-18' },
+      { step: 'First Lead', completed: true, completedDate: '2026-04-19' },
+      { step: 'Scorecard Sent', completed: false },
+    ],
+    totalLeads: 9,
+    recoveredLeads: 4,
+    bookedEstimates: 2,
+    openTasks: 1,
+    lastActivity: '2026-04-24T10:55:00',
+    recentEvents: [
+      { description: 'Booking requested — EV charger installation', timestamp: '2026-04-24T10:55:00' },
+      { description: 'Lead qualified — whole-home rewire', timestamp: '2026-04-22T08:49:00' },
+    ],
+    openIssues: ['First scorecard due end of month'],
+    scriptNotes: 'Script v1 — general electrical with EV charger and panel upgrade paths. Trial period ends May 15.',
+  },
+  {
+    id: 'client-005',
+    companyName: 'Apex Insulation Solutions',
+    ownerName: 'Carla Jennings',
+    trade: 'Insulation',
+    city: 'Sand Springs, OK',
+    serviceArea: 'Greater Tulsa',
+    status: 'Onboarding',
+    plan: 'Growth',
+    workflowHealth: 'Needs Attention',
+    assignedNumber: '(918) 555-0500',
+    monthlyPrice: 499,
+    onboardingSteps: [
+      { step: 'Phone Setup', completed: true, completedDate: '2026-04-20' },
+      { step: 'Script Approved', completed: false },
+      { step: 'Workflow Live', completed: false },
+      { step: 'First Lead', completed: false },
+      { step: 'Scorecard Sent', completed: false },
+    ],
+    totalLeads: 0,
+    recoveredLeads: 0,
+    bookedEstimates: 0,
+    openTasks: 3,
+    lastActivity: '2026-04-23T11:00:00',
+    recentEvents: [
+      { description: 'Phone number assigned and tested', timestamp: '2026-04-20T14:00:00' },
+      { description: 'Onboarding call completed with Carla', timestamp: '2026-04-19T10:00:00' },
+    ],
+    openIssues: ['Script draft pending owner review', 'Workflow config not started', 'Need service area zip codes confirmed'],
+    scriptNotes: 'Draft v1 pending — spray foam and attic insulation focus. Waiting on Carla to approve language.',
+  },
+];
+
+export const adminMetrics: AdminMetrics = {
+  totalClients: 5,
+  activeClients: 3,
+  trialClients: 1,
+  pausedClients: 0,
+  onboardingClients: 1,
+  totalLeadsAllClients: 180,
+  recoveredLeadsAllClients: 81,
+  bookedEstimatesAllClients: 54,
+  workflowsNeedingAttention: 2,
+  openSupportTasks: 4,
+};
+
+export const supportTasks: SupportTask[] = [
+  { id: 'task-001', clientId: 'client-002', clientName: 'Red Fork Roofing', summary: 'Follow-up SMS delay — avg 4min, needs queue tuning', priority: 'High', status: 'Open', createdAt: '2026-04-23T16:00:00' },
+  { id: 'task-002', clientId: 'client-005', clientName: 'Apex Insulation Solutions', summary: 'Script draft needs review — waiting on owner approval', priority: 'Medium', status: 'In Progress', createdAt: '2026-04-21T10:00:00' },
+  { id: 'task-003', clientId: 'client-005', clientName: 'Apex Insulation Solutions', summary: 'Workflow configuration not started yet', priority: 'High', status: 'Open', createdAt: '2026-04-22T09:00:00' },
+  { id: 'task-004', clientId: 'client-003', clientName: 'Green Country Plumbing', summary: 'Bilingual script option requested by owner', priority: 'Low', status: 'Open', createdAt: '2026-04-22T14:00:00' },
+  { id: 'task-005', clientId: 'client-004', clientName: 'Route 66 Electric', summary: 'First scorecard due by end of April', priority: 'Medium', status: 'Open', createdAt: '2026-04-20T09:00:00' },
+  { id: 'task-006', clientId: 'client-005', clientName: 'Apex Insulation Solutions', summary: 'Need zip code list for service area config', priority: 'Medium', status: 'Open', createdAt: '2026-04-23T08:00:00' },
+];
+
+export const operatorActions: OperatorAction[] = [
+  { id: 'op-001', action: 'Delivered weekly scorecard', clientName: 'Tulsa Peak HVAC', timestamp: '2026-04-21T09:00:00' },
+  { id: 'op-002', action: 'Updated follow-up script for storm season', clientName: 'Red Fork Roofing', timestamp: '2026-04-20T15:30:00' },
+  { id: 'op-003', action: 'Completed onboarding call', clientName: 'Apex Insulation Solutions', timestamp: '2026-04-19T10:00:00' },
+  { id: 'op-004', action: 'Assigned tracking number', clientName: 'Route 66 Electric', timestamp: '2026-04-15T14:00:00' },
+  { id: 'op-005', action: 'Approved script revision v4', clientName: 'Green Country Plumbing', timestamp: '2026-04-14T11:00:00' },
+  { id: 'op-006', action: 'Escalated storm-surge queue issue', clientName: 'Red Fork Roofing', timestamp: '2026-04-23T16:30:00' },
+  { id: 'op-007', action: 'Sent trial conversion follow-up email', clientName: 'Route 66 Electric', timestamp: '2026-04-22T10:00:00' },
+];
+
+export function getClientStatusColor(status: ClientStatus): string {
+  const map: Record<ClientStatus, string> = {
+    'Active': 'text-emerald-400 bg-emerald-400/12 border-emerald-400/20',
+    'Trial': 'text-blue-400 bg-blue-400/12 border-blue-400/20',
+    'Paused': 'text-amber-400 bg-amber-400/12 border-amber-400/20',
+    'Onboarding': 'text-purple-400 bg-purple-400/12 border-purple-400/20',
+  };
+  return map[status];
+}
+
+export function getHealthColor(health: WorkflowHealth): string {
+  const map: Record<WorkflowHealth, string> = {
+    'Healthy': 'text-emerald-400',
+    'Needs Attention': 'text-amber-400',
+    'Critical': 'text-red-400',
+  };
+  return map[health];
+}
+
+export function getHealthBg(health: WorkflowHealth): string {
+  const map: Record<WorkflowHealth, string> = {
+    'Healthy': 'bg-emerald-400/10 border-emerald-400/20',
+    'Needs Attention': 'bg-amber-400/10 border-amber-400/20',
+    'Critical': 'bg-red-400/10 border-red-400/20',
+  };
+  return map[health];
+}
+
 // Utility: get status pill class
 export function getStatusPillClass(status: LeadStatus): string {
   const map: Record<LeadStatus, string> = {
