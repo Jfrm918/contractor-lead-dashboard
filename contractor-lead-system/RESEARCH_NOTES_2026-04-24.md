@@ -52,6 +52,13 @@ Applied decision:
 - build the product as a contractor lead-conversion system, not a generic AI dashboard
 - make the UI feel like a premium operational product for contractors
 
+## Additional visual takeaways for V2
+- Apple’s Liquid Glass direction reinforces using dynamic highlights, material depth, and translucency as a way to focus content rather than obscure it.
+- Glassmorphism works best when paired with clear hierarchy, high contrast text, and controlled blur. Too much blur/transparency degrades readability.
+- Premium dashboard design benefits from fewer stronger surfaces instead of many weak cards. Distinct panel levels create a more 3D feel without gimmicks.
+- Subtle real-world affordance cues can help controls feel tactile, but heavy skeuomorphism quickly becomes dated and cluttered.
+- The best premium dashboards use background imagery as atmosphere, not content. A location-based skyline can add identity if darkened and subordinated to the UI.
+
 ## Build implications
 - responsive web app first
 - strong desktop and mobile layout quality
@@ -59,3 +66,6 @@ Applied decision:
 - no native app complexity in V1
 - believable seeded data
 - premium interaction states for every button/card
+- deeper layered surfaces and stronger elevation hierarchy for a more 3D premium feel
+- background image must support the UI, not compete with it
+- separate client and operator/admin views are necessary because the client sees their business while Jason needs to see the whole operation
