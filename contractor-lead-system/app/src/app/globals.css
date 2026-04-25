@@ -55,56 +55,101 @@ body {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  background: #090d15;
 }
 
-.tulsa-bg::before {
-  content: '';
+.tulsa-bg-image,
+.tulsa-bg-overlay,
+.tulsa-bg-grain {
   position: absolute;
   inset: 0;
-  background: url('/images/tulsa-skyview-dashboard-bg.png') center center / cover no-repeat;
-  opacity: 0.12;
-  filter: blur(1px) saturate(0.6);
-  transform: scale(1.05);
-  animation: tulsa-drift 60s ease-in-out infinite alternate;
 }
 
-.tulsa-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
+.tulsa-bg-image {
+  background-image: url('/images/tulsa-skyview-dashboard-bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center 38%;
+  opacity: 0.24;
+  filter: saturate(0.95) contrast(1.05) brightness(0.82);
+  transform: scale(1.02);
+  animation: tulsa-drift 40s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.tulsa-bg-overlay {
   background:
     linear-gradient(180deg,
-      rgba(10, 13, 20, 0.92) 0%,
-      rgba(10, 13, 20, 0.78) 30%,
-      rgba(10, 13, 20, 0.85) 70%,
-      rgba(10, 13, 20, 0.95) 100%),
-    linear-gradient(135deg,
-      rgba(59, 130, 246, 0.04) 0%,
-      transparent 50%,
-      rgba(34, 211, 238, 0.03) 100%);
+      rgba(7, 10, 18, 0.74) 0%,
+      rgba(7, 10, 18, 0.58) 24%,
+      rgba(7, 10, 18, 0.68) 58%,
+      rgba(7, 10, 18, 0.84) 100%),
+    radial-gradient(circle at top right,
+      rgba(56, 189, 248, 0.12) 0%,
+      transparent 28%),
+    radial-gradient(circle at left center,
+      rgba(59, 130, 246, 0.08) 0%,
+      transparent 30%);
 }
 
-.tulsa-bg-admin::before {
-  opacity: 0.09;
-  filter: blur(2px) saturate(0.5) brightness(0.9);
+.tulsa-bg-grain {
+  opacity: 0.06;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 180px 180px;
+  mix-blend-mode: soft-light;
 }
 
-.tulsa-bg-admin::after {
+.tulsa-bg-admin .tulsa-bg-image {
+  opacity: 0.18;
+  filter: saturate(0.78) contrast(1) brightness(0.7);
+}
+
+.tulsa-bg-admin .tulsa-bg-overlay {
   background:
     linear-gradient(180deg,
-      rgba(10, 13, 20, 0.94) 0%,
-      rgba(10, 13, 20, 0.82) 30%,
-      rgba(10, 13, 20, 0.88) 70%,
-      rgba(10, 13, 20, 0.96) 100%),
-    linear-gradient(135deg,
-      rgba(139, 92, 246, 0.03) 0%,
-      transparent 50%,
-      rgba(59, 130, 246, 0.03) 100%);
+      rgba(7, 10, 18, 0.8) 0%,
+      rgba(7, 10, 18, 0.66) 24%,
+      rgba(7, 10, 18, 0.74) 58%,
+      rgba(7, 10, 18, 0.88) 100%),
+    radial-gradient(circle at top right,
+      rgba(139, 92, 246, 0.1) 0%,
+      transparent 28%),
+    radial-gradient(circle at left center,
+      rgba(59, 130, 246, 0.08) 0%,
+      transparent 30%);
 }
 
 @keyframes tulsa-drift {
-  0% { transform: scale(1.05) translate(0, 0); }
-  100% { transform: scale(1.05) translate(-1%, -0.5%); }
+  0% { transform: scale(1.02) translate3d(0, 0, 0); }
+  100% { transform: scale(1.04) translate3d(-1.2%, -0.4%, 0); }
+}
+
+@media (min-width: 1600px) {
+  .tulsa-bg-image {
+    background-position: center 34%;
+  }
+}
+
+@media (max-width: 768px) {
+  .tulsa-bg-image {
+    background-position: center 30%;
+    opacity: 0.2;
+    filter: saturate(0.88) contrast(1.02) brightness(0.76);
+  }
+
+  .tulsa-bg-overlay {
+    background:
+      linear-gradient(180deg,
+        rgba(7, 10, 18, 0.82) 0%,
+        rgba(7, 10, 18, 0.7) 26%,
+        rgba(7, 10, 18, 0.76) 58%,
+        rgba(7, 10, 18, 0.9) 100%),
+      radial-gradient(circle at top center,
+        rgba(56, 189, 248, 0.1) 0%,
+        transparent 26%);
+  }
 }
 
 /* ============================================

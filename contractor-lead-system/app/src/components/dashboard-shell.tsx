@@ -55,7 +55,11 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
   return (
     <div className="min-h-dvh flex flex-col">
       {/* Tulsa background */}
-      <div className={`tulsa-bg ${isAdmin ? 'tulsa-bg-admin' : ''}`} />
+      <div className={`tulsa-bg ${isAdmin ? 'tulsa-bg-admin' : ''}`}>
+        <div className="tulsa-bg-image" />
+        <div className="tulsa-bg-overlay" />
+        <div className="tulsa-bg-grain" />
+      </div>
       <div className={`ambient-glow ${isAdmin ? 'admin-accent-glow' : ''}`} />
 
       {/* Top Nav */}
