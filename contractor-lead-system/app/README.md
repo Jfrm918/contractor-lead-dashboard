@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Contractor Lead System
 
-## Getting Started
+Next.js dashboard + backend for contractor missed-call recovery and lead management.
 
-First, run the development server:
+## Quick Start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The app runs fully in **mock-data mode** when no database is configured — the dashboard and API routes work using in-memory seed data.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env` and fill in the values you need:
 
-## Learn More
+```bash
+cp .env.example .env
+```
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | No (dev) / Yes (prod) | Postgres connection string. When absent the app uses an in-memory mock layer. |
+| `TWILIO_AUTH_TOKEN` | No (dev) / Yes (prod) | Used for Twilio webhook signature validation. |
+| `NODE_ENV` | No | `development` (default), `production`, or `test`. |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Database Setup (optional for local dev)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+When you're ready to use a real Postgres database:
 
-## Deploy on Vercel
+```bash
+# 1. Set DATABASE_URL in .env
+# 2. Run migrations
+npx prisma migrate dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 3. (Optional) Open Prisma Studio to inspect data
+npx prisma studio
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The Prisma schema lives at `prisma/schema.prisma` and covers: `clients`, `client_settings`, `leads`, `lead_events`.
+
+## API Routes
+
+### Client Settings
+- `GET  /api/clients/:clientId/settings` — read settings for a client
+- `PUT  /api/clients/:clientId/settings` — update settings (validated with Zod)
+
+### Twilio Webhooks
+- `POST /api/webhooks/twilio/call` — inbound call webhook; accepts `application/x-www-form-urlencoded` (Twilio default) or JSON; resolves client from tracked number, classifies call outcome, creates/updates lead, logs event.
+
+## Project Structure
+
+```
+src/
+  app/
+    api/
+      clients/[clientId]/settings/route.ts   # Settings CRUD
+      webhooks/twilio/call/route.ts           # Twilio call webhook
+    page.tsx                                  # Dashboard UI
+  components/                                 # UI components
+  lib/
+    api-response.ts                           # {success, data/error} envelope
+    db.ts                                     # Prisma singleton w/ mock fallback
+    env.ts                                    # Zod-validated env vars
+    mock-db.ts                                # In-memory data layer for dev
+    schemas.ts                                # Shared Zod schemas
+    data.ts                                   # UI seed/demo data
+    auth-context.tsx                          # Auth context (placeholder)
+prisma/
+  schema.prisma                               # Database schema
+```
+
+## Stack
+
+- **Next.js 16** (App Router)
+- **React 19** + TypeScript
+- **Tailwind CSS v4**
+- **Prisma** (Postgres ORM)
+- **Zod** (runtime validation)

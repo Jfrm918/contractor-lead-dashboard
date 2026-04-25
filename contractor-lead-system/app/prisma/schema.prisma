@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Core entities (V1 minimum) ───
+
+model Client {
+  id          String   @id @default(uuid()) @db.Uuid
+  companyName String   @map("company_name")
+  trade       String   // HVAC, Plumbing, Roofing, Electrical, Insulation
+  status      String   @default("onboarding") // onboarding, active, trial, paused, churned
+  planTier    String   @default("starter") @map("plan_tier") // starter, growth, pro
+  timezone    String   @default("America/Chicago")
+  contactName String?  @map("contact_name")
+  contactEmail String? @map("contact_email")
+  contactPhone String? @map("contact_phone")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  settings ClientSettings?
+  leads    Lead[]
+  events   LeadEvent[]     // client-level events
+
+  @@map("clients")
+}
+
+model ClientSettings {
+  id       String @id @default(uuid()) @db.Uuid
+  clientId String @unique @map("client_id") @db.Uuid
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  // Routing
+  trackedNumber    String?  @map("tracked_number")   // Twilio number assigned to this client
+  forwardingNumber String?  @map("forwarding_number") // owner's real phone
+  afterHoursNumber String?  @map("after_hours_number")
+  callRecording    Boolean  @default(false) @map("call_recording")
+  abandonedCallThresholdSec Int @default(15) @map("abandoned_call_threshold_sec")
+
+  // Alert recipients
+  alertRecipients  Json     @default("[]") @map("alert_recipients")  // [{name, phone, email}]
+
+  // Service coverage
+  serviceAreas     Json     @default("[]") @map("service_areas")     // string[]
+  servicesOffered  Json     @default("[]") @map("services_offered")  // string[]
+
+  // Hours
+  officeHours      Json     @default("{}") @map("office_hours")      // {mon: {open, close}, ...}
+  weekendHours     Json     @default("{}") @map("weekend_hours")
+
+  // Qualification
+  qualificationQuestions Json @default("[]") @map("qualification_questions") // string[]
+  disqualifierRules      Json @default("[]") @map("disqualifier_rules")
+  highPriorityRules      Json @default("[]") @map("high_priority_rules")
+
+  // Messaging
+  smsTemplates     Json     @default("{}") @map("sms_templates")     // {initial, followup1, followup2, ...}
+  messageTiming    Json     @default("{}") @map("message_timing")    // {initialDelaySec, followup1DelaySec, ...}
+
+  // Booking
+  bookingMode      String   @default("manual_callback") @map("booking_mode") // self_book, manual_callback, hybrid
+  bookingUrl       String?  @map("booking_url")
+
+  // Workflow toggles
+  workflowEnabled  Boolean  @default(true) @map("workflow_enabled")
+  smsEnabled       Boolean  @default(true) @map("sms_enabled")
+  alertsEnabled    Boolean  @default(true) @map("alerts_enabled")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("client_settings")
+}
+
+model Lead {
+  id          String   @id @default(uuid()) @db.Uuid
+  clientId    String   @map("client_id") @db.Uuid
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  phone       String
+  callerName  String?  @map("caller_name")
+  source      String?  // google_ads, lsa, organic, referral, direct_call
+  trade       String?
+  serviceType String?  @map("service_type")
+  city        String?
+  urgency     String?  // urgent, high, medium, low
+
+  // Qualification state
+  qualificationState String @default("pending") @map("qualification_state")
+  // pending, in_progress, qualified, unqualified, high_priority, manual_followup
+  qualificationAnswers Json @default("[]") @map("qualification_answers")
+
+  // Status
+  status      String   @default("new") // new, contacted, qualified, unqualified, booking_requested, booked, closed_lost
+  missedCall  Boolean  @default(false) @map("missed_call")
+  recovered   Boolean  @default(false)
+
+  // Call metadata
+  callSid     String?  @map("call_sid")   // Twilio Call SID
+  callOutcome String?  @map("call_outcome") // answered, missed, after_hours, abandoned
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  events LeadEvent[]
+
+  @@index([clientId])
+  @@index([phone])
+  @@index([status])
+  @@index([createdAt])
+  @@map("leads")
+}
+
+model LeadEvent {
+  id       String   @id @default(uuid()) @db.Uuid
+  leadId   String   @map("lead_id") @db.Uuid
+  lead     Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  clientId String   @map("client_id") @db.Uuid
+  client   Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  eventType String  @map("event_type")
+  // call_received, call_answered, call_missed, call_abandoned, call_after_hours,
+  // sms_sent, sms_received, lead_created, lead_qualified, lead_unqualified,
+  // alert_sent, booking_requested, status_changed
+
+  payload   Json    @default("{}")   // flexible event-specific data
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([leadId])
+  @@index([clientId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("lead_events")
+}
