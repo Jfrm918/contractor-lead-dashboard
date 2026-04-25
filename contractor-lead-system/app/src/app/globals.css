@@ -117,20 +117,49 @@ body {
 .tulsa-bg-admin .tulsa-bg-overlay {
   background:
     linear-gradient(180deg,
-      rgba(5, 8, 15, 0.22) 0%,
-      rgba(5, 8, 15, 0.16) 24%,
-      rgba(5, 8, 15, 0.28) 58%,
-      rgba(5, 8, 15, 0.56) 100%),
+      rgba(5, 8, 15, 0.36) 0%,
+      rgba(5, 8, 15, 0.28) 24%,
+      rgba(5, 8, 15, 0.42) 58%,
+      rgba(5, 8, 15, 0.68) 100%),
     radial-gradient(circle at top right,
-      rgba(167, 139, 250, 0.22) 0%,
+      rgba(167, 139, 250, 0.18) 0%,
       transparent 30%),
     radial-gradient(circle at left center,
-      rgba(34, 211, 238, 0.16) 0%,
+      rgba(34, 211, 238, 0.12) 0%,
       transparent 32%);
 }
 
 .tulsa-bg-admin .tulsa-bg-grain {
-  opacity: 0.055;
+  opacity: 0.04;
+}
+
+.admin-shell .glass,
+.admin-shell .glass-elevated,
+.admin-shell .glass-subtle {
+  background: rgba(6, 10, 18, 0.72);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-shell .glass-nav {
+  background: rgba(5, 8, 15, 0.88);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-shell .mode-toggle,
+.admin-shell .segmented-nav {
+  background: rgba(5, 8, 15, 0.62);
+}
+
+.admin-shell .mode-toggle-active,
+.admin-shell .segmented-nav-active {
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.admin-shell .metric-value,
+.admin-shell h1,
+.admin-shell h2,
+.admin-shell h3 {
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
 }
 
 @keyframes admin-aurora-drift {
@@ -177,13 +206,19 @@ body {
   .tulsa-bg-admin .tulsa-bg-overlay {
     background:
       linear-gradient(180deg,
-        rgba(5, 8, 15, 0.34) 0%,
-        rgba(5, 8, 15, 0.24) 24%,
-        rgba(5, 8, 15, 0.4) 58%,
-        rgba(5, 8, 15, 0.68) 100%),
+        rgba(5, 8, 15, 0.46) 0%,
+        rgba(5, 8, 15, 0.34) 24%,
+        rgba(5, 8, 15, 0.5) 58%,
+        rgba(5, 8, 15, 0.76) 100%),
       radial-gradient(circle at top center,
-        rgba(167, 139, 250, 0.2) 0%,
+        rgba(167, 139, 250, 0.16) 0%,
         transparent 30%);
+  }
+
+  .admin-shell .glass,
+  .admin-shell .glass-elevated,
+  .admin-shell .glass-subtle {
+    background: rgba(6, 10, 18, 0.8);
   }
 }
 

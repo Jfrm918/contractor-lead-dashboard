@@ -53,7 +53,7 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
   const navItems = isAdmin ? adminNavItems : clientNavItems;
 
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div className={`min-h-dvh flex flex-col ${isAdmin ? 'admin-shell' : ''}`}>
       {/* Tulsa background */}
       <div className={`tulsa-bg ${isAdmin ? 'tulsa-bg-admin' : ''}`}>
         <div className="tulsa-bg-image" />
