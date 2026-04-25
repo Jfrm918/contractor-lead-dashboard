@@ -15,6 +15,16 @@ import {
   Sparkles,
   Clock,
   Star,
+  FileText,
+  MapPin,
+  ClipboardList,
+  ListChecks,
+  Handshake,
+  CalendarCheck,
+  BarChart3,
+  Send,
+  ShieldCheck,
+  Crosshair,
 } from 'lucide-react';
 
 const cardVariants = {
@@ -26,12 +36,14 @@ const cardVariants = {
   }),
 };
 
-type PlaybookTab = 'offer' | 'cold-call' | 'cold-email';
+type PlaybookTab = 'offer' | 'cold-call' | 'cold-email' | 'closing' | 'outreach-ops';
 
 const tabs: { id: PlaybookTab; label: string; icon: typeof DollarSign }[] = [
   { id: 'offer', label: 'Offer & Pricing', icon: DollarSign },
   { id: 'cold-call', label: 'Cold Call Script', icon: Phone },
   { id: 'cold-email', label: 'Cold Email Sequence', icon: Mail },
+  { id: 'closing', label: 'Closing & Pilot', icon: Handshake },
+  { id: 'outreach-ops', label: 'Outreach Ops', icon: Crosshair },
 ];
 
 /* ─── Highlight Block ─── */
@@ -452,6 +464,297 @@ function ColdEmailTab() {
   );
 }
 
+/* ─── Step Block (for workflow steps) ─── */
+function StepBlock({ number, title, children }: {
+  number: number;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex gap-3.5 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-purple-500/[0.12] border border-purple-500/[0.2] flex items-center justify-center">
+        <span className="text-xs font-bold text-purple-300">{number}</span>
+      </div>
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-[#e2e8f0] mb-1">{title}</p>
+        <div className="text-sm text-[#94a3b8] leading-relaxed">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Closing & Pilot Tab ─── */
+function ClosingTab() {
+  return (
+    <div className="space-y-5">
+      {/* Key highlights */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <Highlight icon={Handshake} label="Close Signal" color="emerald">
+          <p className="font-medium">Yes to pilot price + intake + setup</p>
+          <p className="text-xs text-[#94a3b8] mt-1">Don&apos;t overcomplicate the close</p>
+        </Highlight>
+        <Highlight icon={FileText} label="Pilot Terms" color="blue">
+          <p className="font-medium">$500 setup + $500/mo &middot; 90 days</p>
+          <p className="text-xs text-[#94a3b8] mt-1">Plain-English agreement — not a legal contract</p>
+        </Highlight>
+        <Highlight icon={ShieldCheck} label="Key Principle" color="purple">
+          <p className="font-medium">Simple, clear, low-friction</p>
+          <p className="text-xs text-[#94a3b8] mt-1">The process should never feel pushy</p>
+        </Highlight>
+      </div>
+
+      {/* Demo-to-Close Workflow */}
+      <SectionCard title="Demo-to-Close Workflow" icon={ArrowRight} index={1}>
+        <p className="text-xs text-[#64748b] mb-4 leading-relaxed">
+          The step-by-step path from first demo to signed pilot. Keep it moving — every step has a clear next action.
+        </p>
+        <div className="space-y-2">
+          <StepBlock number={1} title="Demo Happens">
+            Show the problem, the dashboard, how easy it is. Give price simply. Goal: interest + permission to send next steps.
+          </StepBlock>
+          <StepBlock number={2} title="Same-Day Follow-Up">
+            Send post-demo follow-up email + one-page proposal. CTA: &ldquo;If you want, I can send over the intake and next steps.&rdquo;
+          </StepBlock>
+          <StepBlock number={3} title="If Interested — Move to Pilot">
+            Confirm: they want to test it, who approves, best email/mobile, who handles leads internally. Move to intake form + setup timeline.
+          </StepBlock>
+          <StepBlock number={4} title="If They Stall — Follow Up">
+            Short reminder + pain-based question + clear next step. Example: &ldquo;If missed calls and slow follow-up are still something you want to tighten up, I can send over the pilot setup steps.&rdquo;
+          </StepBlock>
+          <StepBlock number={5} title="Close Point">
+            Deal is closed when they say yes to: pilot price, intake, and setup process.
+          </StepBlock>
+          <StepBlock number={6} title="Post-Close Handoff">
+            Immediately send: intake form, onboarding expectations, and launch timeline.
+          </StepBlock>
+        </div>
+      </SectionCard>
+
+      {/* Pilot Agreement Terms */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <SectionCard title="Pilot Agreement — What's Included" icon={CheckCircle2} index={2}>
+          <div className="space-y-2">
+            {[
+              'Tracked number setup',
+              'Missed-call text-back flow',
+              'Lead qualification flow',
+              'Hot lead alerts',
+              'Dashboard access',
+              'Monthly scorecard',
+              'Basic optimization & support',
+            ].map((item) => (
+              <div key={item} className="flex items-center gap-2.5 p-2 rounded-lg bg-white/[0.02]">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                <span className="text-sm text-[#e2e8f0]">{item}</span>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+
+        <SectionCard title="Pilot Agreement — Terms & Rules" icon={FileText} index={3}>
+          <div className="space-y-3">
+            <div className="p-3 rounded-xl bg-emerald-400/[0.06] border border-emerald-400/[0.15]">
+              <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-1">Payment</p>
+              <p className="text-sm text-[#e2e8f0]">Setup fee due before implementation. Monthly billing begins at launch.</p>
+            </div>
+            <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+              <p className="text-xs font-semibold text-blue-400 uppercase tracking-wider mb-1">Cancellation</p>
+              <p className="text-sm text-[#e2e8f0]">Either side can end after pilot term. Cancel with written notice before next billing cycle.</p>
+            </div>
+            <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+              <p className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">Client Responsibilities</p>
+              <p className="text-sm text-[#e2e8f0]">Provide intake info, correct routing/contact details, service area rules, alert recipients, and timely change notices.</p>
+            </div>
+            <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+              <p className="text-xs font-semibold text-purple-400 uppercase tracking-wider mb-1">Success Definition</p>
+              <p className="text-sm text-[#e2e8f0]">Recover missed leads, improve follow-up speed, improve lead visibility. No revenue guarantees.</p>
+            </div>
+          </div>
+        </SectionCard>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Outreach Ops Tab ─── */
+function OutreachOpsTab() {
+  return (
+    <div className="space-y-5">
+      {/* Key highlights */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <Highlight icon={Crosshair} label="First Target" color="cyan">
+          <p className="text-lg font-semibold text-cyan-400">50 Prospects</p>
+          <p className="text-xs text-[#94a3b8] mt-1">Focused list — learn fast, close first pilot</p>
+        </Highlight>
+        <Highlight icon={MapPin} label="Geography" color="emerald">
+          <p className="font-medium">Tulsa Metro First</p>
+          <p className="text-xs text-[#94a3b8] mt-1">Local credibility, easier demos & support</p>
+        </Highlight>
+        <Highlight icon={CalendarCheck} label="Daily Rule" color="amber">
+          <p className="font-medium">Consistency over perfection</p>
+          <p className="text-xs text-[#94a3b8] mt-1">Keep it moving — don&apos;t overcomplicate</p>
+        </Highlight>
+      </div>
+
+      {/* First 50 Target Plan */}
+      <SectionCard title="First 50 Target Plan" icon={Target} index={1}>
+        <p className="text-xs text-[#64748b] mb-4 leading-relaxed">
+          Not trying to close all 50. Goal: learn objections, find best-responding niche, book first demos, get first pilot.
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+          {[
+            { trade: 'HVAC', count: 15, color: 'text-cyan-400 bg-cyan-400/[0.08] border-cyan-400/[0.15]' },
+            { trade: 'Plumbing', count: 10, color: 'text-blue-400 bg-blue-400/[0.08] border-blue-400/[0.15]' },
+            { trade: 'Roofing', count: 10, color: 'text-purple-400 bg-purple-400/[0.08] border-purple-400/[0.15]' },
+            { trade: 'Electrical', count: 5, color: 'text-amber-400 bg-amber-400/[0.08] border-amber-400/[0.15]' },
+            { trade: 'Insulation', count: 5, color: 'text-emerald-400 bg-emerald-400/[0.08] border-emerald-400/[0.15]' },
+            { trade: 'Garage Doors', count: 5, color: 'text-pink-400 bg-pink-400/[0.08] border-pink-400/[0.15]' },
+          ].map((t) => (
+            <div key={t.trade} className={`flex items-center justify-between p-2.5 rounded-lg border ${t.color}`}>
+              <span className="text-sm font-medium">{t.trade}</span>
+              <span className="text-xs font-bold opacity-70">{t.count}</span>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+            <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">Prefer</p>
+            <div className="space-y-1.5">
+              {['Clearly advertises online', 'Runs Google Ads or LSAs', 'Call-first website', 'Established enough to pay'].map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                  <span className="text-sm text-[#e2e8f0]">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+            <p className="text-xs font-semibold text-red-400/70 uppercase tracking-wider mb-2">Avoid First</p>
+            <div className="space-y-1.5">
+              {['Tiny one-man shops with no spend', 'Giant companies with layers of approvals', 'Weak or missing contact info'].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-[#64748b]">
+                  <span className="text-xs">✕</span>
+                  <span className="text-sm">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* Outreach Tracker */}
+      <SectionCard title="Outreach Tracker — Fields Reference" icon={ClipboardList} index={2}>
+        <p className="text-xs text-[#64748b] mb-3">Track every prospect from first touch to pilot close. Use these columns in your outreach spreadsheet.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
+          {[
+            'Date Added', 'Company Name', 'Trade', 'City',
+            'Website', 'Main Phone', 'Owner Name', 'Email',
+            'Lead Source Guess', 'First Call Attempt', 'First Call Outcome', 'Email Sent',
+            'Follow-Up Call Date', 'Follow-Up Outcome', 'Demo Booked', 'Demo Date',
+            'Proposal Sent', 'Pilot Status', 'Notes',
+          ].map((field) => (
+            <div key={field} className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02]">
+              <div className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
+              <span className="text-xs text-[#e2e8f0]">{field}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 pt-3 border-t border-white/[0.06]">
+          <p className="text-xs font-semibold text-[#94a3b8] uppercase tracking-wider mb-2">Pilot Status Options</p>
+          <div className="flex flex-wrap gap-1.5">
+            {[
+              { label: 'New', color: 'bg-slate-400/10 border-slate-400/20 text-slate-300' },
+              { label: 'Working', color: 'bg-blue-400/10 border-blue-400/20 text-blue-300' },
+              { label: 'Warm', color: 'bg-amber-400/10 border-amber-400/20 text-amber-300' },
+              { label: 'Demo Booked', color: 'bg-cyan-400/10 border-cyan-400/20 text-cyan-300' },
+              { label: 'Proposal Sent', color: 'bg-purple-400/10 border-purple-400/20 text-purple-300' },
+              { label: 'Pilot Pending', color: 'bg-indigo-400/10 border-indigo-400/20 text-indigo-300' },
+              { label: 'Closed Won', color: 'bg-emerald-400/10 border-emerald-400/20 text-emerald-300' },
+              { label: 'Closed Lost', color: 'bg-red-400/10 border-red-400/20 text-red-300' },
+            ].map((s) => (
+              <span key={s.label} className={`text-xs px-2.5 py-1 rounded-full border ${s.color}`}>{s.label}</span>
+            ))}
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* Daily Execution Checklist */}
+      <SectionCard title="Daily Outreach Execution Checklist" icon={ListChecks} index={3}>
+        <p className="text-xs text-[#64748b] mb-4 leading-relaxed">
+          Simple daily workflow for outreach execution. The point is consistency, not perfect calls.
+        </p>
+        <div className="space-y-2">
+          <StepBlock number={1} title="Pull Target List">
+            Work from the outreach sheet. Focus on best-fit trades first. Prioritize businesses likely buying leads.
+          </StepBlock>
+          <StepBlock number={2} title="First Call Block">
+            Make first call attempts. Log outcome immediately. Collect email when possible.
+          </StepBlock>
+          <StepBlock number={3} title="Send Follow-Up Email">
+            Send cold email or resend requested info. Log email sent date.
+          </StepBlock>
+          <StepBlock number={4} title="Second Call Block">
+            Follow up with voicemail leads, email opens, and callback requests.
+          </StepBlock>
+          <StepBlock number={5} title="Book Next Step">
+            Goal is one of: demo booked, email collected, or callback time set.
+          </StepBlock>
+        </div>
+      </SectionCard>
+
+      {/* End-of-Day + Weekly Goals */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <SectionCard title="End-of-Day Review" icon={BarChart3} index={4}>
+          <div className="space-y-1.5">
+            {[
+              'How many companies called?',
+              'How many owners reached?',
+              'How many emails sent?',
+              'How many demos booked?',
+              'What objections came up most?',
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2.5 p-2 rounded-lg bg-white/[0.02]">
+                <span className="text-xs text-purple-400 font-mono">{i + 1}</span>
+                <span className="text-sm text-[#e2e8f0]">{item}</span>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+        <SectionCard title="Weekly Tracking Goals" icon={CalendarCheck} index={5}>
+          <div className="space-y-2">
+            {[
+              { label: 'Calls made', icon: Phone },
+              { label: 'Conversations started', icon: MessageCircle },
+              { label: 'Demos booked', icon: CalendarCheck },
+              { label: 'Follow-ups needed', icon: Send },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-2.5 p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.05]">
+                <item.icon className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+                <span className="text-sm text-[#e2e8f0]">{item.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-3 p-2.5 rounded-lg bg-amber-400/[0.06] border border-amber-400/[0.15]">
+            <p className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">Rule</p>
+            <p className="text-sm text-[#e2e8f0]">Do not overcomplicate the process. Keep it moving.</p>
+          </div>
+        </SectionCard>
+      </div>
+
+      {/* Geography */}
+      <SectionCard title="Target Geography — Start Local" icon={MapPin} index={6}>
+        <div className="flex flex-wrap gap-1.5">
+          {['Tulsa', 'Broken Arrow', 'Owasso', 'Bixby', 'Jenks'].map((city) => (
+            <span key={city} className="text-xs px-3 py-1.5 rounded-full bg-emerald-400/[0.08] border border-emerald-400/[0.15] text-emerald-300 font-medium">{city}</span>
+          ))}
+          <span className="text-xs px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] text-[#94a3b8]">+ nearby service-area cities</span>
+        </div>
+        <p className="text-xs text-[#64748b] mt-3">Local credibility, easier demo conversations, easier pilot support early on.</p>
+      </SectionCard>
+    </div>
+  );
+}
+
 /* ─── Main Component ─── */
 export default function AdminSalesPlaybook() {
   const [activeTab, setActiveTab] = useState<PlaybookTab>('offer');
@@ -499,6 +802,8 @@ export default function AdminSalesPlaybook() {
       {activeTab === 'offer' && <OfferTab />}
       {activeTab === 'cold-call' && <ColdCallTab />}
       {activeTab === 'cold-email' && <ColdEmailTab />}
+      {activeTab === 'closing' && <ClosingTab />}
+      {activeTab === 'outreach-ops' && <OutreachOpsTab />}
     </div>
   );
 }
