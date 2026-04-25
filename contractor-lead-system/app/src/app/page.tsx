@@ -13,6 +13,7 @@ import AdminOverview from '@/components/admin-overview';
 import AdminClientDetail from '@/components/admin-client-detail';
 import AdminOperations from '@/components/admin-operations';
 import AdminDocs from '@/components/admin-docs';
+import AdminSalesPlaybook from '@/components/admin-sales-playbook';
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
@@ -67,6 +68,9 @@ export default function Home() {
       }
       if (activePage === 'admin-operations') {
         return <AdminOperations />;
+      }
+      if (activePage === 'admin-sales-playbook') {
+        return <AdminSalesPlaybook />;
       }
       if (activePage === 'admin-docs') {
         return <AdminDocs />;

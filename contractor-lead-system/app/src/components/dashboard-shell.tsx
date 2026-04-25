@@ -16,11 +16,12 @@ import {
   Settings,
   Shield,
   FileText,
+  BookOpen,
 } from 'lucide-react';
 
 export type AppMode = 'client' | 'admin';
 export type ClientPage = 'overview' | 'leads' | 'alerts' | 'scorecard';
-export type AdminPage = 'admin-overview' | 'admin-operations' | 'admin-docs';
+export type AdminPage = 'admin-overview' | 'admin-operations' | 'admin-docs' | 'admin-sales-playbook';
 
 interface DashboardShellProps {
   mode: AppMode;
@@ -40,6 +41,7 @@ const clientNavItems: { id: ClientPage; label: string; icon: typeof LayoutDashbo
 const adminNavItems: { id: AdminPage; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'admin-overview', label: 'Overview', icon: Building2 },
   { id: 'admin-operations', label: 'Operations', icon: Settings },
+  { id: 'admin-sales-playbook', label: 'Sales Playbook', icon: BookOpen },
   { id: 'admin-docs', label: 'Build Log', icon: FileText },
 ];
 
