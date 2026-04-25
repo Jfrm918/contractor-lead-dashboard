@@ -108,29 +108,29 @@ body {
 .tulsa-bg-admin .tulsa-bg-image {
   background-image: url('/images/admin-aurora-bg.svg');
   background-position: center center;
-  opacity: 0.96;
-  filter: none;
-  transform: scale(1.01);
-  animation: admin-aurora-drift 28s ease-in-out infinite alternate;
+  opacity: 1;
+  filter: saturate(1.12) contrast(1.08) brightness(1.02);
+  transform: scale(1.02);
+  animation: admin-aurora-drift 22s ease-in-out infinite alternate;
 }
 
 .tulsa-bg-admin .tulsa-bg-overlay {
   background:
     linear-gradient(180deg,
-      rgba(5, 8, 15, 0.46) 0%,
-      rgba(5, 8, 15, 0.34) 24%,
-      rgba(5, 8, 15, 0.5) 58%,
-      rgba(5, 8, 15, 0.76) 100%),
+      rgba(5, 8, 15, 0.22) 0%,
+      rgba(5, 8, 15, 0.16) 24%,
+      rgba(5, 8, 15, 0.28) 58%,
+      rgba(5, 8, 15, 0.56) 100%),
     radial-gradient(circle at top right,
-      rgba(167, 139, 250, 0.14) 0%,
-      transparent 26%),
+      rgba(167, 139, 250, 0.22) 0%,
+      transparent 30%),
     radial-gradient(circle at left center,
-      rgba(34, 211, 238, 0.1) 0%,
-      transparent 28%);
+      rgba(34, 211, 238, 0.16) 0%,
+      transparent 32%);
 }
 
 .tulsa-bg-admin .tulsa-bg-grain {
-  opacity: 0.04;
+  opacity: 0.055;
 }
 
 @keyframes admin-aurora-drift {
@@ -170,20 +170,20 @@ body {
 
   .tulsa-bg-admin .tulsa-bg-image {
     background-position: center 24%;
-    opacity: 0.98;
-    transform: scale(1.02);
+    opacity: 1;
+    transform: scale(1.035);
   }
 
   .tulsa-bg-admin .tulsa-bg-overlay {
     background:
       linear-gradient(180deg,
-        rgba(5, 8, 15, 0.52) 0%,
-        rgba(5, 8, 15, 0.4) 24%,
-        rgba(5, 8, 15, 0.56) 58%,
-        rgba(5, 8, 15, 0.8) 100%),
+        rgba(5, 8, 15, 0.34) 0%,
+        rgba(5, 8, 15, 0.24) 24%,
+        rgba(5, 8, 15, 0.4) 58%,
+        rgba(5, 8, 15, 0.68) 100%),
       radial-gradient(circle at top center,
-        rgba(167, 139, 250, 0.14) 0%,
-        transparent 26%);
+        rgba(167, 139, 250, 0.2) 0%,
+        transparent 30%);
   }
 }
 
