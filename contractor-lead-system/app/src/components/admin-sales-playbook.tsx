@@ -100,6 +100,83 @@ const lucrativeAddOns = [
   },
 ];
 
+const guidedDemoSteps = [
+  {
+    time: '0:00–1:00',
+    title: 'Frame the leak',
+    talkTrack: 'You are already paying for leads. The problem is not always lead volume — it is what happens when calls are missed or follow-up is slow.',
+    show: 'Open LRP Overview and point to missed calls, recovered leads, booked estimates, and revenue protected.',
+  },
+  {
+    time: '1:00–2:30',
+    title: 'Show the money math',
+    talkTrack: 'This calculator turns missed calls into estimated dollars at risk, so we can decide if the system is worth paying for.',
+    show: 'Open Add-Ons → Lead Leak Calculator™. Change job value and close rate if the contractor gives better numbers.',
+  },
+  {
+    time: '2:30–4:00',
+    title: 'Show a recovered lead',
+    talkTrack: 'Here is what happens after a missed call: instant reply, qualification, and a clear next action instead of a dead voicemail.',
+    show: 'Open Leads → choose a Hot or Warm lead → show conversation, lead score, and next action.',
+  },
+  {
+    time: '4:00–5:30',
+    title: 'Show owner control',
+    talkTrack: 'The owner does not need another inbox. They need a short action list showing who to call and what is leaking.',
+    show: 'Open Add-Ons → Weekly Lost Lead Report. Show the copyable weekly report and owner action items.',
+  },
+  {
+    time: '5:30–7:00',
+    title: 'Create urgency',
+    talkTrack: 'Buyers call whoever responds fastest. The response-speed audit shows whether competitors are beating you to the phone.',
+    show: 'Open Local Response Speed Audit™. Show competitor average, client speed, and speed-gap verdict.',
+  },
+  {
+    time: '7:00–8:30',
+    title: 'Offer the pilot',
+    talkTrack: 'The pilot is simple: install the workflow, prove whether leads are leaking, and review the numbers after 14 days.',
+    show: 'Return to Demo View → Pilot Offer and close on setup call / tracking-number install.',
+  },
+];
+
+const demoObjections = [
+  {
+    objection: 'We already answer our calls.',
+    response: 'That is good. LRP is for the calls that still slip through — after hours, lunch, job-site chaos, bad timing, and overflow. We measure the leak instead of guessing.',
+  },
+  {
+    objection: 'We already have a CRM.',
+    response: 'Perfect. This does not replace the CRM. It catches and qualifies missed opportunities before they ever become clean CRM entries.',
+  },
+  {
+    objection: 'We do not need AI.',
+    response: 'I would not position this as AI. It is missed-call recovery, speed-to-lead, and owner visibility. The automation is just how the work gets done fast.',
+  },
+  {
+    objection: 'What does it cost?',
+    response: 'Pilot is $500 setup and $750/month. The goal is to prove whether the recovered pipeline is worth more than the fee inside the first 14 days.',
+  },
+  {
+    objection: 'Will this replace my office person?',
+    response: 'No. It gives the office/owner a backup system and a cleaner action list so missed calls and after-hours leads do not die.',
+  },
+];
+
+const followUpAssets = [
+  {
+    label: 'After-demo text',
+    body: 'Good talking with you. The main thing I saw is that missed/slow follow-up could be costing real estimate opportunities. If you want, we can start with the 14-day LRP pilot: tracking number, missed-call text-back, lead qualification, weekly lost lead report, and response-speed audit.',
+  },
+  {
+    label: 'After-demo email',
+    body: 'Subject: LRP pilot recap\n\nQuick recap — LRP is built to help recover missed contractor leads, qualify them faster, and show the owner where lead value is leaking.\n\nPilot includes: missed-call recovery, Lead Leak Calculator™, Weekly Lost Lead Report, Local Response Speed Audit™, and script optimization.\n\nPilot terms: $500 setup + $750/month. We review the numbers after 14 days and decide if the recovered opportunity justifies continuing.',
+  },
+  {
+    label: 'Pilot setup checklist',
+    body: '1. Confirm tracked number and forwarding number\n2. Confirm business hours and after-hours handling\n3. Confirm service area and top services\n4. Approve missed-call SMS script\n5. Add owner/office alert recipients\n6. Run test call\n7. Start 14-day proof window',
+  },
+];
+
 /* ─── Highlight Block ─── */
 function Highlight({ icon: Icon, label, children, color = 'blue' }: {
   icon: typeof DollarSign;
@@ -161,6 +238,20 @@ function SectionCard({ title, icon: Icon, children, index = 0 }: {
 function DemoTab() {
   return (
     <div className="space-y-5">
+      <SectionCard title="Demo Opening Script" icon={MessageCircle} index={0}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            <ScriptBlock>
+              “You are already paying for leads. LRP is built to stop those leads from dying when calls get missed, follow-up is slow, or the owner does not know who needs attention. I am going to show you the leak, the recovery workflow, and the pilot offer in under 10 minutes.”
+            </ScriptBlock>
+          </div>
+          <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-emerald-300 mb-2">Demo rule</p>
+            <p className="text-sm text-[#e2e8f0] leading-relaxed">Do not tour features. Walk the buyer from pain → money math → proof → pilot.</p>
+          </div>
+        </div>
+      </SectionCard>
+
       <SectionCard title="Demo-Ready Sales View" icon={BarChart3} index={0}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {[
@@ -178,11 +269,20 @@ function DemoTab() {
       </SectionCard>
 
       <SectionCard title="Prospect Walkthrough Order" icon={ListChecks} index={1}>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
-          {['Show missed-call problem', 'Show live lead inbox', 'Open hot lead score', 'Show LRP ROI math', 'Offer 14-day pilot'].map((step, i) => (
-            <div key={step} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
-              <p className="text-[10px] text-purple-300 mb-1">STEP {i + 1}</p>
-              <p className="text-sm text-[#e2e8f0]">{step}</p>
+        <div className="space-y-3">
+          {guidedDemoSteps.map((step, i) => (
+            <div key={step.title} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-4">
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+                <div>
+                  <p className="text-[10px] text-purple-300 mb-1">STEP {i + 1} · {step.time}</p>
+                  <p className="text-sm font-semibold text-[#e2e8f0]">{step.title}</p>
+                  <p className="text-sm text-[#cbd5e1] mt-2 leading-relaxed">{step.talkTrack}</p>
+                </div>
+                <div className="rounded-lg bg-cyan-400/[0.07] border border-cyan-400/[0.14] p-3 md:w-[320px] flex-shrink-0">
+                  <p className="text-xs text-cyan-300 font-medium mb-1">Show this</p>
+                  <p className="text-xs text-[#94a3b8] leading-relaxed">{step.show}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -215,6 +315,56 @@ function DemoTab() {
                 <p className="text-xs text-cyan-300"><span className="text-[#64748b]">Fulfillment:</span> {addOn.fulfillment}</p>
                 <p className="text-xs text-emerald-300"><span className="text-[#64748b]">Ops load:</span> {addOn.backend}</p>
               </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title="One-Page Pilot Offer" icon={FileText} index={4}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="glass-subtle p-4 rounded-2xl">
+            <p className="text-sm font-semibold text-[#e2e8f0] mb-3">What they get</p>
+            {[
+              'Missed-call text-back workflow',
+              'Lead qualification and hot-lead scoring',
+              'Owner alerts and weekly lost lead report',
+              'Lead Leak Calculator™ dashboard',
+              'Local Response Speed Audit™ during setup',
+              'Monthly script optimization included',
+            ].map((item) => (
+              <p key={item} className="text-sm text-[#cbd5e1] mb-2 flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />{item}</p>
+            ))}
+          </div>
+          <div className="glass-subtle p-4 rounded-2xl">
+            <p className="text-sm font-semibold text-[#e2e8f0] mb-3">Close terms</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-3"><p className="text-xs text-[#64748b]">Setup</p><p className="text-xl font-semibold text-emerald-300">$500</p></div>
+              <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-3"><p className="text-xs text-[#64748b]">Monthly</p><p className="text-xl font-semibold text-emerald-300">$750</p></div>
+              <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-3"><p className="text-xs text-[#64748b]">Proof window</p><p className="text-xl font-semibold text-amber-300">14 days</p></div>
+              <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-3"><p className="text-xs text-[#64748b]">Decision</p><p className="text-xl font-semibold text-cyan-300">Keep / kill</p></div>
+            </div>
+            <p className="text-xs text-[#94a3b8] mt-3 leading-relaxed">No revenue guarantees. The promise is visibility, speed, recovery workflow, and measurable opportunity protection.</p>
+          </div>
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Objection Handling" icon={ShieldCheck} index={5}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          {demoObjections.map((item) => (
+            <div key={item.objection} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-4">
+              <p className="text-sm font-semibold text-amber-300">{item.objection}</p>
+              <p className="text-sm text-[#cbd5e1] mt-2 leading-relaxed">{item.response}</p>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Follow-Up Assets" icon={Send} index={6}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          {followUpAssets.map((asset) => (
+            <div key={asset.label} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-4">
+              <p className="text-sm font-semibold text-[#e2e8f0] mb-2">{asset.label}</p>
+              <pre className="whitespace-pre-wrap text-xs text-[#94a3b8] leading-relaxed font-sans">{asset.body}</pre>
             </div>
           ))}
         </div>
