@@ -74,6 +74,8 @@ export default function Home() {
     setSelectedClientId(null);
     if (newMode === 'admin') {
       setActivePage('admin-overview');
+    } else if (newMode === 'outreach') {
+      setActivePage('outreach-desk');
     } else {
       setActivePage('overview');
     }

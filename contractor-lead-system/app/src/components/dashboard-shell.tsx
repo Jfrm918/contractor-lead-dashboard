@@ -61,7 +61,7 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
 
   const isAdmin = mode === 'admin';
   const isOutreach = mode === 'outreach';
-  const canToggleModes = !isOutreach && (isDemo || user?.role === 'admin');
+  const canToggleModes = isDemo || user?.role === 'admin';
   const navItems = isAdmin ? adminNavItems : isOutreach ? outreachNavItems : clientNavItems;
 
   return (
@@ -92,7 +92,7 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
               <div className="hidden sm:block">
                 <span className="text-base font-semibold tracking-tight">LeadRecovery Pro</span>
                 {isAdmin && <span className="text-[10px] text-purple-400 font-medium ml-1.5 uppercase tracking-wider">Admin</span>}
-                {isOutreach && <span className="text-[10px] text-cyan-400 font-medium ml-1.5 uppercase tracking-wider">Outreach</span>}
+                {isOutreach && <span className="text-[10px] text-pink-300 font-medium ml-1.5 uppercase tracking-wider">Madison</span>}
               </div>
             </div>
 
@@ -109,6 +109,12 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
                 className={`mode-toggle-option ${isAdmin ? 'mode-toggle-active mode-admin' : ''}`}
               >
                 Admin
+              </button>
+              <button
+                onClick={() => onModeChange('outreach')}
+                className={`mode-toggle-option ${isOutreach ? 'mode-toggle-active mode-admin' : ''}`}
+              >
+                Madison View
               </button>
             </div>}
           </div>
@@ -201,6 +207,12 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
                   className={`mode-toggle-option flex-1 text-center ${isAdmin ? 'mode-toggle-active mode-admin' : ''}`}
                 >
                   Admin
+                </button>
+                <button
+                  onClick={() => { onModeChange('outreach'); }}
+                  className={`mode-toggle-option flex-1 text-center ${isOutreach ? 'mode-toggle-active mode-admin' : ''}`}
+                >
+                  Madison
                 </button>
               </div>}
 
