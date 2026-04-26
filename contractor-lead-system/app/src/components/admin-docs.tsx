@@ -14,10 +14,6 @@ import {
   ClipboardList,
   BarChart3,
   Users,
-  FlaskConical,
-  Thermometer,
-  Droplets,
-  Brain,
 } from 'lucide-react';
 
 const cardVariants = {
@@ -112,92 +108,6 @@ const nextSteps = [
   { priority: 'Low', item: 'Webhook integrations (Zapier, CRM sync)', reason: 'Expands platform reach into existing contractor workflows' },
 ];
 
-const envergeKnowledge = {
-  currentFocus: 'Enverge EasySeal .5 open-cell spray foam',
-  operatorBaseline: {
-    hose: '145°F',
-    aSide: '95°F',
-    bSide: '100°F',
-    note: 'Jason’s stated usual starting point this time of year: 145 all the way across, A-side barrel 95, B-side barrel 100.',
-  },
-  proofOfKnowledge: [
-    'Current research priority is Enverge chemicals and Graco E-30 equipment.',
-    'Immediate product focus is Enverge EasySeal .5.',
-    'Useful knowledge standard here is not generic spray foam talk — it is job-usable dial-in knowledge tied to actual field settings, conditions, and outcomes.',
-    'The dashboard should become the place where Jason can verify accumulated Enverge knowledge, job observations, dial-in patterns, and recommendations without relying on chat memory.',
-  ],
-  buildStandard: [
-    'Track actual start settings used on each job.',
-    'Track weather / ambient conditions with each spray session.',
-    'Track substrate, yield, spray feel, shrink, pull-away, rolling, and finish quality.',
-    'Convert repeated field observations into practical Enverge EasySeal .5 guidance over time.',
-  ],
-  nextResearchTargets: [
-    'How EasySeal .5 responds to seasonal ambient swings.',
-    'How barrel temperature shifts affect spray feel and structure.',
-    'What recurring defects correlate to heat, substrate, and humidity.',
-    'What repeatable starting ranges work best on Jason’s rig with Graco E-30 behavior.'
-  ]
-};
-
-const seasonalStartingWindows = [
-  {
-    season: 'Spring / mild days',
-    settings: 'Baseline starting point: 145 hose, A 95, B 100',
-    why: 'Known starting point from Jason. Use this as the control before making small corrections.',
-  },
-  {
-    season: 'Hot afternoons',
-    settings: 'Expect lower hose need and thinner lifts',
-    why: 'Fast reaction and sag risk usually rise as ambient and substrate heat climb.',
-  },
-  {
-    season: 'Cold mornings',
-    settings: 'Expect higher hose demand and slower reaction',
-    why: 'Cold substrate and colder material usually tighten yield and slow expansion.',
-  },
-];
-
-const defectSignals = [
-  {
-    symptom: 'Foam reacting too fast / wants to roll or stack rough',
-    likelyCause: 'System running too hot for conditions, passes too heavy, or hot substrate',
-    action: 'Lower hose in small steps, thin out the pass, and watch texture before changing more.',
-  },
-  {
-    symptom: 'Slow rise / weak structure / wet-looking spray feel',
-    likelyCause: 'Material or substrate too cold, or not enough heat in the system',
-    action: 'Verify actual drum/substrate condition, then increase heat carefully from the baseline.',
-  },
-  {
-    symptom: 'Shrink / pull-away after initial laydown',
-    likelyCause: 'Heat imbalance, hot lifts, bad substrate condition, or condition swing during the job',
-    action: 'Check ratio/temps first, reduce lift thickness, and log exactly when the defect starts showing.',
-  },
-  {
-    symptom: 'Low yield / burning through sets',
-    likelyCause: 'Material condition off, overheated setup, or poor adaptation to ambient swings',
-    action: 'Compare yield against weather and temp settings, then correct starting conditions before chasing the gun.',
-  },
-];
-
-const dialInRules = [
-  'Make small temperature moves off the baseline, not big jumps.',
-  'Change one variable at a time when possible: hose, A-side, B-side, lift thickness, or pace.',
-  'Treat weather, substrate, and spray feel as first-class data, not background noise.',
-  'If a defect repeats, log the exact condition pattern so it becomes reusable guidance.',
-];
-
-const observationTemplate = [
-  'Ambient temperature and humidity',
-  'Substrate type and substrate temperature',
-  'Hose temp, A-side temp, B-side temp, and pressure behavior',
-  'Spray feel: fast, slow, soft, crunchy, greasy, smooth, or rolling',
-  'Lift thickness, vertical/horizontal application, and finish quality',
-  'Defects seen: shrink, pull-away, coarse cell structure, sag, low yield',
-  'What adjustment fixed it, if anything',
-];
-
 function getStatusColor(status: DocEntry['status']) {
   switch (status) {
     case 'Live in App': return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
@@ -227,149 +137,9 @@ export default function AdminDocs() {
         <p className="text-sm text-[#64748b] mt-0.5">Workspace documents, build history, and system status</p>
       </div>
 
-      <motion.div
-        custom={0}
-        initial="hidden"
-        animate="visible"
-        variants={cardVariants}
-        className="glass p-5"
-      >
-        <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
-          <Brain className="w-4 h-4 text-cyan-400" />
-          Enverge / Spray Foam Proof of Knowledge
-        </h2>
-
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
-          <div className="glass-subtle p-4 rounded-2xl">
-            <div className="flex items-center gap-2 mb-2">
-              <FlaskConical className="w-4 h-4 text-cyan-400" />
-              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">Current Focus</p>
-            </div>
-            <p className="text-base font-semibold text-[#e2e8f0]">{envergeKnowledge.currentFocus}</p>
-            <p className="text-xs text-[#94a3b8] mt-2 leading-relaxed">
-              This section is the in-dashboard record of usable Enverge knowledge, not generic filler.
-            </p>
-          </div>
-
-          <div className="glass-subtle p-4 rounded-2xl">
-            <div className="flex items-center gap-2 mb-2">
-              <Thermometer className="w-4 h-4 text-amber-400" />
-              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">Current Starting Temps</p>
-            </div>
-            <div className="space-y-1.5 text-sm text-[#e2e8f0]">
-              <p>Hose / across: <span className="text-amber-300 font-medium">{envergeKnowledge.operatorBaseline.hose}</span></p>
-              <p>A-side barrel: <span className="text-amber-300 font-medium">{envergeKnowledge.operatorBaseline.aSide}</span></p>
-              <p>B-side barrel: <span className="text-amber-300 font-medium">{envergeKnowledge.operatorBaseline.bSide}</span></p>
-            </div>
-            <p className="text-xs text-[#94a3b8] mt-2 leading-relaxed">{envergeKnowledge.operatorBaseline.note}</p>
-          </div>
-
-          <div className="glass-subtle p-4 rounded-2xl">
-            <div className="flex items-center gap-2 mb-2">
-              <Droplets className="w-4 h-4 text-blue-400" />
-              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">Knowledge Standard</p>
-            </div>
-            <p className="text-sm text-[#e2e8f0] leading-relaxed">
-              Field-usable Enverge EasySeal .5 knowledge tied to real spray behavior, defects, weather, substrate, and machine settings.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="glass-subtle p-4 rounded-2xl">
-            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Proof logged now</p>
-            <div className="space-y-2">
-              {envergeKnowledge.proofOfKnowledge.map((item) => (
-                <div key={item} className="flex items-start gap-2 text-sm text-[#cbd5e1]">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="glass-subtle p-4 rounded-2xl">
-            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">What this section should keep proving</p>
-            <div className="space-y-2">
-              {envergeKnowledge.buildStandard.map((item) => (
-                <div key={item} className="flex items-start gap-2 text-sm text-[#cbd5e1]">
-                  <ArrowRight className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="glass-subtle p-4 rounded-2xl mt-4">
-          <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Next Enverge EasySeal .5 research targets</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {envergeKnowledge.nextResearchTargets.map((item) => (
-              <div key={item} className="text-sm text-[#cbd5e1] bg-white/[0.03] border border-white/[0.05] rounded-xl px-3 py-2">
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
-          <div className="glass-subtle p-4 rounded-2xl">
-            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Seasonal starting windows</p>
-            <div className="space-y-3">
-              {seasonalStartingWindows.map((item) => (
-                <div key={item.season} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
-                  <p className="text-sm font-medium text-[#e2e8f0]">{item.season}</p>
-                  <p className="text-xs text-amber-300 mt-1">{item.settings}</p>
-                  <p className="text-xs text-[#94a3b8] mt-2 leading-relaxed">{item.why}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="glass-subtle p-4 rounded-2xl">
-            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Dial-in rules</p>
-            <div className="space-y-2">
-              {dialInRules.map((item) => (
-                <div key={item} className="flex items-start gap-2 text-sm text-[#cbd5e1]">
-                  <ArrowRight className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
-          <div className="glass-subtle p-4 rounded-2xl">
-            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Defect signal map</p>
-            <div className="space-y-3">
-              {defectSignals.map((item) => (
-                <div key={item.symptom} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
-                  <p className="text-sm font-medium text-[#e2e8f0]">{item.symptom}</p>
-                  <p className="text-xs text-[#94a3b8] mt-1"><span className="text-amber-300">Likely cause:</span> {item.likelyCause}</p>
-                  <p className="text-xs text-[#94a3b8] mt-2"><span className="text-cyan-300">Move:</span> {item.action}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="glass-subtle p-4 rounded-2xl">
-            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Job observation template</p>
-            <div className="space-y-2">
-              {observationTemplate.map((item) => (
-                <div key={item} className="flex items-start gap-2 text-sm text-[#cbd5e1]">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
       {/* Documents */}
       <motion.div
-        custom={1}
+        custom={0}
         initial="hidden"
         animate="visible"
         variants={cardVariants}
@@ -405,7 +175,7 @@ export default function AdminDocs() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Commit history */}
         <motion.div
-          custom={2}
+          custom={1}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -438,7 +208,7 @@ export default function AdminDocs() {
 
         {/* Current system status */}
         <motion.div
-          custom={3}
+          custom={2}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -471,7 +241,7 @@ export default function AdminDocs() {
 
       {/* Next steps */}
       <motion.div
-        custom={4}
+        custom={3}
         initial="hidden"
         animate="visible"
         variants={cardVariants}
