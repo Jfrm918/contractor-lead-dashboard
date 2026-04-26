@@ -1,16 +1,18 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, ChevronDown } from 'lucide-react';
+import { Search, Filter, ChevronDown, Loader2 } from 'lucide-react';
 import {
-  leads,
+  leads as mockLeads,
   getStatusPillClass,
   getUrgencyPillClass,
+  scoreLead,
   timeAgo,
   type LeadStatus,
   type LeadSource,
   type Trade,
+  type Lead,
 } from '@/lib/data';
 
 interface LeadsPageProps {
@@ -18,11 +20,37 @@ interface LeadsPageProps {
 }
 
 export default function LeadsPage({ onViewLead }: LeadsPageProps) {
+  const [leads, setLeads] = useState<Lead[]>(mockLeads);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | ''>('');
   const [sourceFilter, setSourceFilter] = useState<LeadSource | ''>('');
   const [tradeFilter, setTradeFilter] = useState<Trade | ''>('');
   const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchLeads() {
+      try {
+        const res = await fetch('/api/leads?limit=200');
+        if (cancelled) return;
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setLeads(json.data);
+          }
+        }
+      } catch {
+        // Keep mock data on error
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchLeads();
+    return () => { cancelled = true; };
+  }, []);
 
   const filteredLeads = useMemo(() => {
     return leads.filter((l) => {
@@ -30,8 +58,8 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
         const q = search.toLowerCase();
         if (
           !l.name.toLowerCase().includes(q) &&
-          !l.service.toLowerCase().includes(q) &&
-          !l.city.toLowerCase().includes(q) &&
+          !(l.service || '').toLowerCase().includes(q) &&
+          !(l.city || '').toLowerCase().includes(q) &&
           !l.phone.includes(q)
         ) {
           return false;
@@ -42,11 +70,25 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
       if (tradeFilter && l.trade !== tradeFilter) return false;
       return true;
     });
-  }, [search, statusFilter, sourceFilter, tradeFilter]);
+  }, [leads, search, statusFilter, sourceFilter, tradeFilter]);
 
   const statuses: LeadStatus[] = ['New', 'Contacted', 'Qualified', 'Unqualified', 'Booking Requested', 'Booked', 'Closed Lost'];
   const sources: LeadSource[] = ['Google Ads', 'LSA', 'Organic', 'Referral'];
   const trades: Trade[] = ['HVAC', 'Plumbing', 'Roofing', 'Electrical', 'Insulation'];
+
+  if (loading) {
+    return (
+      <div className="space-y-5">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Leads Inbox</h1>
+          <p className="text-sm text-[#64748b] mt-0.5">Loading leads...</p>
+        </div>
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-5">
@@ -142,17 +184,17 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
                 <th className="text-left text-xs font-medium text-[#64748b] px-4 py-3">City</th>
                 <th className="text-left text-xs font-medium text-[#64748b] px-4 py-3">Source</th>
                 <th className="text-left text-xs font-medium text-[#64748b] px-4 py-3">Status</th>
+                <th className="text-left text-xs font-medium text-[#64748b] px-4 py-3">Score</th>
                 <th className="text-left text-xs font-medium text-[#64748b] px-4 py-3">Urgency</th>
                 <th className="text-left text-xs font-medium text-[#64748b] px-4 py-3">Last Contact</th>
               </tr>
             </thead>
             <tbody>
-              {filteredLeads.map((l) => (
-                <tr
-                  key={l.id}
-                  onClick={() => onViewLead(l.id)}
-                  className="border-b border-white/[0.03] interactive-row"
-                >
+              {filteredLeads.map((l) => {
+                const leadScore = scoreLead(l);
+                const scoreClass = leadScore.label === 'Hot' ? 'text-red-300 bg-red-400/10 border-red-400/20' : leadScore.label === 'Warm' ? 'text-amber-300 bg-amber-400/10 border-amber-400/20' : leadScore.label === 'Low' ? 'text-blue-300 bg-blue-400/10 border-blue-400/20' : 'text-[#94a3b8] bg-white/[0.03] border-white/[0.06]';
+                return (
+                <tr key={l.id} onClick={() => onViewLead(l.id)} className="border-b border-white/[0.03] interactive-row">
                   <td className="px-4 py-3.5">
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-lg bg-white/[0.06] border border-white/[0.06] flex items-center justify-center text-xs font-medium text-[#94a3b8]">
@@ -171,11 +213,14 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
                     <span className={getStatusPillClass(l.status)}>{l.status}</span>
                   </td>
                   <td className="px-4 py-3.5">
+                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${scoreClass}`}>{leadScore.label} · {leadScore.score}</span>
+                  </td>
+                  <td className="px-4 py-3.5">
                     <span className={getUrgencyPillClass(l.urgency)}>{l.urgency}</span>
                   </td>
                   <td className="px-4 py-3.5 text-[#64748b] text-xs">{timeAgo(l.lastContact)}</td>
                 </tr>
-              ))}
+              );})}
             </tbody>
           </table>
         </div>
@@ -213,6 +258,7 @@ export default function LeadsPage({ onViewLead }: LeadsPageProps) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className={getStatusPillClass(l.status)}>{l.status}</span>
+                <span className="text-xs text-cyan-300">{scoreLead(l).label} · {scoreLead(l).score}</span>
                 <span className="text-xs text-[#64748b]">{l.source}</span>
               </div>
               <span className="text-xs text-[#64748b]">{timeAgo(l.lastContact)}</span>

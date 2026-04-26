@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -13,15 +14,18 @@ import {
   AlertCircle,
   CheckCircle2,
   PhoneMissed,
+  Loader2,
 } from 'lucide-react';
 import {
-  leads,
-  alerts,
+  leads as mockLeads,
+  alerts as mockAlerts,
   getStatusPillClass,
   getUrgencyPillClass,
+  scoreLead,
   formatTime,
   formatDate,
   type Lead,
+  type Alert,
 } from '@/lib/data';
 
 interface LeadDetailProps {
@@ -30,8 +34,54 @@ interface LeadDetailProps {
 }
 
 export default function LeadDetail({ leadId, onBack }: LeadDetailProps) {
-  const lead = leads.find((l) => l.id === leadId) as Lead;
-  const leadAlerts = alerts.filter((a) => a.leadId === leadId);
+  const [lead, setLead] = useState<Lead | null>(null);
+  const [leadAlerts, setLeadAlerts] = useState<Alert[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchLead() {
+      try {
+        const res = await fetch(`/api/leads/${leadId}`);
+        if (cancelled) return;
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setLead(json.data);
+            if (json.data.alerts) {
+              setLeadAlerts(json.data.alerts);
+            } else {
+              // Alerts might not be in the response; use mock for matching lead
+              setLeadAlerts(mockAlerts.filter((a) => a.leadId === leadId));
+            }
+            return;
+          }
+        }
+        // Fallback to mock
+        const mockLead = mockLeads.find((l) => l.id === leadId) ?? null;
+        setLead(mockLead);
+        setLeadAlerts(mockAlerts.filter((a) => a.leadId === leadId));
+      } catch {
+        const mockLead = mockLeads.find((l) => l.id === leadId) ?? null;
+        setLead(mockLead);
+        setLeadAlerts(mockAlerts.filter((a) => a.leadId === leadId));
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchLead();
+    return () => { cancelled = true; };
+  }, [leadId]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
+      </div>
+    );
+  }
 
   if (!lead) {
     return (
@@ -41,6 +91,8 @@ export default function LeadDetail({ leadId, onBack }: LeadDetailProps) {
       </div>
     );
   }
+
+  const leadScore = scoreLead(lead);
 
   return (
     <div className="space-y-5">
@@ -64,6 +116,26 @@ export default function LeadDetail({ leadId, onBack }: LeadDetailProps) {
         </div>
       </div>
 
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+        className="glass p-5"
+      >
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.18em] text-[#64748b] mb-1">Lead quality score</p>
+            <p className="text-2xl font-semibold metric-value text-[#e2e8f0]">{leadScore.label} · {leadScore.score}/100</p>
+            <p className="text-sm text-cyan-300 mt-1">{leadScore.nextAction}</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {leadScore.reasons.map((reason) => (
+              <span key={reason} className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs text-[#cbd5e1]">{reason}</span>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Left column: contact info + qualification */}
         <div className="space-y-4 lg:col-span-1">
@@ -80,13 +152,15 @@ export default function LeadDetail({ leadId, onBack }: LeadDetailProps) {
                 <Phone className="w-4 h-4 text-[#64748b]" />
                 <span>{lead.phone}</span>
               </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Mail className="w-4 h-4 text-[#64748b]" />
-                <span className="text-[#94a3b8]">{lead.email}</span>
-              </div>
+              {lead.email && (
+                <div className="flex items-center gap-3 text-sm">
+                  <Mail className="w-4 h-4 text-[#64748b]" />
+                  <span className="text-[#94a3b8]">{lead.email}</span>
+                </div>
+              )}
               <div className="flex items-center gap-3 text-sm">
                 <MapPin className="w-4 h-4 text-[#64748b]" />
-                <span className="text-[#94a3b8]">{lead.city}</span>
+                <span className="text-[#94a3b8]">{lead.city || 'N/A'}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Wrench className="w-4 h-4 text-[#64748b]" />
@@ -107,7 +181,7 @@ export default function LeadDetail({ leadId, onBack }: LeadDetailProps) {
           </motion.div>
 
           {/* Qualification */}
-          {lead.qualificationAnswers.length > 0 && (
+          {lead.qualificationAnswers && lead.qualificationAnswers.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -119,7 +193,7 @@ export default function LeadDetail({ leadId, onBack }: LeadDetailProps) {
                 Qualification
               </h2>
               <div className="space-y-3">
-                {lead.qualificationAnswers.map((qa, i) => (
+                {lead.qualificationAnswers.map((qa: { question: string; answer: string }, i: number) => (
                   <div key={i}>
                     <p className="text-xs text-[#64748b] mb-0.5">{qa.question}</p>
                     <p className="text-sm text-[#e2e8f0]">{qa.answer}</p>
@@ -171,7 +245,10 @@ export default function LeadDetail({ leadId, onBack }: LeadDetailProps) {
             Conversation
           </h2>
           <div className="space-y-3 max-h-[600px] overflow-y-auto">
-            {lead.conversation.map((msg, i) => {
+            {(!lead.conversation || lead.conversation.length === 0) && (
+              <p className="text-sm text-[#64748b] text-center py-8">No conversation history yet.</p>
+            )}
+            {lead.conversation && lead.conversation.map((msg, i) => {
               if (msg.type === 'system') {
                 return (
                   <div key={i} className="flex justify-center">

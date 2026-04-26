@@ -32,6 +32,37 @@ export interface Lead {
   conversation: ConversationMessage[];
 }
 
+export function scoreLead(lead: Lead): { score: number; label: 'Hot' | 'Warm' | 'Low' | 'Bad Fit'; nextAction: string; reasons: string[] } {
+  let score = 0;
+  const reasons: string[] = [];
+
+  if (lead.urgency === 'Urgent') { score += 30; reasons.push('urgent timeline'); }
+  else if (lead.urgency === 'High') { score += 22; reasons.push('high urgency'); }
+  else if (lead.urgency === 'Medium') { score += 12; reasons.push('medium urgency'); }
+
+  if (lead.missedCall && !lead.recovered) { score += 18; reasons.push('missed call not recovered'); }
+  if (lead.recovered) { score += 16; reasons.push('recovered missed lead'); }
+  if (lead.status === 'Booking Requested') { score += 24; reasons.push('booking requested'); }
+  if (lead.status === 'Booked') { score += 18; reasons.push('already booked'); }
+  if (lead.status === 'Qualified') { score += 14; reasons.push('qualified'); }
+  if (lead.status === 'Unqualified' || lead.status === 'Closed Lost') { score -= 35; reasons.push('poor fit or closed lost'); }
+  if (lead.qualificationAnswers.length >= 2) { score += 8; reasons.push('qualification data captured'); }
+  if (lead.bookingIntent) { score += 10; reasons.push('booking intent present'); }
+  if (lead.source === 'Google Ads' || lead.source === 'LSA') { score += 6; reasons.push('paid lead source'); }
+
+  score = Math.max(0, Math.min(100, score));
+  const label = score >= 75 ? 'Hot' : score >= 45 ? 'Warm' : score >= 20 ? 'Low' : 'Bad Fit';
+  const nextAction = label === 'Hot'
+    ? 'Call now and push to booked estimate.'
+    : label === 'Warm'
+      ? 'Continue SMS qualification and offer estimate times.'
+      : label === 'Low'
+        ? 'Keep in nurture unless they reply with urgency.'
+        : 'Do not chase; mark closed or unqualified.';
+
+  return { score, label, nextAction, reasons };
+}
+
 export interface Alert {
   id: string;
   type: AlertType;
