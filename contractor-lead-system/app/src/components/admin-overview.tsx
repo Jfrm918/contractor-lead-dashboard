@@ -193,33 +193,49 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
   const openTasks = supportTasksList.filter(t => t.status !== 'Resolved');
   const onboardingClients = clientAccountsList.filter(c => c.status === 'Onboarding' || c.status === 'Trial');
   const totalLeadCount = clientAccountsList.reduce((sum, c) => sum + c.totalLeads, 0);
+  const missedCallCount = clientAccountsList.reduce((sum, c) => sum + (c.missedCalls ?? 0), 0);
   const recoveredLeadCount = clientAccountsList.reduce((sum, c) => sum + c.recoveredLeads, 0);
   const bookedEstimateCount = clientAccountsList.reduce((sum, c) => sum + c.bookedEstimates, 0);
-  const unrecoveredLeadCount = Math.max(totalLeadCount - recoveredLeadCount, 0);
+  const unrecoveredMissedCallCount = clientAccountsList.reduce((sum, c) => sum + Math.max((c.missedCalls ?? 0) - c.recoveredLeads, 0), 0);
   const recoveredToBookedRate = recoveredLeadCount > 0 ? bookedEstimateCount / recoveredLeadCount : 0;
-  const closeRate = Math.max(Math.min(closeRatePct, 100), 0) / 100;
-  const recoveredRevenueProtected = bookedEstimateCount * avgBookedJobValue * closeRate;
-  const estimatedLeakValue = unrecoveredLeadCount * recoveredToBookedRate * avgBookedJobValue * closeRate;
+  const recoveredRevenueProtected = clientAccountsList.reduce((sum, c) => {
+    const jobValue = c.avgBookedJobValue || avgBookedJobValue;
+    const clientCloseRate = Math.max(Math.min(c.closeRatePct || closeRatePct, 100), 0) / 100;
+    return sum + (c.bookedEstimates * jobValue * clientCloseRate);
+  }, 0);
+  const estimatedLeakValue = clientAccountsList.reduce((sum, c) => {
+    const unrecoveredMissedCalls = Math.max((c.missedCalls ?? 0) - c.recoveredLeads, 0);
+    const clientRecoveredToBookedRate = c.recoveredLeads > 0 ? c.bookedEstimates / c.recoveredLeads : recoveredToBookedRate;
+    const jobValue = c.avgBookedJobValue || avgBookedJobValue;
+    const clientCloseRate = Math.max(Math.min(c.closeRatePct || closeRatePct, 100), 0) / 100;
+    return sum + (unrecoveredMissedCalls * clientRecoveredToBookedRate * jobValue * clientCloseRate);
+  }, 0);
+  const weightedAvgJobValue = bookedEstimateCount > 0
+    ? clientAccountsList.reduce((sum, c) => sum + (c.bookedEstimates * (c.avgBookedJobValue || avgBookedJobValue)), 0) / bookedEstimateCount
+    : avgBookedJobValue;
+  const weightedCloseRatePct = bookedEstimateCount > 0
+    ? clientAccountsList.reduce((sum, c) => sum + (c.bookedEstimates * (c.closeRatePct || closeRatePct)), 0) / bookedEstimateCount
+    : closeRatePct;
   const ownerActionCount = openTasks.length + needsAttention.length;
 
   const lrpMetrics = [
-    { label: 'Lead value still at risk', value: formatCurrency(estimatedLeakValue), note: `${unrecoveredLeadCount} tracked leads not recovered yet × current assumptions`, icon: AlertTriangle, color: 'text-red-400' },
-    { label: 'Revenue protected', value: formatCurrency(recoveredRevenueProtected), note: `${bookedEstimateCount} booked estimates × job value × close rate`, icon: PhoneForwarded, color: 'text-cyan-400' },
+    { label: 'Missed-call value at risk', value: formatCurrency(estimatedLeakValue), note: `${unrecoveredMissedCallCount} missed calls not recovered × client values/close rates`, icon: AlertTriangle, color: 'text-red-400' },
+    { label: 'Revenue protected', value: formatCurrency(recoveredRevenueProtected), note: `${bookedEstimateCount} booked estimates × actual client close-rate data`, icon: PhoneForwarded, color: 'text-cyan-400' },
     { label: 'Recovered-to-booked', value: `${Math.round(recoveredToBookedRate * 100)}%`, note: `${bookedEstimateCount} booked from ${recoveredLeadCount} recovered leads`, icon: CalendarCheck, color: 'text-emerald-400' },
     { label: 'Owner actions', value: ownerActionCount, note: `${openTasks.length} open tasks + ${needsAttention.length} workflow issues`, icon: Activity, color: 'text-purple-400' },
   ];
 
   const lrpPipeline = [
     { stage: 'Leads tracked', count: totalLeadCount, detail: 'All inbound opportunities currently visible across client dashboards' },
+    { stage: 'Missed calls', count: missedCallCount, detail: 'Actual missed-call count pulled from client lead records' },
     { stage: 'Recovered by LRP', count: recoveredLeadCount, detail: 'Leads pulled back into conversation after missed or delayed follow-up' },
     { stage: 'Booked estimates', count: bookedEstimateCount, detail: 'Recovered/followed-up leads that became scheduled estimate opportunities' },
-    { stage: 'Owner action needed', count: ownerActionCount, detail: 'Open tasks and unhealthy workflows blocking more recovered revenue' },
   ];
 
   const lrpOwnerActions = [
     ...(needsAttention.length > 0 ? [`Fix ${needsAttention.length} workflow issue${needsAttention.length === 1 ? '' : 's'} before more leads leak.`] : []),
     ...(openTasks.length > 0 ? [`Clear ${openTasks.length} open operator task${openTasks.length === 1 ? '' : 's'} tied to client follow-up.`] : []),
-    `Use ${formatCurrency(avgBookedJobValue)} average job value and ${closeRatePct}% close rate until each client has real close data.`,
+    `Current weighted client value: ${formatCurrency(weightedAvgJobValue)} average job value at ${Math.round(weightedCloseRatePct)}% close rate.`,
     'Review this section weekly: if revenue protected is not above monthly fee, tighten script, speed, or target client.',
   ];
 
@@ -405,14 +421,14 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
           <div className="glass-subtle p-4 rounded-2xl md:col-span-2">
-            <p className="text-sm font-semibold text-[#e2e8f0] mb-2">ROI calculator assumptions</p>
+            <p className="text-sm font-semibold text-[#e2e8f0] mb-2">Client value + close-rate data</p>
             <p className="text-xs text-[#94a3b8] leading-relaxed">
-              These controls turn LRP into an owner-facing calculator. Change the average booked job value and close rate to show what recovered leads are worth for each contractor.
+              LRP now calculates from missed-call counts, recovered leads, booked estimates, each client&apos;s average booked job value, and each client&apos;s close rate. The inputs only fill gaps when a client does not have value data yet.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="text-xs text-[#94a3b8]">
-              Avg booked job value
+              Fallback job value
               <input
                 type="number"
                 min="0"
@@ -423,7 +439,7 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
               />
             </label>
             <label className="text-xs text-[#94a3b8]">
-              Close rate %
+              Fallback close %
               <input
                 type="number"
                 min="0"

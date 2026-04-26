@@ -681,8 +681,11 @@ export interface ClientAccount {
   monthlyPrice: number;
   onboardingSteps: { step: OnboardingStep; completed: boolean; completedDate?: string }[];
   totalLeads: number;
+  missedCalls: number;
   recoveredLeads: number;
   bookedEstimates: number;
+  avgBookedJobValue: number;
+  closeRatePct: number;
   openTasks: number;
   lastActivity: string;
   recentEvents: { description: string; timestamp: string }[];
@@ -741,8 +744,11 @@ export const clientAccounts: ClientAccount[] = [
       { step: 'Scorecard Sent', completed: true, completedDate: '2026-03-31' },
     ],
     totalLeads: 62,
+    missedCalls: 34,
     recoveredLeads: 28,
     bookedEstimates: 19,
+    avgBookedJobValue: 6800,
+    closeRatePct: 42,
     openTasks: 0,
     lastActivity: '2026-04-24T10:15:00',
     recentEvents: [
@@ -773,8 +779,11 @@ export const clientAccounts: ClientAccount[] = [
       { step: 'Scorecard Sent', completed: true, completedDate: '2026-04-01' },
     ],
     totalLeads: 38,
+    missedCalls: 21,
     recoveredLeads: 15,
     bookedEstimates: 11,
+    avgBookedJobValue: 11500,
+    closeRatePct: 31,
     openTasks: 2,
     lastActivity: '2026-04-24T09:45:00',
     recentEvents: [
@@ -805,8 +814,11 @@ export const clientAccounts: ClientAccount[] = [
       { step: 'Scorecard Sent', completed: true, completedDate: '2026-03-31' },
     ],
     totalLeads: 71,
+    missedCalls: 39,
     recoveredLeads: 34,
     bookedEstimates: 22,
+    avgBookedJobValue: 4200,
+    closeRatePct: 46,
     openTasks: 1,
     lastActivity: '2026-04-24T11:15:00',
     recentEvents: [
@@ -837,8 +849,11 @@ export const clientAccounts: ClientAccount[] = [
       { step: 'Scorecard Sent', completed: false },
     ],
     totalLeads: 9,
+    missedCalls: 5,
     recoveredLeads: 4,
     bookedEstimates: 2,
+    avgBookedJobValue: 2600,
+    closeRatePct: 35,
     openTasks: 1,
     lastActivity: '2026-04-24T10:55:00',
     recentEvents: [
@@ -868,8 +883,11 @@ export const clientAccounts: ClientAccount[] = [
       { step: 'Scorecard Sent', completed: false },
     ],
     totalLeads: 0,
+    missedCalls: 0,
     recoveredLeads: 0,
     bookedEstimates: 0,
+    avgBookedJobValue: 5000,
+    closeRatePct: 30,
     openTasks: 3,
     lastActivity: '2026-04-23T11:00:00',
     recentEvents: [
