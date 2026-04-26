@@ -14,6 +14,10 @@ import {
   ClipboardList,
   BarChart3,
   Users,
+  FlaskConical,
+  Thermometer,
+  Droplets,
+  Brain,
 } from 'lucide-react';
 
 const cardVariants = {
@@ -108,6 +112,34 @@ const nextSteps = [
   { priority: 'Low', item: 'Webhook integrations (Zapier, CRM sync)', reason: 'Expands platform reach into existing contractor workflows' },
 ];
 
+const envergeKnowledge = {
+  currentFocus: 'Enverge EasySeal .5 open-cell spray foam',
+  operatorBaseline: {
+    hose: '145°F',
+    aSide: '95°F',
+    bSide: '100°F',
+    note: 'Jason’s stated usual starting point this time of year: 145 all the way across, A-side barrel 95, B-side barrel 100.',
+  },
+  proofOfKnowledge: [
+    'Current research priority is Enverge chemicals and Graco E-30 equipment.',
+    'Immediate product focus is Enverge EasySeal .5.',
+    'Useful knowledge standard here is not generic spray foam talk — it is job-usable dial-in knowledge tied to actual field settings, conditions, and outcomes.',
+    'The dashboard should become the place where Jason can verify accumulated Enverge knowledge, job observations, dial-in patterns, and recommendations without relying on chat memory.',
+  ],
+  buildStandard: [
+    'Track actual start settings used on each job.',
+    'Track weather / ambient conditions with each spray session.',
+    'Track substrate, yield, spray feel, shrink, pull-away, rolling, and finish quality.',
+    'Convert repeated field observations into practical Enverge EasySeal .5 guidance over time.',
+  ],
+  nextResearchTargets: [
+    'How EasySeal .5 responds to seasonal ambient swings.',
+    'How barrel temperature shifts affect spray feel and structure.',
+    'What recurring defects correlate to heat, substrate, and humidity.',
+    'What repeatable starting ranges work best on Jason’s rig with Graco E-30 behavior.'
+  ]
+};
+
 function getStatusColor(status: DocEntry['status']) {
   switch (status) {
     case 'Live in App': return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
@@ -137,9 +169,95 @@ export default function AdminDocs() {
         <p className="text-sm text-[#64748b] mt-0.5">Workspace documents, build history, and system status</p>
       </div>
 
-      {/* Documents */}
       <motion.div
         custom={0}
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        className="glass p-5"
+      >
+        <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
+          <Brain className="w-4 h-4 text-cyan-400" />
+          Enverge / Spray Foam Proof of Knowledge
+        </h2>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
+          <div className="glass-subtle p-4 rounded-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <FlaskConical className="w-4 h-4 text-cyan-400" />
+              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">Current Focus</p>
+            </div>
+            <p className="text-base font-semibold text-[#e2e8f0]">{envergeKnowledge.currentFocus}</p>
+            <p className="text-xs text-[#94a3b8] mt-2 leading-relaxed">
+              This section is the in-dashboard record of usable Enverge knowledge, not generic filler.
+            </p>
+          </div>
+
+          <div className="glass-subtle p-4 rounded-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Thermometer className="w-4 h-4 text-amber-400" />
+              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">Current Starting Temps</p>
+            </div>
+            <div className="space-y-1.5 text-sm text-[#e2e8f0]">
+              <p>Hose / across: <span className="text-amber-300 font-medium">{envergeKnowledge.operatorBaseline.hose}</span></p>
+              <p>A-side barrel: <span className="text-amber-300 font-medium">{envergeKnowledge.operatorBaseline.aSide}</span></p>
+              <p>B-side barrel: <span className="text-amber-300 font-medium">{envergeKnowledge.operatorBaseline.bSide}</span></p>
+            </div>
+            <p className="text-xs text-[#94a3b8] mt-2 leading-relaxed">{envergeKnowledge.operatorBaseline.note}</p>
+          </div>
+
+          <div className="glass-subtle p-4 rounded-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Droplets className="w-4 h-4 text-blue-400" />
+              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">Knowledge Standard</p>
+            </div>
+            <p className="text-sm text-[#e2e8f0] leading-relaxed">
+              Field-usable Enverge EasySeal .5 knowledge tied to real spray behavior, defects, weather, substrate, and machine settings.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="glass-subtle p-4 rounded-2xl">
+            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Proof logged now</p>
+            <div className="space-y-2">
+              {envergeKnowledge.proofOfKnowledge.map((item) => (
+                <div key={item} className="flex items-start gap-2 text-sm text-[#cbd5e1]">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="glass-subtle p-4 rounded-2xl">
+            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">What this section should keep proving</p>
+            <div className="space-y-2">
+              {envergeKnowledge.buildStandard.map((item) => (
+                <div key={item} className="flex items-start gap-2 text-sm text-[#cbd5e1]">
+                  <ArrowRight className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="glass-subtle p-4 rounded-2xl mt-4">
+          <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Next Enverge EasySeal .5 research targets</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {envergeKnowledge.nextResearchTargets.map((item) => (
+              <div key={item} className="text-sm text-[#cbd5e1] bg-white/[0.03] border border-white/[0.05] rounded-xl px-3 py-2">
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Documents */}
+      <motion.div
+        custom={1}
         initial="hidden"
         animate="visible"
         variants={cardVariants}
@@ -175,7 +293,7 @@ export default function AdminDocs() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Commit history */}
         <motion.div
-          custom={1}
+          custom={2}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -208,7 +326,7 @@ export default function AdminDocs() {
 
         {/* Current system status */}
         <motion.div
-          custom={2}
+          custom={3}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -241,7 +359,7 @@ export default function AdminDocs() {
 
       {/* Next steps */}
       <motion.div
-        custom={3}
+        custom={4}
         initial="hidden"
         animate="visible"
         variants={cardVariants}
