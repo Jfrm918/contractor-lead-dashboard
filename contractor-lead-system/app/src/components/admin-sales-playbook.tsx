@@ -79,6 +79,27 @@ const tradeScripts = {
 
 type TradeScriptKey = keyof typeof tradeScripts;
 
+const lucrativeAddOns = [
+  {
+    name: 'Local Response Speed Audit™',
+    why: 'Creates competitive pressure before the sale: shows whether local competitors respond faster and where the client is losing buyers.',
+    fulfillment: 'Setup-only or monthly light audit: test 3–5 competitors, record response time/channel/follow-up quality, summarize gaps.',
+    backend: 'Low backend stress — manual inputs + report template.',
+  },
+  {
+    name: 'Weekly Lost Lead Report',
+    why: 'Turns LRP into a recurring management tool by showing leaked leads, recovered leads, owner actions, and protected value every week.',
+    fulfillment: 'Auto-pull missed/recovered/booked metrics already in the dashboard and generate a 3-action owner summary.',
+    backend: 'Low backend stress — uses existing lead metrics.',
+  },
+  {
+    name: 'Lead Leak Calculator™',
+    why: 'Makes the money pain obvious by converting missed calls into estimated value at risk and recovered pipeline.',
+    fulfillment: 'Use missed calls, avg job value, recovered-to-booked rate, and close rate to show value lost/protected.',
+    backend: 'Already mostly built — package it as a named feature.',
+  },
+];
+
 /* ─── Highlight Block ─── */
 function Highlight({ icon: Icon, label, children, color = 'blue' }: {
   icon: typeof DollarSign;
@@ -183,6 +204,21 @@ function DemoTab() {
           ))}
         </div>
       </SectionCard>
+
+      <SectionCard title="Low-Stress Add-On Value Stack" icon={Sparkles} index={3}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {lucrativeAddOns.map((addOn) => (
+            <div key={addOn.name} className="glass-subtle p-4 rounded-2xl">
+              <p className="text-base font-semibold text-[#e2e8f0]">{addOn.name}</p>
+              <p className="text-sm text-[#cbd5e1] mt-2 leading-relaxed">{addOn.why}</p>
+              <div className="mt-3 pt-3 border-t border-white/[0.06] space-y-2">
+                <p className="text-xs text-cyan-300"><span className="text-[#64748b]">Fulfillment:</span> {addOn.fulfillment}</p>
+                <p className="text-xs text-emerald-300"><span className="text-[#64748b]">Ops load:</span> {addOn.backend}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
     </div>
   );
 }
@@ -222,8 +258,11 @@ function ProofTab() {
   const [recovered, setRecovered] = useState(10);
   const [booked, setBooked] = useState(5);
   const [jobValue, setJobValue] = useState(4500);
+  const [clientMinutes, setClientMinutes] = useState(62);
+  const [competitorAvgMinutes, setCompetitorAvgMinutes] = useState(14);
   const protectedValue = booked * jobValue;
   const recoveryRate = missed > 0 ? Math.round((recovered / missed) * 100) : 0;
+  const responseGap = Math.max(clientMinutes - competitorAvgMinutes, 0);
   return (
     <div className="space-y-5">
       <SectionCard title="Proof / Case Study Generator" icon={FileText} index={0}>
@@ -242,6 +281,26 @@ function ProofTab() {
         <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4">
           <p className="text-sm text-[#e2e8f0] leading-relaxed">
             In a 14-day pilot, LRP tracked <span className="text-white font-semibold">{missed}</span> missed calls, recovered <span className="text-white font-semibold">{recovered}</span>, and helped create <span className="text-white font-semibold">{booked}</span> booked estimate opportunities. At an average job value of <span className="text-white font-semibold">${jobValue.toLocaleString()}</span>, that represents <span className="text-emerald-300 font-semibold">${protectedValue.toLocaleString()}</span> in visible pipeline and a <span className="text-emerald-300 font-semibold">{recoveryRate}%</span> missed-call recovery rate.
+          </p>
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Local Response Speed Audit™" icon={Crosshair} index={1}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+          <label className="text-xs text-[#94a3b8]">Client response time / min
+            <input type="number" value={clientMinutes} onChange={(e) => setClientMinutes(Number(e.target.value) || 0)} className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-[#e2e8f0] outline-none" />
+          </label>
+          <label className="text-xs text-[#94a3b8]">Competitor avg / min
+            <input type="number" value={competitorAvgMinutes} onChange={(e) => setCompetitorAvgMinutes(Number(e.target.value) || 0)} className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-[#e2e8f0] outline-none" />
+          </label>
+          <div className="rounded-xl border border-amber-400/20 bg-amber-400/10 p-3">
+            <p className="text-xs text-amber-300">Response gap</p>
+            <p className="text-2xl font-semibold metric-value text-[#e2e8f0]">{responseGap} min</p>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4">
+          <p className="text-sm text-[#e2e8f0] leading-relaxed">
+            Local audit result: competitors responded in about <span className="text-white font-semibold">{competitorAvgMinutes} minutes</span>, while the client took about <span className="text-white font-semibold">{clientMinutes} minutes</span>. LRP closes that <span className="text-cyan-300 font-semibold">{responseGap}-minute speed gap</span> by triggering instant missed-call follow-up and owner alerts.
           </p>
         </div>
       </SectionCard>
@@ -316,6 +375,18 @@ function OfferTab() {
           </div>
         </SectionCard>
       </div>
+
+      <SectionCard title="Included Bonus Add-Ons" icon={Sparkles} index={3}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {lucrativeAddOns.map((addOn) => (
+            <div key={addOn.name} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
+              <p className="text-sm font-semibold text-[#e2e8f0]">{addOn.name}</p>
+              <p className="text-xs text-[#94a3b8] mt-2 leading-relaxed">{addOn.why}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-[#64748b] mt-3">These increase perceived value without creating heavy fulfillment work. Keep them as setup/pilot bonuses until the core system is proven.</p>
+      </SectionCard>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Target niches */}

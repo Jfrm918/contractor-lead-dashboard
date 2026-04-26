@@ -43,6 +43,12 @@ const launchChecklist = [
   'Scorecard Sent',
 ];
 
+const addOnFulfillment = [
+  { name: 'Local Response Speed Audit™', cadence: 'Setup / optional monthly', ownerWork: 'Pick 3–5 competitors and enter response times.', output: 'Competitive speed gap report' },
+  { name: 'Weekly Lost Lead Report', cadence: 'Weekly', ownerWork: 'Review missed/recovered/booked metrics and send 3 actions.', output: 'Owner action summary' },
+  { name: 'Lead Leak Calculator™', cadence: 'Live dashboard', ownerWork: 'Confirm avg job value and close rate assumptions.', output: 'Revenue at risk / protected value' },
+];
+
 export default function AdminOperations() {
   const [clientAccountsList, setClientAccountsList] = useState<ClientAccount[]>(mockClientAccounts);
   const [supportTasksList, setSupportTasksList] = useState<SupportTask[]>(mockSupportTasks);
@@ -143,9 +149,33 @@ export default function AdminOperations() {
           </div>
         </motion.div>
 
-        {/* Automation health */}
+        {/* Add-on fulfillment tracker */}
         <motion.div
           custom={1}
+          initial="hidden"
+          animate="visible"
+          variants={cardVariants}
+          className="glass p-5 lg:col-span-2"
+        >
+          <h2 className="text-sm font-semibold mb-4 flex items-center gap-2">
+            <Clipboard className="w-4 h-4 text-cyan-400" />
+            Low-Stress Add-On Fulfillment
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {addOnFulfillment.map((addOn) => (
+              <div key={addOn.name} className="glass-subtle p-4 rounded-2xl">
+                <p className="text-sm font-semibold text-[#e2e8f0]">{addOn.name}</p>
+                <p className="text-xs text-purple-300 mt-1">{addOn.cadence}</p>
+                <p className="text-xs text-[#94a3b8] mt-3 leading-relaxed"><span className="text-[#cbd5e1]">Operator step:</span> {addOn.ownerWork}</p>
+                <p className="text-xs text-emerald-300 mt-2"><span className="text-[#64748b]">Output:</span> {addOn.output}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Automation health */}
+        <motion.div
+          custom={2}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -178,7 +208,7 @@ export default function AdminOperations() {
 
         {/* Billing summary */}
         <motion.div
-          custom={2}
+          custom={3}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -218,7 +248,7 @@ export default function AdminOperations() {
 
         {/* Support / Tasks queue */}
         <motion.div
-          custom={3}
+          custom={4}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -256,7 +286,7 @@ export default function AdminOperations() {
 
         {/* Recent operator actions */}
         <motion.div
-          custom={4}
+          custom={5}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -284,7 +314,7 @@ export default function AdminOperations() {
 
         {/* Onboarding tracker */}
         <motion.div
-          custom={5}
+          custom={6}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
@@ -351,7 +381,7 @@ export default function AdminOperations() {
 
         {/* Script revision notes */}
         <motion.div
-          custom={6}
+          custom={7}
           initial="hidden"
           animate="visible"
           variants={cardVariants}
