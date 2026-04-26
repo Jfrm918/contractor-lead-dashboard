@@ -36,15 +36,48 @@ const cardVariants = {
   }),
 };
 
-type PlaybookTab = 'offer' | 'cold-call' | 'cold-email' | 'closing' | 'outreach-ops';
+type PlaybookTab = 'demo' | 'offer' | 'script-builder' | 'cold-call' | 'cold-email' | 'closing' | 'proof' | 'outreach-ops';
 
 const tabs: { id: PlaybookTab; label: string; icon: typeof DollarSign }[] = [
+  { id: 'demo', label: 'Demo View', icon: BarChart3 },
   { id: 'offer', label: 'Offer & Pricing', icon: DollarSign },
+  { id: 'script-builder', label: 'Script Builder', icon: MessageCircle },
   { id: 'cold-call', label: 'Cold Call Script', icon: Phone },
   { id: 'cold-email', label: 'Cold Email Sequence', icon: Mail },
   { id: 'closing', label: 'Closing & Pilot', icon: Handshake },
+  { id: 'proof', label: 'Proof Generator', icon: FileText },
   { id: 'outreach-ops', label: 'Outreach Ops', icon: Crosshair },
 ];
+
+const tradeScripts = {
+  HVAC: {
+    opener: 'Sorry we missed you — is this about repair, replacement, or maintenance?',
+    questions: ['Is the system currently working?', 'How old is the unit?', 'Are you looking for repair or replacement?', 'What time window works for an estimate?'],
+    hot: 'No cooling/heat, replacement interest, elderly/kids in home, or same-day need.',
+  },
+  Roofing: {
+    opener: 'Sorry we missed you — are you dealing with storm damage, a leak, or a roof replacement question?',
+    questions: ['Is there active leaking?', 'Was this storm or insurance related?', 'How old is the roof?', 'Do you want an inspection this week?'],
+    hot: 'Active leak, storm damage, insurance claim, or full replacement interest.',
+  },
+  Plumbing: {
+    opener: 'Sorry we missed you — is this urgent plumbing, water heater, drain, or leak related?',
+    questions: ['Is water actively leaking?', 'Is anything shut off?', 'What fixture or line is involved?', 'Do you need someone today?'],
+    hot: 'Active leak, no hot water, slab leak signs, sewer backup, or shutoff situation.',
+  },
+  Electrical: {
+    opener: 'Sorry we missed you — is this for a panel, outlet, EV charger, repair, or safety issue?',
+    questions: ['Is power out or flickering?', 'Any burning smell or tripped breakers?', 'What work are you trying to get done?', 'Is there a deadline?'],
+    hot: 'Safety concern, outage, panel issue, EV charger install, or project deadline.',
+  },
+  Insulation: {
+    opener: 'Sorry we missed you — is this for attic insulation, spray foam, crawlspace, or an energy-bill issue?',
+    questions: ['What area needs insulation?', 'Is this retrofit or new construction?', 'What problem are you trying to solve?', 'When do you want the estimate?'],
+    hot: 'High utility bills, new construction timeline, comfort complaint, or ready-to-book estimate.',
+  },
+};
+
+type TradeScriptKey = keyof typeof tradeScripts;
 
 /* ─── Highlight Block ─── */
 function Highlight({ icon: Icon, label, children, color = 'blue' }: {
@@ -101,6 +134,118 @@ function SectionCard({ title, icon: Icon, children, index = 0 }: {
       </h2>
       {children}
     </motion.div>
+  );
+}
+
+function DemoTab() {
+  return (
+    <div className="space-y-5">
+      <SectionCard title="Demo-Ready Sales View" icon={BarChart3} index={0}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {[
+            { label: 'Problem', value: 'Paid leads die when calls are missed.', detail: 'Contractors spend on Google/LSA/referrals, then lose buyers because follow-up is slow.' },
+            { label: 'System', value: 'LRP responds, qualifies, and alerts.', detail: 'Missed call → instant SMS → qualification → hot lead alert → booked estimate push.' },
+            { label: 'Proof', value: 'Dashboard shows recovered value.', detail: 'Owner sees missed calls, recovered leads, booked estimates, and revenue protected.' },
+          ].map((item) => (
+            <div key={item.label} className="glass-subtle p-4 rounded-2xl">
+              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">{item.label}</p>
+              <p className="text-base font-semibold text-[#e2e8f0] mt-2">{item.value}</p>
+              <p className="text-sm text-[#94a3b8] mt-2 leading-relaxed">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Prospect Walkthrough Order" icon={ListChecks} index={1}>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+          {['Show missed-call problem', 'Show live lead inbox', 'Open hot lead score', 'Show LRP ROI math', 'Offer 14-day pilot'].map((step, i) => (
+            <div key={step} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
+              <p className="text-[10px] text-purple-300 mb-1">STEP {i + 1}</p>
+              <p className="text-sm text-[#e2e8f0]">{step}</p>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Pilot Offer" icon={Handshake} index={2}>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          {[
+            ['Setup', '$500', 'tracking number, scripts, routing, test call'],
+            ['Monthly', '$750/mo', 'missed-call recovery + reporting'],
+            ['Proof Window', '14 days', 'show response speed and recovered opportunities'],
+            ['Success Metric', '3+ recovered leads', 'or clear evidence of leak/value'],
+          ].map(([label, value, detail]) => (
+            <div key={label} className="glass-subtle p-4 rounded-2xl">
+              <p className="text-xs text-[#64748b]">{label}</p>
+              <p className="text-xl font-semibold metric-value text-emerald-300 mt-1">{value}</p>
+              <p className="text-xs text-[#94a3b8] mt-2">{detail}</p>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
+function ScriptBuilderTab() {
+  const [trade, setTrade] = useState<TradeScriptKey>('HVAC');
+  const script = tradeScripts[trade];
+  return (
+    <div className="space-y-5">
+      <SectionCard title="Trade Script Builder" icon={MessageCircle} index={0}>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {(Object.keys(tradeScripts) as TradeScriptKey[]).map((t) => (
+            <button key={t} onClick={() => setTrade(t)} className={`rounded-xl border px-3 py-2 text-sm ${trade === t ? 'border-purple-400/40 bg-purple-400/15 text-white' : 'border-white/[0.06] bg-white/[0.03] text-[#94a3b8]'}`}>{t}</button>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="glass-subtle p-4 rounded-2xl">
+            <p className="text-xs uppercase tracking-[0.18em] text-[#64748b] mb-2">Missed-call opener</p>
+            <p className="text-sm text-[#e2e8f0] italic">“{script.opener}”</p>
+          </div>
+          <div className="glass-subtle p-4 rounded-2xl">
+            <p className="text-xs uppercase tracking-[0.18em] text-[#64748b] mb-2">Qualifying questions</p>
+            <div className="space-y-2">{script.questions.map((q) => <p key={q} className="text-sm text-[#cbd5e1]">• {q}</p>)}</div>
+          </div>
+          <div className="glass-subtle p-4 rounded-2xl">
+            <p className="text-xs uppercase tracking-[0.18em] text-[#64748b] mb-2">Hot lead rule</p>
+            <p className="text-sm text-amber-300">{script.hot}</p>
+          </div>
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+
+function ProofTab() {
+  const [missed, setMissed] = useState(24);
+  const [recovered, setRecovered] = useState(10);
+  const [booked, setBooked] = useState(5);
+  const [jobValue, setJobValue] = useState(4500);
+  const protectedValue = booked * jobValue;
+  const recoveryRate = missed > 0 ? Math.round((recovered / missed) * 100) : 0;
+  return (
+    <div className="space-y-5">
+      <SectionCard title="Proof / Case Study Generator" icon={FileText} index={0}>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+          {[
+            ['Missed calls', missed, setMissed],
+            ['Recovered', recovered, setRecovered],
+            ['Booked', booked, setBooked],
+            ['Avg job $', jobValue, setJobValue],
+          ].map(([label, value, setter]) => (
+            <label key={label as string} className="text-xs text-[#94a3b8]">{label as string}
+              <input type="number" value={value as number} onChange={(e) => (setter as React.Dispatch<React.SetStateAction<number>>)(Number(e.target.value) || 0)} className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-[#e2e8f0] outline-none" />
+            </label>
+          ))}
+        </div>
+        <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4">
+          <p className="text-sm text-[#e2e8f0] leading-relaxed">
+            In a 14-day pilot, LRP tracked <span className="text-white font-semibold">{missed}</span> missed calls, recovered <span className="text-white font-semibold">{recovered}</span>, and helped create <span className="text-white font-semibold">{booked}</span> booked estimate opportunities. At an average job value of <span className="text-white font-semibold">${jobValue.toLocaleString()}</span>, that represents <span className="text-emerald-300 font-semibold">${protectedValue.toLocaleString()}</span> in visible pipeline and a <span className="text-emerald-300 font-semibold">{recoveryRate}%</span> missed-call recovery rate.
+          </p>
+        </div>
+      </SectionCard>
+    </div>
   );
 }
 
@@ -757,7 +902,7 @@ function OutreachOpsTab() {
 
 /* ─── Main Component ─── */
 export default function AdminSalesPlaybook() {
-  const [activeTab, setActiveTab] = useState<PlaybookTab>('offer');
+  const [activeTab, setActiveTab] = useState<PlaybookTab>('demo');
 
   return (
     <div className="space-y-6">
@@ -799,10 +944,13 @@ export default function AdminSalesPlaybook() {
       </motion.div>
 
       {/* Tab content */}
+      {activeTab === 'demo' && <DemoTab />}
       {activeTab === 'offer' && <OfferTab />}
+      {activeTab === 'script-builder' && <ScriptBuilderTab />}
       {activeTab === 'cold-call' && <ColdCallTab />}
       {activeTab === 'cold-email' && <ColdEmailTab />}
       {activeTab === 'closing' && <ClosingTab />}
+      {activeTab === 'proof' && <ProofTab />}
       {activeTab === 'outreach-ops' && <OutreachOpsTab />}
     </div>
   );
