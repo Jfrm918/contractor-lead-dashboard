@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
   Building2,
@@ -11,13 +12,19 @@ import {
   Clipboard,
   Activity,
   ArrowRight,
+  Shield,
+  RefreshCw,
+  Loader2,
 } from 'lucide-react';
 import {
-  adminMetrics,
-  clientAccounts,
-  supportTasks,
+  adminMetrics as mockAdminMetrics,
+  clientAccounts as mockClientAccounts,
+  supportTasks as mockSupportTasks,
   getHealthColor,
   timeAgo,
+  type AdminMetrics,
+  type ClientAccount,
+  type SupportTask,
 } from '@/lib/data';
 
 const cardVariants = {
@@ -29,12 +36,157 @@ const cardVariants = {
   }),
 };
 
+const lrpMetrics = [
+  { label: 'Missed-call leak', value: '$18.4k', note: 'estimated monthly lead value at risk', icon: AlertTriangle, color: 'text-red-400' },
+  { label: 'Recovered pipeline', value: '$7.8k', note: 'estimated value pulled back into follow-up', icon: PhoneForwarded, color: 'text-cyan-400' },
+  { label: 'Booked estimates', value: '23', note: 'from recovered or instantly followed-up leads', icon: CalendarCheck, color: 'text-emerald-400' },
+  { label: 'Speed-to-lead', value: '<60s', note: 'target response time after a missed call', icon: Activity, color: 'text-purple-400' },
+];
+
+const lrpPipeline = [
+  { stage: 'Missed call detected', count: 41, detail: 'Inbound calls that would normally disappear without follow-up' },
+  { stage: 'Instant SMS sent', count: 39, detail: 'Automated recovery message sent while intent is still hot' },
+  { stage: 'Qualified lead', count: 28, detail: 'Service, location, urgency, and timeline captured' },
+  { stage: 'Owner action needed', count: 9, detail: 'Hot prospects needing a call, quote, or scheduling push' },
+];
+
+const lrpOwnerActions = [
+  'Call back hot missed leads inside 5 minutes when flagged.',
+  'Review leads marked high-ticket or urgent before end of day.',
+  'Approve/update the trade-specific SMS script weekly.',
+  'Compare booked revenue against monthly service cost every Friday.',
+];
+
+// ─── Health Panel Types & Hook ───
+
+type HealthStatus = 'healthy' | 'degraded' | 'down';
+
+interface SystemHealthCheck {
+  name: string;
+  status: HealthStatus;
+  message: string;
+  latencyMs?: number;
+}
+
+interface HealthResponse {
+  overall: HealthStatus;
+  checks: SystemHealthCheck[];
+  checkedAt: string;
+}
+
+function useSystemHealth(pollIntervalMs = 30_000) {
+  const [health, setHealth] = useState<HealthResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchHealth = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/health');
+      const json = await res.json();
+      if (json.success && json.data) {
+        setHealth(json.data as HealthResponse);
+        setError(null);
+      } else {
+        setError(json.error?.message ?? 'Unknown error');
+      }
+    } catch {
+      setError('Failed to reach health endpoint');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchHealth();
+    const id = setInterval(fetchHealth, pollIntervalMs);
+    return () => clearInterval(id);
+  }, [fetchHealth, pollIntervalMs]);
+
+  return { health, loading, error, refetch: fetchHealth };
+}
+
+function statusDotColor(status: HealthStatus): string {
+  switch (status) {
+    case 'healthy':
+      return 'bg-emerald-400';
+    case 'degraded':
+      return 'bg-amber-400';
+    case 'down':
+      return 'bg-red-400';
+  }
+}
+
+function statusGlowColor(status: HealthStatus): string {
+  switch (status) {
+    case 'healthy':
+      return 'shadow-[0_0_8px_rgba(52,211,153,0.5)]';
+    case 'degraded':
+      return 'shadow-[0_0_8px_rgba(251,191,36,0.5)]';
+    case 'down':
+      return 'shadow-[0_0_8px_rgba(248,113,113,0.5)]';
+  }
+}
+
+function statusTextColor(status: HealthStatus): string {
+  switch (status) {
+    case 'healthy':
+      return 'text-emerald-400';
+    case 'degraded':
+      return 'text-amber-400';
+    case 'down':
+      return 'text-red-400';
+  }
+}
+
+function statusLabel(status: HealthStatus): string {
+  switch (status) {
+    case 'healthy':
+      return 'Healthy';
+    case 'degraded':
+      return 'Degraded';
+    case 'down':
+      return 'Down';
+  }
+}
+
 interface AdminOverviewProps {
   onViewClient: (id: string) => void;
 }
 
 export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
-  const am = adminMetrics;
+  const [am, setAm] = useState<AdminMetrics>(mockAdminMetrics);
+  const [clientAccountsList, setClientAccountsList] = useState<ClientAccount[]>(mockClientAccounts);
+  const [supportTasksList, setSupportTasksList] = useState<SupportTask[]>(mockSupportTasks);
+  const [loading, setLoading] = useState(true);
+  const { health, loading: healthLoading, refetch: refetchHealth } = useSystemHealth();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchClients() {
+      try {
+        const res = await fetch('/api/clients');
+        if (cancelled) return;
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setAm(json.data.metrics);
+            setClientAccountsList(json.data.clients);
+            if (json.data.supportTasks) {
+              setSupportTasksList(json.data.supportTasks);
+            }
+          }
+        }
+      } catch {
+        // Keep mock data on error
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchClients();
+    return () => { cancelled = true; };
+  }, []);
 
   const topMetrics = [
     { label: 'Total Clients', value: am.totalClients, icon: Building2, color: 'text-purple-400' },
@@ -45,9 +197,17 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
     { label: 'Booked', value: am.bookedEstimatesAllClients, icon: CalendarCheck, color: 'text-amber-400' },
   ];
 
-  const needsAttention = clientAccounts.filter(c => c.workflowHealth !== 'Healthy');
-  const openTasks = supportTasks.filter(t => t.status !== 'Resolved');
-  const onboardingClients = clientAccounts.filter(c => c.status === 'Onboarding' || c.status === 'Trial');
+  const needsAttention = clientAccountsList.filter(c => c.workflowHealth !== 'Healthy');
+  const openTasks = supportTasksList.filter(t => t.status !== 'Resolved');
+  const onboardingClients = clientAccountsList.filter(c => c.status === 'Onboarding' || c.status === 'Trial');
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-6 h-6 text-purple-400 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -59,9 +219,103 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
         </div>
         <div className="flex items-center gap-2">
           <span className="pill" style={{ background: 'rgba(139, 92, 246, 0.15)', color: '#c4b5fd', border: '1px solid rgba(139, 92, 246, 0.25)' }}>Admin</span>
-          <span className="text-xs text-[#64748b]">Apr 24, 2026</span>
+          <span className="text-xs text-[#64748b]">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
         </div>
       </div>
+
+      {/* System Health Panel */}
+      <motion.div
+        custom={0}
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        className="glass p-5"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold flex items-center gap-2">
+            <Shield className="w-4 h-4 text-cyan-400" />
+            System Health
+          </h2>
+          <div className="flex items-center gap-3">
+            {health && (
+              <span className={`text-xs font-medium ${statusTextColor(health.overall)}`}>
+                {statusLabel(health.overall)}
+              </span>
+            )}
+            <button
+              onClick={refetchHealth}
+              className="p-1.5 rounded-md hover:bg-white/[0.06] transition-colors"
+              title="Refresh health checks"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 text-[#64748b] ${healthLoading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {healthLoading && !health ? (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="grid grid-cols-2 md:grid-cols-4 gap-3"
+            >
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="glass-subtle p-3 animate-pulse">
+                  <div className="h-3 w-20 bg-white/[0.06] rounded mb-2" />
+                  <div className="h-2 w-28 bg-white/[0.04] rounded" />
+                </div>
+              ))}
+            </motion.div>
+          ) : health ? (
+            <motion.div
+              key="loaded"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="grid grid-cols-2 md:grid-cols-4 gap-3"
+            >
+              {health.checks.map((check, i) => (
+                <motion.div
+                  key={check.name}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.06, duration: 0.25 }}
+                  className="glass-subtle p-3"
+                >
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span
+                      className={`w-2 h-2 rounded-full ${statusDotColor(check.status)} ${statusGlowColor(check.status)}`}
+                    />
+                    <span className="text-xs font-medium text-[#e2e8f0]">{check.name}</span>
+                  </div>
+                  <p className="text-[11px] text-[#64748b] leading-relaxed">{check.message}</p>
+                  {check.latencyMs !== undefined && (
+                    <p className="text-[10px] text-[#475569] mt-1">{check.latencyMs}ms</p>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.p
+              key="error"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-xs text-red-400"
+            >
+              Unable to load system health
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        {health && (
+          <p className="text-[10px] text-[#475569] mt-3">
+            Last checked {new Date(health.checkedAt).toLocaleTimeString()} — polling every 30s
+          </p>
+        )}
+      </motion.div>
 
       {/* Top metrics */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -85,6 +339,78 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
           );
         })}
       </div>
+
+      {/* LRP operating dashboard */}
+      <motion.div
+        custom={6}
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        className="glass p-5"
+      >
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3 mb-5">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <PhoneForwarded className="w-4 h-4 text-cyan-400" />
+              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">LRP Operating Dashboard</p>
+            </div>
+            <h2 className="text-lg font-semibold text-[#e2e8f0]">Recover paid leads before they buy from someone else</h2>
+            <p className="text-sm text-[#94a3b8] mt-1 max-w-3xl">
+              Money view for contractors: missed-call recovery, instant follow-up, qualification, booked estimates, and daily owner action.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3">
+            <p className="text-xs text-emerald-300">Core sales promise</p>
+            <p className="text-sm font-semibold text-[#e2e8f0]">Convert more of the leads already being paid for.</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
+          {lrpMetrics.map((metric) => {
+            const Icon = metric.icon;
+            return (
+              <div key={metric.label} className="glass-subtle p-4 rounded-2xl">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <p className="text-xs text-[#64748b] font-medium">{metric.label}</p>
+                  <Icon className={`w-4 h-4 ${metric.color}`} />
+                </div>
+                <p className="text-2xl font-semibold metric-value text-[#e2e8f0]">{metric.value}</p>
+                <p className="text-xs text-[#94a3b8] mt-1 leading-relaxed">{metric.note}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <div className="glass-subtle p-4 rounded-2xl xl:col-span-2">
+            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Lead recovery pipeline</p>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+              {lrpPipeline.map((stage, idx) => (
+                <div key={stage.stage} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="text-[10px] text-[#64748b]">STEP {idx + 1}</span>
+                    <span className="text-lg font-semibold metric-value text-cyan-300">{stage.count}</span>
+                  </div>
+                  <p className="text-sm font-medium text-[#e2e8f0]">{stage.stage}</p>
+                  <p className="text-xs text-[#94a3b8] mt-1 leading-relaxed">{stage.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="glass-subtle p-4 rounded-2xl">
+            <p className="text-sm font-semibold mb-3 text-[#e2e8f0]">Owner daily action list</p>
+            <div className="space-y-2">
+              {lrpOwnerActions.map((action) => (
+                <div key={action} className="flex items-start gap-2 text-sm text-[#cbd5e1]">
+                  <ArrowRight className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <span>{action}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Main grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -114,7 +440,7 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
                     <span className="text-sm font-medium">{client.companyName}</span>
                     <span className={`text-xs font-medium ${getHealthColor(client.workflowHealth)}`}>{client.workflowHealth}</span>
                   </div>
-                  {client.openIssues.slice(0, 2).map((issue, idx) => (
+                  {(client.openIssues || []).slice(0, 2).map((issue, idx) => (
                     <p key={idx} className="text-xs text-[#94a3b8] leading-relaxed">{issue}</p>
                   ))}
                 </button>
@@ -136,6 +462,9 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
             Open Tasks ({openTasks.length})
           </h2>
           <div className="space-y-2 max-h-[280px] overflow-y-auto">
+            {openTasks.length === 0 && (
+              <p className="text-sm text-[#64748b]">No open tasks.</p>
+            )}
             {openTasks.slice(0, 6).map(task => {
               const priorityColor = task.priority === 'High' ? 'text-red-400' : task.priority === 'Medium' ? 'text-amber-400' : 'text-[#64748b]';
               return (
@@ -168,9 +497,13 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
             Onboarding Progress
           </h2>
           <div className="space-y-3">
+            {onboardingClients.length === 0 && (
+              <p className="text-sm text-[#64748b]">No clients onboarding.</p>
+            )}
             {onboardingClients.map(client => {
-              const completed = client.onboardingSteps.filter(s => s.completed).length;
-              const total = client.onboardingSteps.length;
+              const steps = client.onboardingSteps || [];
+              const completed = steps.filter(s => s.completed).length;
+              const total = steps.length || 1;
               const pct = Math.round((completed / total) * 100);
               return (
                 <button
@@ -182,28 +515,32 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
                     <span className="text-sm font-medium">{client.companyName}</span>
                     <span className="text-xs text-[#64748b]">{completed}/{total}</span>
                   </div>
-                  <div className="progress-track">
-                    <motion.div
-                      className="progress-fill"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${pct}%` }}
-                      transition={{ delay: 0.4, duration: 0.6, ease: 'easeOut' }}
-                    />
-                  </div>
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {client.onboardingSteps.map((step, idx) => (
-                      <span
-                        key={idx}
-                        className={`text-[10px] px-1.5 py-0.5 rounded-md ${
-                          step.completed
-                            ? 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/20'
-                            : 'bg-white/[0.03] text-[#64748b] border border-white/[0.06]'
-                        }`}
-                      >
-                        {step.step}
-                      </span>
-                    ))}
-                  </div>
+                  {steps.length > 0 && (
+                    <>
+                      <div className="progress-track">
+                        <motion.div
+                          className="progress-fill"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${pct}%` }}
+                          transition={{ delay: 0.4, duration: 0.6, ease: 'easeOut' }}
+                        />
+                      </div>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {steps.map((step, idx) => (
+                          <span
+                            key={idx}
+                            className={`text-[10px] px-1.5 py-0.5 rounded-md ${
+                              step.completed
+                                ? 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/20'
+                                : 'bg-white/[0.03] text-[#64748b] border border-white/[0.06]'
+                            }`}
+                          >
+                            {step.step}
+                          </span>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </button>
               );
             })}
@@ -239,7 +576,7 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
               </tr>
             </thead>
             <tbody>
-              {clientAccounts.map(client => (
+              {clientAccountsList.map(client => (
                 <tr
                   key={client.id}
                   onClick={() => onViewClient(client.id)}
@@ -273,7 +610,7 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
         </div>
         {/* Mobile cards */}
         <div className="md:hidden space-y-3">
-          {clientAccounts.map(client => (
+          {clientAccountsList.map(client => (
             <button
               key={client.id}
               onClick={() => onViewClient(client.id)}
