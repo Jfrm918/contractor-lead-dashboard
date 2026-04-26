@@ -36,26 +36,8 @@ const cardVariants = {
   }),
 };
 
-const lrpMetrics = [
-  { label: 'Missed-call leak', value: '$18.4k', note: 'estimated monthly lead value at risk', icon: AlertTriangle, color: 'text-red-400' },
-  { label: 'Recovered pipeline', value: '$7.8k', note: 'estimated value pulled back into follow-up', icon: PhoneForwarded, color: 'text-cyan-400' },
-  { label: 'Booked estimates', value: '23', note: 'from recovered or instantly followed-up leads', icon: CalendarCheck, color: 'text-emerald-400' },
-  { label: 'Speed-to-lead', value: '<60s', note: 'target response time after a missed call', icon: Activity, color: 'text-purple-400' },
-];
-
-const lrpPipeline = [
-  { stage: 'Missed call detected', count: 41, detail: 'Inbound calls that would normally disappear without follow-up' },
-  { stage: 'Instant SMS sent', count: 39, detail: 'Automated recovery message sent while intent is still hot' },
-  { stage: 'Qualified lead', count: 28, detail: 'Service, location, urgency, and timeline captured' },
-  { stage: 'Owner action needed', count: 9, detail: 'Hot prospects needing a call, quote, or scheduling push' },
-];
-
-const lrpOwnerActions = [
-  'Call back hot missed leads inside 5 minutes when flagged.',
-  'Review leads marked high-ticket or urgent before end of day.',
-  'Approve/update the trade-specific SMS script weekly.',
-  'Compare booked revenue against monthly service cost every Friday.',
-];
+const DEFAULT_BOOKED_JOB_VALUE = 3500;
+const DEFAULT_CLOSE_RATE_PCT = 35;
 
 // ─── Health Panel Types & Hook ───
 
@@ -149,6 +131,14 @@ function statusLabel(status: HealthStatus): string {
   }
 }
 
+function formatCurrency(value: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
 interface AdminOverviewProps {
   onViewClient: (id: string) => void;
 }
@@ -157,6 +147,8 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
   const [am, setAm] = useState<AdminMetrics>(mockAdminMetrics);
   const [clientAccountsList, setClientAccountsList] = useState<ClientAccount[]>(mockClientAccounts);
   const [supportTasksList, setSupportTasksList] = useState<SupportTask[]>(mockSupportTasks);
+  const [avgBookedJobValue, setAvgBookedJobValue] = useState(DEFAULT_BOOKED_JOB_VALUE);
+  const [closeRatePct, setCloseRatePct] = useState(DEFAULT_CLOSE_RATE_PCT);
   const [loading, setLoading] = useState(true);
   const { health, loading: healthLoading, refetch: refetchHealth } = useSystemHealth();
 
@@ -200,6 +192,36 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
   const needsAttention = clientAccountsList.filter(c => c.workflowHealth !== 'Healthy');
   const openTasks = supportTasksList.filter(t => t.status !== 'Resolved');
   const onboardingClients = clientAccountsList.filter(c => c.status === 'Onboarding' || c.status === 'Trial');
+  const totalLeadCount = clientAccountsList.reduce((sum, c) => sum + c.totalLeads, 0);
+  const recoveredLeadCount = clientAccountsList.reduce((sum, c) => sum + c.recoveredLeads, 0);
+  const bookedEstimateCount = clientAccountsList.reduce((sum, c) => sum + c.bookedEstimates, 0);
+  const unrecoveredLeadCount = Math.max(totalLeadCount - recoveredLeadCount, 0);
+  const recoveredToBookedRate = recoveredLeadCount > 0 ? bookedEstimateCount / recoveredLeadCount : 0;
+  const closeRate = Math.max(Math.min(closeRatePct, 100), 0) / 100;
+  const recoveredRevenueProtected = bookedEstimateCount * avgBookedJobValue * closeRate;
+  const estimatedLeakValue = unrecoveredLeadCount * recoveredToBookedRate * avgBookedJobValue * closeRate;
+  const ownerActionCount = openTasks.length + needsAttention.length;
+
+  const lrpMetrics = [
+    { label: 'Lead value still at risk', value: formatCurrency(estimatedLeakValue), note: `${unrecoveredLeadCount} tracked leads not recovered yet × current assumptions`, icon: AlertTriangle, color: 'text-red-400' },
+    { label: 'Revenue protected', value: formatCurrency(recoveredRevenueProtected), note: `${bookedEstimateCount} booked estimates × job value × close rate`, icon: PhoneForwarded, color: 'text-cyan-400' },
+    { label: 'Recovered-to-booked', value: `${Math.round(recoveredToBookedRate * 100)}%`, note: `${bookedEstimateCount} booked from ${recoveredLeadCount} recovered leads`, icon: CalendarCheck, color: 'text-emerald-400' },
+    { label: 'Owner actions', value: ownerActionCount, note: `${openTasks.length} open tasks + ${needsAttention.length} workflow issues`, icon: Activity, color: 'text-purple-400' },
+  ];
+
+  const lrpPipeline = [
+    { stage: 'Leads tracked', count: totalLeadCount, detail: 'All inbound opportunities currently visible across client dashboards' },
+    { stage: 'Recovered by LRP', count: recoveredLeadCount, detail: 'Leads pulled back into conversation after missed or delayed follow-up' },
+    { stage: 'Booked estimates', count: bookedEstimateCount, detail: 'Recovered/followed-up leads that became scheduled estimate opportunities' },
+    { stage: 'Owner action needed', count: ownerActionCount, detail: 'Open tasks and unhealthy workflows blocking more recovered revenue' },
+  ];
+
+  const lrpOwnerActions = [
+    ...(needsAttention.length > 0 ? [`Fix ${needsAttention.length} workflow issue${needsAttention.length === 1 ? '' : 's'} before more leads leak.`] : []),
+    ...(openTasks.length > 0 ? [`Clear ${openTasks.length} open operator task${openTasks.length === 1 ? '' : 's'} tied to client follow-up.`] : []),
+    `Use ${formatCurrency(avgBookedJobValue)} average job value and ${closeRatePct}% close rate until each client has real close data.`,
+    'Review this section weekly: if revenue protected is not above monthly fee, tighten script, speed, or target client.',
+  ];
 
   if (loading) {
     return (
@@ -379,6 +401,40 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
               </div>
             );
           })}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+          <div className="glass-subtle p-4 rounded-2xl md:col-span-2">
+            <p className="text-sm font-semibold text-[#e2e8f0] mb-2">ROI calculator assumptions</p>
+            <p className="text-xs text-[#94a3b8] leading-relaxed">
+              These controls turn LRP into an owner-facing calculator. Change the average booked job value and close rate to show what recovered leads are worth for each contractor.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <label className="text-xs text-[#94a3b8]">
+              Avg booked job value
+              <input
+                type="number"
+                min="0"
+                step="100"
+                value={avgBookedJobValue}
+                onChange={(event) => setAvgBookedJobValue(Number(event.target.value) || 0)}
+                className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-[#e2e8f0] outline-none focus:border-cyan-400/40"
+              />
+            </label>
+            <label className="text-xs text-[#94a3b8]">
+              Close rate %
+              <input
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                value={closeRatePct}
+                onChange={(event) => setCloseRatePct(Number(event.target.value) || 0)}
+                className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-[#e2e8f0] outline-none focus:border-cyan-400/40"
+              />
+            </label>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
