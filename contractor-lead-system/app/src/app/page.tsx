@@ -15,6 +15,7 @@ import AdminOperations from '@/components/admin-operations';
 import AdminAddOns from '@/components/admin-addons';
 import AdminDocs from '@/components/admin-docs';
 import AdminSalesPlaybook from '@/components/admin-sales-playbook';
+import AdminProspectPipeline from '@/components/admin-prospect-pipeline';
 
 export default function Home() {
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -97,6 +98,9 @@ export default function Home() {
       }
       if (activePage === 'admin-addons') {
         return <AdminAddOns />;
+      }
+      if (activePage === 'admin-prospects') {
+        return <AdminProspectPipeline />;
       }
       if (activePage === 'admin-docs') {
         return <AdminDocs />;
