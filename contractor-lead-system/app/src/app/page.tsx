@@ -12,6 +12,7 @@ import ScorecardPage from '@/components/scorecard-page';
 import AdminOverview from '@/components/admin-overview';
 import AdminClientDetail from '@/components/admin-client-detail';
 import AdminOperations from '@/components/admin-operations';
+import AdminAddOns from '@/components/admin-addons';
 import AdminDocs from '@/components/admin-docs';
 import AdminSalesPlaybook from '@/components/admin-sales-playbook';
 
@@ -93,6 +94,9 @@ export default function Home() {
       }
       if (activePage === 'admin-sales-playbook') {
         return <AdminSalesPlaybook />;
+      }
+      if (activePage === 'admin-addons') {
+        return <AdminAddOns />;
       }
       if (activePage === 'admin-docs') {
         return <AdminDocs />;
