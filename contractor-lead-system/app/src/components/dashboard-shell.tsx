@@ -19,11 +19,13 @@ import {
   BookOpen,
   PackagePlus,
   BriefcaseBusiness,
+  Send,
 } from 'lucide-react';
 
-export type AppMode = 'client' | 'admin';
+export type AppMode = 'client' | 'admin' | 'outreach';
 export type ClientPage = 'overview' | 'leads' | 'alerts' | 'scorecard';
 export type AdminPage = 'admin-overview' | 'admin-operations' | 'admin-addons' | 'admin-prospects' | 'admin-docs' | 'admin-sales-playbook';
+export type OutreachPage = 'outreach-desk';
 
 interface DashboardShellProps {
   mode: AppMode;
@@ -49,22 +51,28 @@ const adminNavItems: { id: AdminPage; label: string; icon: typeof LayoutDashboar
   { id: 'admin-docs', label: 'Build Log', icon: FileText },
 ];
 
+const outreachNavItems: { id: OutreachPage; label: string; icon: typeof LayoutDashboard }[] = [
+  { id: 'outreach-desk', label: 'Outreach Desk', icon: Send },
+];
+
 export default function DashboardShell({ mode, onModeChange, activePage, onNavigate, children }: DashboardShellProps) {
-  const { userName, isDemo, signOut } = useAuth();
+  const { userName, isDemo, user, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isAdmin = mode === 'admin';
-  const navItems = isAdmin ? adminNavItems : clientNavItems;
+  const isOutreach = mode === 'outreach';
+  const canToggleModes = !isOutreach && (isDemo || user?.role === 'admin');
+  const navItems = isAdmin ? adminNavItems : isOutreach ? outreachNavItems : clientNavItems;
 
   return (
-    <div className={`min-h-dvh flex flex-col ${isAdmin ? 'admin-shell' : ''}`}>
+    <div className={`min-h-dvh flex flex-col ${isAdmin || isOutreach ? 'admin-shell' : ''}`}>
       {/* Tulsa background */}
-      <div className={`tulsa-bg ${isAdmin ? 'tulsa-bg-admin' : ''}`}>
+      <div className={`tulsa-bg ${isAdmin || isOutreach ? 'tulsa-bg-admin' : ''}`}>
         <div className="tulsa-bg-image" />
         <div className="tulsa-bg-overlay" />
         <div className="tulsa-bg-grain" />
       </div>
-      <div className={`ambient-glow ${isAdmin ? 'admin-accent-glow' : ''}`} />
+      <div className={`ambient-glow ${isAdmin || isOutreach ? 'admin-accent-glow' : ''}`} />
 
       {/* Top Nav */}
       <header className="glass-nav sticky top-0 z-50 px-4 md:px-6">
@@ -75,18 +83,21 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
               <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                 isAdmin
                   ? 'bg-gradient-to-br from-purple-500 to-blue-500'
-                  : 'bg-gradient-to-br from-blue-500 to-cyan-400'
+                  : isOutreach
+                    ? 'bg-gradient-to-br from-cyan-500 to-emerald-500'
+                    : 'bg-gradient-to-br from-blue-500 to-cyan-400'
               }`}>
-                {isAdmin ? <Shield className="w-4 h-4 text-white" /> : <Zap className="w-4 h-4 text-white" />}
+                {isAdmin ? <Shield className="w-4 h-4 text-white" /> : isOutreach ? <Send className="w-4 h-4 text-white" /> : <Zap className="w-4 h-4 text-white" />}
               </div>
               <div className="hidden sm:block">
                 <span className="text-base font-semibold tracking-tight">LeadRecovery Pro</span>
                 {isAdmin && <span className="text-[10px] text-purple-400 font-medium ml-1.5 uppercase tracking-wider">Admin</span>}
+                {isOutreach && <span className="text-[10px] text-cyan-400 font-medium ml-1.5 uppercase tracking-wider">Outreach</span>}
               </div>
             </div>
 
             {/* Mode toggle */}
-            <div className="mode-toggle hidden sm:flex">
+            {canToggleModes && <div className="mode-toggle hidden sm:flex">
               <button
                 onClick={() => onModeChange('client')}
                 className={`mode-toggle-option ${!isAdmin ? 'mode-toggle-active' : ''}`}
@@ -99,7 +110,7 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
               >
                 Admin
               </button>
-            </div>
+            </div>}
           </div>
 
           {/* Desktop nav */}
@@ -116,7 +127,7 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
                     flex items-center gap-2
                     focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2
                     ${active
-                      ? isAdmin
+                      ? isAdmin || isOutreach
                         ? 'text-white bg-purple-500/[0.12] border border-purple-500/[0.2]'
                         : 'text-white bg-white/[0.08] border border-white/[0.1]'
                       : 'text-[#94a3b8] hover:text-white hover:bg-white/[0.04] border border-transparent'
@@ -129,7 +140,7 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
                     <motion.div
                       layoutId="nav-indicator"
                       className={`absolute inset-0 rounded-xl border ${
-                        isAdmin
+                        isAdmin || isOutreach
                           ? 'bg-purple-500/[0.08] border-purple-500/[0.15]'
                           : 'bg-white/[0.06] border-white/[0.08]'
                       }`}
@@ -178,7 +189,7 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
           >
             <nav className="flex flex-col gap-1">
               {/* Mobile mode toggle */}
-              <div className="mode-toggle mb-3">
+              {canToggleModes && <div className="mode-toggle mb-3">
                 <button
                   onClick={() => { onModeChange('client'); }}
                   className={`mode-toggle-option flex-1 text-center ${!isAdmin ? 'mode-toggle-active' : ''}`}
@@ -191,7 +202,7 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
                 >
                   Admin
                 </button>
-              </div>
+              </div>}
 
               {navItems.map((item) => {
                 const Icon = item.icon;

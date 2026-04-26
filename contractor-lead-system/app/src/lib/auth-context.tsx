@@ -13,7 +13,7 @@ interface UserSession {
   userId: string;
   email: string;
   name: string | null;
-  role: string;       // "admin" | "client"
+  role: string;       // "admin" | "client" | "outreach"
   clientId: string | null;
 }
 
@@ -44,6 +44,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async function checkSession() {
       try {
         const params = new URLSearchParams(window.location.search);
+        if (params.get('demo') === 'madison' || params.get('demo') === 'outreach') {
+          if (!cancelled) {
+            setUser({
+              userId: 'demo-madison',
+              email: 'madison@leadrecoverypro.demo',
+              name: 'Madison',
+              role: 'outreach',
+              clientId: null,
+            });
+            setIsDemo(true);
+          }
+          return;
+        }
+
         if (params.get('demo') === 'admin' || params.get('demo') === 'client') {
           if (!cancelled) setIsDemo(true);
           return;

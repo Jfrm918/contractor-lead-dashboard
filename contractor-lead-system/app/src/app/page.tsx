@@ -16,6 +16,7 @@ import AdminAddOns from '@/components/admin-addons';
 import AdminDocs from '@/components/admin-docs';
 import AdminSalesPlaybook from '@/components/admin-sales-playbook';
 import AdminProspectPipeline from '@/components/admin-prospect-pipeline';
+import OutreachDashboard from '@/components/outreach-dashboard';
 
 export default function Home() {
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -23,9 +24,18 @@ export default function Home() {
   const [activePage, setActivePage] = useState<string>('overview');
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const isAdmin = user?.role === 'admin';
+  const isOutreach = user?.role === 'outreach';
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    if (isAuthenticated && (params.get('demo') === 'madison' || params.get('demo') === 'outreach')) {
+      setMode('outreach');
+      setActivePage('outreach-desk');
+      setSelectedLeadId(null);
+      setSelectedClientId(null);
+      return;
+    }
     if (isAuthenticated && params.get('demo') === 'admin') {
       setMode('admin');
       setActivePage('admin-overview');
@@ -33,6 +43,15 @@ export default function Home() {
       setSelectedClientId(null);
     }
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (isOutreach) {
+      setMode('outreach');
+      setActivePage('outreach-desk');
+      setSelectedLeadId(null);
+      setSelectedClientId(null);
+    }
+  }, [isOutreach]);
 
   // Show nothing while checking for an existing session cookie
   if (isLoading) {
@@ -47,10 +66,9 @@ export default function Home() {
     return <SignIn />;
   }
 
-  // Only admins can access admin mode
-  const isAdmin = user?.role === 'admin';
-
   const handleModeChange = (newMode: AppMode) => {
+    if (isOutreach) return;
+    if (newMode === 'admin' && !isAdmin) return;
     setMode(newMode);
     setSelectedLeadId(null);
     setSelectedClientId(null);
@@ -85,6 +103,10 @@ export default function Home() {
   };
 
   const renderContent = () => {
+    if (mode === 'outreach') {
+      return <OutreachDashboard />;
+    }
+
     // Admin mode
     if (mode === 'admin') {
       if (selectedClientId) {
