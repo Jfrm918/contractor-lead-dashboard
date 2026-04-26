@@ -46,7 +46,7 @@ const adminNavItems: { id: AdminPage; label: string; icon: typeof LayoutDashboar
 ];
 
 export default function DashboardShell({ mode, onModeChange, activePage, onNavigate, children }: DashboardShellProps) {
-  const { userName, signOut } = useAuth();
+  const { userName, isDemo, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isAdmin = mode === 'admin';
@@ -139,6 +139,11 @@ export default function DashboardShell({ mode, onModeChange, activePage, onNavig
           </nav>
 
           <div className="flex items-center gap-3">
+            {isDemo && (
+              <span className="hidden sm:inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-cyan-300">
+                Read-only
+              </span>
+            )}
             <span className="text-sm text-[#94a3b8] hidden sm:block">{userName}</span>
             <button
               onClick={signOut}

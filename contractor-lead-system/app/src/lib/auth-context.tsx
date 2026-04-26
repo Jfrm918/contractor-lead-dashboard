@@ -1,38 +1,109 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  type ReactNode,
+} from 'react';
+
+interface UserSession {
+  userId: string;
+  email: string;
+  name: string | null;
+  role: string;       // "admin" | "client"
+  clientId: string | null;
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  isLoading: boolean;
+  isDemo: boolean;
   userName: string;
-  signIn: (email: string, password: string) => void;
+  user: UserSession | null;
+  signIn: (email: string, password: string) => Promise<string | null>;
   signInDemo: () => void;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userName, setUserName] = useState('');
+  const [user, setUser] = useState<UserSession | null>(null);
+  const [isDemo, setIsDemo] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const signIn = useCallback((email: string, _password: string) => {
-    setUserName(email.split('@')[0]);
-    setIsAuthenticated(true);
+  const isAuthenticated = user !== null || isDemo;
+  const userName = user?.name ?? user?.email?.split('@')[0] ?? (isDemo ? 'Read-only Demo' : '');
+
+  // Check for existing session on mount
+  useEffect(() => {
+    let cancelled = false;
+    async function checkSession() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('demo') === 'admin' || params.get('demo') === 'client') {
+          if (!cancelled) setIsDemo(true);
+          return;
+        }
+
+        const res = await fetch('/api/auth/session');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && !cancelled) {
+            setUser(json.data);
+          }
+        }
+      } catch {
+        // No session — that's fine
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+    checkSession();
+    return () => { cancelled = true; };
+  }, []);
+
+  const signIn = useCallback(async (email: string, password: string): Promise<string | null> => {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        return json.error?.message ?? 'Invalid email or password';
+      }
+      setUser(json.data);
+      setIsDemo(false);
+      return null; // no error
+    } catch {
+      return 'Network error — please try again';
+    }
   }, []);
 
   const signInDemo = useCallback(() => {
-    setUserName('Jason');
-    setIsAuthenticated(true);
+    setUser(null);
+    setIsDemo(true);
   }, []);
 
-  const signOut = useCallback(() => {
-    setIsAuthenticated(false);
-    setUserName('');
+  const signOut = useCallback(async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch {
+      // Clear local state regardless
+    }
+    setUser(null);
+    setIsDemo(false);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userName, signIn, signInDemo, signOut }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, isLoading, isDemo, userName, user, signIn, signInDemo, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

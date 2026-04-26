@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import SignIn from '@/components/sign-in';
 import DashboardShell, { type AppMode } from '@/components/dashboard-shell';
@@ -16,15 +16,37 @@ import AdminDocs from '@/components/admin-docs';
 import AdminSalesPlaybook from '@/components/admin-sales-playbook';
 
 export default function Home() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [mode, setMode] = useState<AppMode>('client');
   const [activePage, setActivePage] = useState<string>('overview');
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (isAuthenticated && params.get('demo') === 'admin') {
+      setMode('admin');
+      setActivePage('admin-overview');
+      setSelectedLeadId(null);
+      setSelectedClientId(null);
+    }
+  }, [isAuthenticated]);
+
+  // Show nothing while checking for an existing session cookie
+  if (isLoading) {
+    return (
+      <div className="min-h-dvh flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return <SignIn />;
   }
+
+  // Only admins can access admin mode
+  const isAdmin = user?.role === 'admin';
 
   const handleModeChange = (newMode: AppMode) => {
     setMode(newMode);
