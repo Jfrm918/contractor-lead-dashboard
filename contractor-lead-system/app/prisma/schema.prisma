@@ -7,6 +7,23 @@ datasource db {
   provider = "postgresql"
 }
 
+// ─── Auth ───
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String?
+  role         String   @default("client") // admin, client
+  clientId     String?  @map("client_id") @db.Uuid
+  client       Client?  @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([email])
+  @@map("users")
+}
+
 // ─── Core entities (V1 minimum) ───
 
 model Client {
@@ -25,6 +42,7 @@ model Client {
   settings ClientSettings?
   leads    Lead[]
   events   LeadEvent[]     // client-level events
+  users    User[]
 
   @@map("clients")
 }
@@ -64,6 +82,10 @@ model ClientSettings {
   // Booking
   bookingMode      String   @default("manual_callback") @map("booking_mode") // self_book, manual_callback, hybrid
   bookingUrl       String?  @map("booking_url")
+
+  // Add-on data
+  competitorAuditRows Json @default("[]") @map("competitor_audit_rows")
+  // [{id, competitor, testedAt, responseMinutes, channel, quality, notes}]
 
   // Workflow toggles
   workflowEnabled  Boolean  @default(true) @map("workflow_enabled")
@@ -135,4 +157,59 @@ model LeadEvent {
   @@index([eventType])
   @@index([createdAt])
   @@map("lead_events")
+}
+
+// ─── SMS Job Queue ───
+
+model SmsJob {
+  id          String    @id @default(uuid()) @db.Uuid
+  leadId      String    @map("lead_id") @db.Uuid
+  clientId    String    @map("client_id") @db.Uuid
+  toPhone     String    @map("to_phone")
+  body        String
+  scheduledAt DateTime  @map("scheduled_at")
+  processedAt DateTime? @map("processed_at")
+  failedAt    DateTime? @map("failed_at")
+  failReason  String?   @map("fail_reason")
+  attempts    Int       @default(0)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@index([scheduledAt, processedAt])
+  @@map("sms_jobs")
+}
+
+// ─── Outreach Prospect Pipeline ───
+
+model OutreachProspect {
+  id              String   @id @default(uuid()) @db.Uuid
+  name            String   @unique
+  trade           String
+  tier            String
+  fitScore        Int      @map("fit_score")
+  phone           String?
+  email           String?
+  emailConfidence String?  @map("email_confidence")
+  website         String?
+  contactUrl      String?  @map("contact_url")
+  source          String?
+  sourceUrl       String?  @map("source_url")
+  rating          String?
+  zip             String?
+  fitReason       String   @map("fit_reason")
+  madisonAngle    String   @map("madison_angle")
+
+  status          String   @default("Not Contacted")
+  note            String   @default("")
+  lastContactedAt DateTime? @map("last_contacted_at")
+  followUpDueAt   DateTime? @map("follow_up_due_at")
+  lastTouchedAt   DateTime? @map("last_touched_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([trade])
+  @@index([tier])
+  @@index([status])
+  @@index([fitScore])
+  @@map("outreach_prospects")
 }

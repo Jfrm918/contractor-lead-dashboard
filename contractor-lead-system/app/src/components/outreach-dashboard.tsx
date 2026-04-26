@@ -3,17 +3,24 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, ExternalLink, Heart, Mail, Phone, Search, Send, Sparkles, Star, StickyNote, Target } from 'lucide-react';
-import { tulsaProspects, type ProspectTrade } from '@/lib/tulsa-prospects';
+import { tulsaProspects, type ProspectTrade, type TulsaProspect } from '@/lib/tulsa-prospects';
 
 type OutreachStatus = 'Not Contacted' | 'Email Sent' | 'Follow-Up 1' | 'Follow-Up 2' | 'Replied' | 'Demo Booked' | 'Pilot Offered' | 'Won' | 'Lost';
 
 const statuses: OutreachStatus[] = ['Not Contacted', 'Email Sent', 'Follow-Up 1', 'Follow-Up 2', 'Replied', 'Demo Booked', 'Pilot Offered', 'Won', 'Lost'];
 const trades: ('All' | ProspectTrade)[] = ['All', 'Plumbing', 'HVAC', 'Roofing', 'Electrical', 'Restoration', 'Garage Doors', 'Insulation', 'Pest Control'];
-const storageKey = 'lrp-madison-outreach-state-v1';
 
 interface OutreachState {
   [name: string]: { status: OutreachStatus; note: string; lastTouched?: string };
 }
+
+type OutreachProspect = TulsaProspect & {
+  status: OutreachStatus;
+  note: string;
+  lastContactedAt: string | null;
+  followUpDueAt: string | null;
+  lastTouchedAt: string | null;
+};
 
 function emailOne(name: string, trade: ProspectTrade, angle: string) {
   return `Subject: Quick question about missed ${trade.toLowerCase()} leads\n\nHi ${name} team,\n\nI’m reaching out because we’re helping Tulsa-area contractors catch leads that slip through when calls are missed or follow-up is slow.\n\nFor ${trade.toLowerCase()} companies, the leak is usually simple: a customer calls about something urgent, does not get a fast response, then calls the next company.\n\n${angle}\n\nWould it be worth a quick look at where leads may be leaking in your follow-up?\n\nBest,\nMadison\nLeadRecovery Pro`;
@@ -29,24 +36,52 @@ function breakupEmail(name: string) {
 
 export default function OutreachDashboard() {
   const [state, setState] = useState<OutreachState>({});
+  const [dbProspects, setDbProspects] = useState<OutreachProspect[]>([]);
   const [query, setQuery] = useState('');
   const [trade, setTrade] = useState<'All' | ProspectTrade>('All');
   const [copied, setCopied] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState<string | null>(null);
+  const [mode, setMode] = useState<'demo' | 'live'>('demo');
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(storageKey);
-      if (stored) setState(JSON.parse(stored));
-    } catch {}
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch('/api/outreach/prospects');
+        const json = await res.json();
+        if (!cancelled && json.success && Array.isArray(json.data?.prospects)) {
+          setDbProspects(json.data.prospects);
+          setMode(json.data.mode === 'live' ? 'live' : 'demo');
+          setState(Object.fromEntries(json.data.prospects.map((p: OutreachProspect) => [p.name, {
+            status: p.status,
+            note: p.note ?? '',
+            lastTouched: p.lastTouchedAt ?? undefined,
+          }])));
+        }
+      } catch {
+        if (!cancelled) {
+          setDbProspects(tulsaProspects.map((p) => ({
+            ...p,
+            status: 'Not Contacted',
+            note: '',
+            lastContactedAt: null,
+            followUpDueAt: null,
+            lastTouchedAt: null,
+          })));
+          setMode('demo');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
   }, []);
-
-  useEffect(() => {
-    try { window.localStorage.setItem(storageKey, JSON.stringify(state)); } catch {}
-  }, [state]);
 
   const prospects = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return tulsaProspects
+    return dbProspects
       .filter((p) => p.tier === 'Best Bets' || p.tier === 'Strong Fit')
       .filter((p) => p.email || p.contactUrl)
       .filter((p) => trade === 'All' || p.trade === trade)
@@ -56,7 +91,7 @@ export default function OutreachDashboard() {
         const bStatus = state[b.name]?.status ?? 'Not Contacted';
         return statuses.indexOf(aStatus) - statuses.indexOf(bStatus) || b.fitScore - a.fitScore;
       });
-  }, [query, trade, state]);
+  }, [query, trade, state, dbProspects]);
 
   const totals = useMemo(() => {
     const counts = Object.fromEntries(statuses.map((s) => [s, 0])) as Record<OutreachStatus, number>;
@@ -64,7 +99,7 @@ export default function OutreachDashboard() {
     return counts;
   }, [prospects, state]);
 
-  function updateProspect(name: string, patch: Partial<OutreachState[string]>) {
+  async function updateProspect(name: string, patch: Partial<OutreachState[string]> & { lastContactedAt?: string | null; followUpDueAt?: string | null }) {
     setState((prev) => ({
       ...prev,
       [name]: {
@@ -74,12 +109,42 @@ export default function OutreachDashboard() {
         lastTouched: new Date().toISOString(),
       },
     }));
+    setDbProspects((prev) => prev.map((p) => p.name === name ? {
+      ...p,
+      status: patch.status ?? p.status,
+      note: patch.note ?? p.note,
+      lastContactedAt: patch.lastContactedAt === undefined ? p.lastContactedAt : patch.lastContactedAt,
+      followUpDueAt: patch.followUpDueAt === undefined ? p.followUpDueAt : patch.followUpDueAt,
+      lastTouchedAt: new Date().toISOString(),
+    } : p));
+
+    if (mode !== 'live') return;
+    setSaving(name);
+    try {
+      await fetch('/api/outreach/prospects', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, ...patch }),
+      });
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  function scheduleFollowUp(name: string, status: OutreachStatus) {
+    const due = new Date();
+    due.setDate(due.getDate() + 3);
+    updateProspect(name, { status, followUpDueAt: due.toISOString() });
   }
 
   async function copy(label: string, text: string) {
     await navigator.clipboard?.writeText(text);
     setCopied(label);
     setTimeout(() => setCopied(null), 1800);
+  }
+
+  if (loading) {
+    return <div className="rounded-3xl border border-pink-300/15 bg-pink-300/[0.06] p-8 text-pink-100">Loading Madison’s outreach desk…</div>;
   }
 
   return (
@@ -92,6 +157,7 @@ export default function OutreachDashboard() {
           <p className="text-xs uppercase tracking-[0.18em] text-pink-300 mb-2 flex items-center gap-2"><Sparkles className="w-3.5 h-3.5" /> Madison workspace</p>
           <h1 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-pink-200 via-rose-200 to-fuchsia-200 bg-clip-text text-transparent">Madison’s Outreach Desk</h1>
           <p className="text-sm text-[#c4b5fd] mt-1 max-w-2xl">Email-first prospecting with only the essentials: best-fit leads, polished copy, status, notes, and handoff signals for Jason.</p>
+          <p className="text-xs mt-2 text-pink-200/70">{mode === 'live' ? 'Live shared pipeline — updates save for Jason and Madison.' : 'Demo preview — real login required to save shared updates.'}</p>
         </div>
         <div className="grid grid-cols-4 gap-2 min-w-[360px]">
           <div className="rounded-2xl border border-pink-300/15 bg-pink-300/[0.06] p-3"><p className="text-xs text-pink-200/70">Queue</p><p className="text-xl font-semibold metric-value text-pink-100">{prospects.length}</p></div>
@@ -148,6 +214,14 @@ export default function OutreachDashboard() {
                 <button onClick={() => copy('Follow-Up 1', followUpOne(p.name))} className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-pink-50/80 inline-flex items-center gap-2"><Send className="w-4 h-4" />Copy Follow-Up</button>
                 <button onClick={() => copy('Breakup Email', breakupEmail(p.name))} className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-pink-50/80 inline-flex items-center gap-2"><Copy className="w-4 h-4" />Copy Breakup</button>
                 {p.website && <a href={p.website} target="_blank" rel="noreferrer" className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-pink-50/80 inline-flex items-center gap-2">Website <ExternalLink className="w-4 h-4" /></a>}
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button onClick={() => updateProspect(p.name, { status: 'Email Sent', lastContactedAt: new Date().toISOString() })} className="rounded-xl border border-rose-300/20 bg-rose-300/10 px-3 py-2 text-xs text-rose-200">Mark Email Sent</button>
+                <button onClick={() => scheduleFollowUp(p.name, 'Follow-Up 1')} className="rounded-xl border border-pink-300/20 bg-pink-300/10 px-3 py-2 text-xs text-pink-200">Schedule Follow-Up</button>
+                <button onClick={() => updateProspect(p.name, { status: 'Replied' })} className="rounded-xl border border-fuchsia-300/20 bg-fuchsia-300/10 px-3 py-2 text-xs text-fuchsia-200">Mark Replied</button>
+                <button onClick={() => updateProspect(p.name, { status: 'Demo Booked' })} className="rounded-xl border border-purple-300/20 bg-purple-300/10 px-3 py-2 text-xs text-purple-200">Book Demo</button>
+                {saving === p.name && <span className="px-3 py-2 text-xs text-pink-200/60">Saving…</span>}
               </div>
 
               <label className="block mt-4 text-xs text-pink-100/60">
