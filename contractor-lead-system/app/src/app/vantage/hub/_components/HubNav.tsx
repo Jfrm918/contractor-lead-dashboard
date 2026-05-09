@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 const TABS = [
+  { href: '/vantage/hub/tulsa', label: 'Tulsa · live' },
   { href: '/vantage/hub', label: 'Today' },
   { href: '/vantage/hub/plan', label: 'The Plan' },
   { href: '/vantage/hub/morning', label: 'Morning' },

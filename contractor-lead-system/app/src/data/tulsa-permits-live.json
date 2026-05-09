@@ -1,0 +1,554 @@
+{
+  "fetchedAt": "2026-05-09T02:13:16.820Z",
+  "source": "City of Tulsa Self-Service Portal (Tyler EnerGov)",
+  "windowDays": 14,
+  "totalCandidates": 66,
+  "enrichedCount": 15,
+  "permits": [
+    {
+      "permitNumber": "BLDC-246765-2026",
+      "caseId": "5f44f0c2-dee4-49ef-bd75-6ef03700d1b2",
+      "type": "Building: Alteration (Commercial)",
+      "workClass": "Alteration",
+      "status": "Submitted - Online",
+      "appliedDate": "2026-05-08T19:01:51.597",
+      "issuedDate": null,
+      "address": "4833 S SHERIDAN RD E Unit: 407 Tulsa OK 74145",
+      "city": "Tulsa",
+      "zip": "74145",
+      "parcel": "33220932613310",
+      "description": "Certificate of Occupancy for a 1,200 sq. ft. commercial building/office operated by a Nurse Practitioner providing preventive care, routine visits, and chronic disease management. No overnight patients or surgical procedures. Ambulatory patients only.  No construction is planned.",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Owner",
+          "company": "",
+          "firstName": "ELIANA",
+          "lastName": "QUINTERO",
+          "email": "elimquint@yahoo.com",
+          "phone": "(918) 633-5246",
+          "phoneType": "Mobile Phone",
+          "address": "4833 S SHERIDAN RD E Unit: STE 407 \r\nTulsa, OK 74145"
+        },
+        {
+          "role": "Applicant",
+          "company": "",
+          "firstName": "ELIANA",
+          "lastName": "QUINTERO",
+          "email": "elimquint@yahoo.com",
+          "phone": "(918) 633-5246",
+          "phoneType": "Mobile Phone",
+          "address": "4833 S SHERIDAN RD E Unit: STE 407 \r\nTulsa, OK 74145"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/5f44f0c2-dee4-49ef-bd75-6ef03700d1b2"
+    },
+    {
+      "permitNumber": "BLDC-246764-2026",
+      "caseId": "98867b2e-1b88-4d5f-bd5f-6fd4a77bfd5a",
+      "type": "Building: Telecommunication and Broadcast Tower (Commercial)",
+      "workClass": "Telecommunication and Broadcast Tower",
+      "status": "Submitted - Online",
+      "appliedDate": "2026-05-08T18:06:04.613",
+      "issuedDate": null,
+      "address": "21304 E 11TH ST S Catoosa OK 74015",
+      "city": "Catoosa",
+      "zip": "74015",
+      "parcel": "730096245",
+      "description": "DAS Tower for Project Anthem",
+      "valuation": 100000,
+      "squareFeet": 200,
+      "contacts": [
+        {
+          "role": "Applicant",
+          "company": "HDR",
+          "firstName": "Kristofer",
+          "lastName": "Segler",
+          "email": "Kristofer.Segler@hdrinc.com",
+          "phone": "(702) 890-8470",
+          "phoneType": "Business Phone ",
+          "address": "6750 Via Austi PKWY Unit: Suite 350 \r\nLas Vegas, NV 89119"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/98867b2e-1b88-4d5f-bd5f-6fd4a77bfd5a"
+    },
+    {
+      "permitNumber": "COO-246752-2026",
+      "caseId": "945352ec-e7cd-453e-b4e8-4c306a2d786b",
+      "type": "Certificate of Occupancy  - Certificate of Occupancy (Commercial)",
+      "workClass": "Certificate of Occupancy (Commercial)",
+      "status": "Complete",
+      "appliedDate": "2026-05-08T15:40:29",
+      "issuedDate": null,
+      "address": "8181 E 41ST ST S Unit: 10 Tulsa OK 74145",
+      "city": "Tulsa",
+      "zip": "74145",
+      "parcel": "04225932400360",
+      "description": "Converting motel into apartments",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Applicant",
+          "company": "Parker Associates",
+          "firstName": "Bryan",
+          "lastName": "Hulst",
+          "email": "bhulst@parkertulsa.com",
+          "phone": "9187422485",
+          "phoneType": "Business Phone ",
+          "address": "2202 E 49TH ST S \r\nTulsa, OK 74105"
+        },
+        {
+          "role": "Applicant",
+          "company": "AGB Real Estate",
+          "firstName": "Adam",
+          "lastName": "Rosenberg",
+          "email": "adam@agbrealestate.co",
+          "phone": "(310) 463-0074",
+          "phoneType": "Business Phone ",
+          "address": "1012b W Grove AVE \r\nNashville, TN 37203"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/945352ec-e7cd-453e-b4e8-4c306a2d786b"
+    },
+    {
+      "permitNumber": "COO-246751-2026",
+      "caseId": "2408d406-8b2c-400c-9c90-0535fea0132b",
+      "type": "Certificate of Occupancy  - Certificate of Occupancy (Commercial)",
+      "workClass": "Certificate of Occupancy (Commercial)",
+      "status": "Complete",
+      "appliedDate": "2026-05-08T15:30:44",
+      "issuedDate": null,
+      "address": "1611 W ARCHER ST N Tulsa OK 74127",
+      "city": "Tulsa",
+      "zip": "74127",
+      "parcel": "30850920202400",
+      "description": "New 4 unit residential building. Garage has already been permitted under BLDC-178184-2024.",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Architect",
+          "company": "Method Architecture",
+          "firstName": "Josh",
+          "lastName": "Kunkel",
+          "email": "josh@method.group",
+          "phone": "9186884690",
+          "phoneType": "Mobile Phone",
+          "address": "2303 E Admiral BLVD \r\nTulsa, OK 74110"
+        },
+        {
+          "role": "Engineer",
+          "company": "Route 66 Engineering",
+          "firstName": "Billy",
+          "lastName": "Cox",
+          "email": "bcox@66eng.com",
+          "phone": "(918) 852-1458",
+          "phoneType": "Mobile Phone",
+          "address": "5 S Main ST \r\nSapulpa, OK 74066"
+        },
+        {
+          "role": "Applicant",
+          "company": "AlexCo",
+          "firstName": "Dorinda",
+          "lastName": "Alexander",
+          "email": "dalexco@gmail.com",
+          "phone": "(404) 798-9961",
+          "phoneType": "Mobile Phone",
+          "address": "1611 S Utica AVE Unit: 205 \r\nTulsa, OK 74104"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/2408d406-8b2c-400c-9c90-0535fea0132b"
+    },
+    {
+      "permitNumber": "PLBGR-246744-2026",
+      "caseId": "ad3251d9-bcb9-4cb8-8816-2d3224bbefea",
+      "type": "Plumbing: New Construction (Residential)",
+      "workClass": "New Construction",
+      "status": "Submitted",
+      "appliedDate": "2026-05-08T14:35:03",
+      "issuedDate": null,
+      "address": "6324 E 56TH PL S Tulsa OK 74135",
+      "city": "Tulsa",
+      "zip": "74135",
+      "parcel": "31350933400820",
+      "description": "Master bedroom addition",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Contractor",
+          "company": "ATG Plumbing",
+          "firstName": "Alejandro",
+          "lastName": "Gonzalez",
+          "email": "atgbusiness2024@outlook.com",
+          "phone": "9189517117",
+          "phoneType": "Business Phone ",
+          "address": "14264 N 108 AVE E \r\nCollinsville, OK 74021"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/ad3251d9-bcb9-4cb8-8816-2d3224bbefea"
+    },
+    {
+      "permitNumber": "ROWC-246743-2026",
+      "caseId": "a656da3d-9958-43ee-bdae-7a5e2b46fb3a",
+      "type": "ROW: Franchisee (Commercial)",
+      "workClass": "Franchisee",
+      "status": "Submitted - Online",
+      "appliedDate": "2026-05-08T14:23:31.317",
+      "issuedDate": null,
+      "address": "224 N 31ST AVE W Tulsa OK 74127",
+      "city": "Tulsa",
+      "zip": "74127",
+      "parcel": "12175920302240",
+      "description": "leak repair for ong",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Applicant",
+          "company": "NPL Construction Co",
+          "firstName": "Gladys",
+          "lastName": "Wallace",
+          "email": "gwallace@gonpl.com",
+          "phone": "9187946746",
+          "phoneType": "Business Phone ",
+          "address": "6036 W 71ST ST S \r\nTulsa, OK 74131"
+        },
+        {
+          "role": "Franchisee",
+          "company": "Oklahoma Natural Gas",
+          "firstName": "Jeremy",
+          "lastName": "Poplin",
+          "email": "jeremy.poplin@onegas.com",
+          "phone": "9185212670",
+          "phoneType": "Business Phone ",
+          "address": "5848 E 15TH ST S \r\nTulsa, OK 74112"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/a656da3d-9958-43ee-bdae-7a5e2b46fb3a"
+    },
+    {
+      "permitNumber": "ROWC-246734-2026",
+      "caseId": "cd4249f2-2525-49c5-8a73-3689813069a9",
+      "type": "ROW: Franchisee (Commercial)",
+      "workClass": "Franchisee",
+      "status": "In Review",
+      "appliedDate": "2026-05-08T13:17:31.42",
+      "issuedDate": null,
+      "address": "2232 N VICTOR AVE E Tulsa OK 74110",
+      "city": "Tulsa",
+      "zip": "74110",
+      "parcel": "35925033016120",
+      "description": "\"Call Okie 811 three business days before starting work.\"\n“ONG Franchisee Gas Blanket Permit - MUST be 4 feet under all streets AND a minimum of 2 feet under ALL water lines. Must schedule with Justan 918-697-3764 48HRS BEFORE starting job.”\n\nLEAK REPAIR FOR ONG",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Applicant",
+          "company": "NPL Construction Co",
+          "firstName": "Gladys",
+          "lastName": "Wallace",
+          "email": "gwallace@gonpl.com",
+          "phone": "9187946746",
+          "phoneType": "Business Phone ",
+          "address": "6036 W 71ST ST S \r\nTulsa, OK 74131"
+        },
+        {
+          "role": "Franchisee",
+          "company": "Oklahoma Natural Gas",
+          "firstName": "Jeremy",
+          "lastName": "Poplin",
+          "email": "jeremy.poplin@onegas.com",
+          "phone": "9185212670",
+          "phoneType": "Business Phone ",
+          "address": "5848 E 15TH ST S \r\nTulsa, OK 74112"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/cd4249f2-2525-49c5-8a73-3689813069a9"
+    },
+    {
+      "permitNumber": "ROWC-246731-2026",
+      "caseId": "91050d81-b6ba-445e-80f5-5a32d4fae0a3",
+      "type": "ROW: Franchisee (Commercial)",
+      "workClass": "Franchisee",
+      "status": "In Review",
+      "appliedDate": "2026-05-08T12:47:26.39",
+      "issuedDate": null,
+      "address": "1511 N LEWIS AVE E Tulsa OK 74110",
+      "city": "Tulsa",
+      "zip": "74110",
+      "parcel": "43300032915950",
+      "description": "\"Call Okie 811 three business days before starting work.\"\n“ONG Franchisee Gas Blanket Permit - MUST be 4 feet under all streets AND a minimum of 2 feet under ALL water lines. Must schedule with Justan 918-697-3764 48HRS BEFORE starting job.”\n\nLEAK REPAIR FOR ONG",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Applicant",
+          "company": "NPL Construction Co",
+          "firstName": "Gladys",
+          "lastName": "Wallace",
+          "email": "gwallace@gonpl.com",
+          "phone": "9187946746",
+          "phoneType": "Business Phone ",
+          "address": "6036 W 71ST ST S \r\nTulsa, OK 74131"
+        },
+        {
+          "role": "Franchisee",
+          "company": "Oklahoma Natural Gas",
+          "firstName": "Jeremy",
+          "lastName": "Poplin",
+          "email": "jeremy.poplin@onegas.com",
+          "phone": "9185212670",
+          "phoneType": "Business Phone ",
+          "address": "5848 E 15TH ST S \r\nTulsa, OK 74112"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/91050d81-b6ba-445e-80f5-5a32d4fae0a3"
+    },
+    {
+      "permitNumber": "BLDR-246727-2026",
+      "caseId": "cc104bb0-133c-4584-a020-ddd4dfc2e96c",
+      "type": "Building: Addition (Residential)",
+      "workClass": "Addition",
+      "status": "In Review",
+      "appliedDate": "2026-05-08T12:33:12.083",
+      "issuedDate": null,
+      "address": "1436 E 33RD ST S Tulsa OK 74105",
+      "city": "Tulsa",
+      "zip": "74105",
+      "parcel": "30675931910810",
+      "description": "24ft x 16ft Tied in Pergola",
+      "valuation": 30000,
+      "squareFeet": 384,
+      "contacts": [
+        {
+          "role": "Owner/Builder",
+          "company": "PMH Construction, LLC",
+          "firstName": "Jonathan",
+          "lastName": "King",
+          "email": "jonathan@pmhokc.com",
+          "phone": "(405) 412-6359",
+          "phoneType": "Mobile Phone",
+          "address": "4107 N Council RD Unit: Suite D1 D2 \r\nBethany, OK 73008"
+        },
+        {
+          "role": "Applicant",
+          "company": "PMH Construction, LLC",
+          "firstName": "Jonathan",
+          "lastName": "King",
+          "email": "jonathan@pmhokc.com",
+          "phone": "(405) 412-6359",
+          "phoneType": "Mobile Phone",
+          "address": "4107 N Council RD Unit: Suite D1 D2 \r\nBethany, OK 73008"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/cc104bb0-133c-4584-a020-ddd4dfc2e96c"
+    },
+    {
+      "permitNumber": "ELECC-246726-2026",
+      "caseId": "fd1dad7b-607e-4eb6-af86-77cb21eadc7f",
+      "type": "Electrical: New Construction (Commercial)",
+      "workClass": "New Construction",
+      "status": "Issued",
+      "appliedDate": "2026-05-08T12:19:10.16",
+      "issuedDate": "2026-05-08T00:00:00",
+      "address": "11350 E 31ST ST S Tulsa OK 74146",
+      "city": "Tulsa",
+      "zip": "74146",
+      "parcel": "74940942037280",
+      "description": "new 6 space retail building",
+      "valuation": null,
+      "squareFeet": 10800,
+      "contacts": [
+        {
+          "role": "Contractor",
+          "company": "Genesis 1:3 Electric LLC - account",
+          "firstName": "Ted",
+          "lastName": "Labombarbe",
+          "email": "ted@g13e.com",
+          "phone": "9188133068",
+          "phoneType": "Mobile Phone",
+          "address": "3635 E 430 RD \r\nOologah, OK 74053"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/fd1dad7b-607e-4eb6-af86-77cb21eadc7f"
+    },
+    {
+      "permitNumber": "ROWC-246721-2026",
+      "caseId": "8aeea2b0-bb10-4cff-b6bc-f19af451c6a1",
+      "type": "ROW: Franchisee (Commercial)",
+      "workClass": "Franchisee",
+      "status": "In Review",
+      "appliedDate": "2026-05-08T10:52:53.137",
+      "issuedDate": null,
+      "address": "1508 S CINCINNATI AVE E Unit: A Tulsa OK 74119",
+      "city": "Tulsa",
+      "zip": "74119",
+      "parcel": "25000921208260",
+      "description": "\"Call Okie 811 three business days before starting work.\"\n“ONG Franchisee Gas Blanket Permit - MUST be 4 feet under all streets AND a minimum of 2 feet under ALL water lines. Must schedule with Justan 918-697-3764 48HRS BEFORE starting job.”\n\nLEAK REPAIR FOR ONG",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Applicant",
+          "company": "NPL Construction Co",
+          "firstName": "Gladys",
+          "lastName": "Wallace",
+          "email": "gwallace@gonpl.com",
+          "phone": "9187946746",
+          "phoneType": "Business Phone ",
+          "address": "6036 W 71ST ST S \r\nTulsa, OK 74131"
+        },
+        {
+          "role": "Franchisee",
+          "company": "Oklahoma Natural Gas",
+          "firstName": "Jeremy",
+          "lastName": "Poplin",
+          "email": "jeremy.poplin@onegas.com",
+          "phone": "9185212670",
+          "phoneType": "Business Phone ",
+          "address": "5848 E 15TH ST S \r\nTulsa, OK 74112"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/8aeea2b0-bb10-4cff-b6bc-f19af451c6a1"
+    },
+    {
+      "permitNumber": "ROWC-246714-2026",
+      "caseId": "5ae96b5d-2747-4455-8cb3-3ee4f4b33cba",
+      "type": "ROW: Occupant (Commercial)",
+      "workClass": "Occupant",
+      "status": "In Review",
+      "appliedDate": "2026-05-08T10:31:47.3",
+      "issuedDate": null,
+      "address": "18 W ARCHER ST S Tulsa OK 74103",
+      "city": "Tulsa",
+      "zip": "74103",
+      "parcel": "00500920131720",
+      "description": "\"Call Okie 811 three business days before starting work.\"\nInstalling Fiber/Street Bore (###Project Name) - MUST be 4 feet under all streets AND a minimum of 2 feet under ALL water lines. Installing Aerial Fiber lines- No parking on sidewalks. Must replace full panel of sidewalk when doing drops. Must schedule with Chris 918-639-1660 24HRS BEFORE starting job.\n\n\ninstalling new fiber optic cable into existing conduits and handholes starting at city streets Archer, Main, Easton, and then existing duct pathway follows Katy Trail  along Eastern Heights and Zeigler Park",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Licensee",
+          "company": "level3 DBA Lumen Technologies",
+          "firstName": "Josue",
+          "lastName": "Romero",
+          "email": "josue.romero@lumen.com",
+          "phone": "7132490626",
+          "phoneType": "Business Phone ",
+          "address": ""
+        },
+        {
+          "role": "Applicant",
+          "company": "Stalcup and Associates",
+          "firstName": "JEFFREY",
+          "lastName": "MATTINGLY",
+          "email": "jmattingly@stalcupassociates.com",
+          "phone": "(904) 236-8126",
+          "phoneType": "Business Phone ",
+          "address": "310 Deer Crossing RD \r\nSAINT AUGUSTINE, FL 32086"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/5ae96b5d-2747-4455-8cb3-3ee4f4b33cba"
+    },
+    {
+      "permitNumber": "ROWC-246711-2026",
+      "caseId": "94c922a7-c7c4-40f9-a9b2-d6c726c204e9",
+      "type": "ROW: Franchisee (Commercial)",
+      "workClass": "Franchisee",
+      "status": "In Review",
+      "appliedDate": "2026-05-08T10:01:39.387",
+      "issuedDate": null,
+      "address": "1111 E 21ST ST S Tulsa OK 74120",
+      "city": "Tulsa",
+      "zip": "74120",
+      "parcel": "25025921209040",
+      "description": "\"Call Okie 811 three business days before starting work.\"\n“ONG Franchisee Gas Blanket Permit - MUST be 4 feet under all streets AND a minimum of 2 feet under ALL water lines. Must schedule with Justan 918-697-3764 48HRS BEFORE starting job.”\n\nLEAK REPAIR FOR ONG",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Applicant",
+          "company": "NPL Construction Co",
+          "firstName": "Gladys",
+          "lastName": "Wallace",
+          "email": "gwallace@gonpl.com",
+          "phone": "9187946746",
+          "phoneType": "Business Phone ",
+          "address": "6036 W 71ST ST S \r\nTulsa, OK 74131"
+        },
+        {
+          "role": "Franchisee",
+          "company": "Oklahoma Natural Gas",
+          "firstName": "Jeremy",
+          "lastName": "Poplin",
+          "email": "jeremy.poplin@onegas.com",
+          "phone": "9185212670",
+          "phoneType": "Business Phone ",
+          "address": "5848 E 15TH ST S \r\nTulsa, OK 74112"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/94c922a7-c7c4-40f9-a9b2-d6c726c204e9"
+    },
+    {
+      "permitNumber": "PLBGC-246710-2026",
+      "caseId": "10139ccb-2f17-4c61-9a63-c9b416d29ac3",
+      "type": "Plumbing: Water Heater (Commercial)",
+      "workClass": "Water Heater",
+      "status": "Submitted - Online",
+      "appliedDate": "2026-05-08T09:50:27.59",
+      "issuedDate": null,
+      "address": "4450 S 70TH AVE E Tulsa OK 74145",
+      "city": "Tulsa",
+      "zip": "74145",
+      "parcel": "20925932603380",
+      "description": "Installing tankless water heater",
+      "valuation": null,
+      "squareFeet": null,
+      "contacts": [
+        {
+          "role": "Contractor",
+          "company": "Oklahoma plumbing & gas",
+          "firstName": "Larry",
+          "lastName": "Deason",
+          "email": "oklahomaplumbinggas@gmail.com",
+          "phone": "(918) 998-7539",
+          "phoneType": "Business Phone ",
+          "address": "916 N Willow RD \r\nSand Springs, OK 74063"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/10139ccb-2f17-4c61-9a63-c9b416d29ac3"
+    },
+    {
+      "permitNumber": "BLDC-246709-2026",
+      "caseId": "d338e26c-259a-4110-9a5c-ae1be14d8f5a",
+      "type": "Building: Addendum (Commercial)",
+      "workClass": "Addendum  ",
+      "status": "In Review",
+      "appliedDate": "2026-05-08T09:31:21.43",
+      "issuedDate": null,
+      "address": "1919 N SHERIDAN RD E Tulsa OK 74115",
+      "city": "Tulsa",
+      "zip": "74115",
+      "parcel": "90326032616730",
+      "description": "Revised Civil sheets to show the added fire line/ gas line brought to building. Revised construction type to VB.",
+      "valuation": null,
+      "squareFeet": 10750,
+      "contacts": [
+        {
+          "role": "Applicant",
+          "company": "Shaffer Architecture Studio, LLC",
+          "firstName": "Jameson",
+          "lastName": "Shaffer",
+          "email": "jshaffer@shafferarch.com",
+          "phone": "(918) 851-8224",
+          "phoneType": "Mobile Phone",
+          "address": "11541 South 66th East Avenue \r\nBixby, OK 74008"
+        }
+      ],
+      "portalUrl": "https://tulsaok-energovweb.tylerhost.net/apps/selfservice#/permit/d338e26c-259a-4110-9a5c-ae1be14d8f5a"
+    }
+  ]
+}
