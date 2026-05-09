@@ -1,16 +1,17 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  BarChart3,
   Calculator,
+  Check,
   ClipboardList,
   Crosshair,
   Download,
   Gauge,
   Loader2,
   Plus,
+  Send,
   Trash2,
 } from 'lucide-react';
 import {
@@ -63,6 +64,12 @@ function SectionCard({ title, icon: Icon, children, index = 0 }: {
   );
 }
 
+const DEFAULT_AUDIT_ROWS: AuditRow[] = [
+  { id: 'audit-1', competitor: 'Fast Response HVAC', testedAt: '2026-04-26T09:15', responseMinutes: 8, channel: 'call', quality: 'strong', notes: 'Called back quickly and offered a same-day slot.' },
+  { id: 'audit-2', competitor: 'Metro Contractor Co.', testedAt: '2026-04-26T09:20', responseMinutes: 22, channel: 'text', quality: 'average', notes: 'Text reply was fast enough, but no firm next step.' },
+  { id: 'audit-3', competitor: 'No Call Back Pros', testedAt: '2026-04-26T09:25', responseMinutes: 180, channel: 'none', quality: 'weak', notes: 'No response inside three hours.' },
+];
+
 export default function AdminAddOns() {
   const [clients, setClients] = useState<ClientAccount[]>(mockClientAccounts);
   const [tasks, setTasks] = useState<SupportTask[]>(mockSupportTasks);
@@ -70,12 +77,18 @@ export default function AdminAddOns() {
   const [selectedClientId, setSelectedClientId] = useState(mockClientAccounts[0]?.id ?? '');
   const [fallbackJobValue, setFallbackJobValue] = useState(3500);
   const [fallbackCloseRate, setFallbackCloseRate] = useState(35);
-  const [auditRows, setAuditRows] = useState<AuditRow[]>([
-    { id: 'audit-1', competitor: 'Fast Response HVAC', testedAt: '2026-04-26T09:15', responseMinutes: 8, channel: 'call', quality: 'strong', notes: 'Called back quickly and offered a same-day slot.' },
-    { id: 'audit-2', competitor: 'Metro Contractor Co.', testedAt: '2026-04-26T09:20', responseMinutes: 22, channel: 'text', quality: 'average', notes: 'Text reply was fast enough, but no firm next step.' },
-    { id: 'audit-3', competitor: 'No Call Back Pros', testedAt: '2026-04-26T09:25', responseMinutes: 180, channel: 'none', quality: 'weak', notes: 'No response inside three hours.' },
-  ]);
+  const [auditRows, setAuditRows] = useState<AuditRow[]>(DEFAULT_AUDIT_ROWS);
+  const [auditDirty, setAuditDirty] = useState(false);
+  const [auditSaving, setAuditSaving] = useState(false);
+  const [reportSending, setReportSending] = useState(false);
+  const [reportSent, setReportSent] = useState(false);
+  const [reportError, setReportError] = useState<string | null>(null);
+  const [clientResponseSec, setClientResponseSec] = useState(60); // from settings.messageTiming.initialDelaySec
 
+  // Debounce timer ref for auto-saving audit rows
+  const auditSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ─── Load clients ───
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -99,6 +112,102 @@ export default function AdminAddOns() {
     load();
     return () => { cancelled = true; };
   }, [selectedClientId]);
+
+  // ─── Load audit rows + client settings when client changes ───
+  useEffect(() => {
+    if (!selectedClientId) return;
+    let cancelled = false;
+
+    async function loadClientData() {
+      // Load competitor audit rows
+      try {
+        const auditRes = await fetch(`/api/clients/${selectedClientId}/audit`);
+        if (!cancelled && auditRes.ok) {
+          const json = await auditRes.json();
+          if (json.success && Array.isArray(json.data?.rows) && json.data.rows.length > 0) {
+            setAuditRows(json.data.rows);
+          } else {
+            setAuditRows(DEFAULT_AUDIT_ROWS);
+          }
+          setAuditDirty(false);
+        }
+      } catch {
+        // keep current rows
+      }
+
+      // Load client settings for response speed
+      try {
+        const settingsRes = await fetch(`/api/clients/${selectedClientId}/settings`);
+        if (!cancelled && settingsRes.ok) {
+          const json = await settingsRes.json();
+          if (json.success && json.data) {
+            const timing = json.data.messageTiming as Record<string, number> | null;
+            if (timing?.initialDelaySec) {
+              setClientResponseSec(timing.initialDelaySec);
+            } else {
+              setClientResponseSec(60); // default 1 minute
+            }
+          }
+        }
+      } catch {
+        setClientResponseSec(60);
+      }
+    }
+
+    loadClientData();
+    return () => { cancelled = true; };
+  }, [selectedClientId]);
+
+  // ─── Auto-save audit rows (debounced) ───
+  const saveAuditRows = useCallback(async (rows: AuditRow[]) => {
+    if (!selectedClientId) return;
+    setAuditSaving(true);
+    try {
+      await fetch(`/api/clients/${selectedClientId}/audit`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rows }),
+      });
+      setAuditDirty(false);
+    } catch {
+      // silent fail — rows still in local state
+    } finally {
+      setAuditSaving(false);
+    }
+  }, [selectedClientId]);
+
+  useEffect(() => {
+    if (!auditDirty) return;
+    if (auditSaveTimer.current) clearTimeout(auditSaveTimer.current);
+    auditSaveTimer.current = setTimeout(() => saveAuditRows(auditRows), 1500);
+    return () => { if (auditSaveTimer.current) clearTimeout(auditSaveTimer.current); };
+  }, [auditRows, auditDirty, saveAuditRows]);
+
+  // ─── Send weekly report via SMS ───
+  async function sendWeeklyReport() {
+    if (!selectedClientId) return;
+    setReportSending(true);
+    setReportError(null);
+    setReportSent(false);
+    try {
+      const res = await fetch('/api/reports/weekly', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientId: selectedClientId }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setReportSent(true);
+        setTimeout(() => setReportSent(false), 4000);
+      } else {
+        setReportError(json.error?.message ?? 'Failed to send report');
+      }
+    } catch {
+      setReportError('Network error — could not send report');
+    } finally {
+      setReportSending(false);
+    }
+  }
 
   const selectedClient = clients.find((c) => c.id === selectedClientId) ?? clients[0];
   const clientTasks = tasks.filter((t) => t.clientId === selectedClient?.id && t.status !== 'Resolved');
@@ -134,12 +243,15 @@ export default function AdminAddOns() {
     return { missedCalls, recovered, booked, unrecovered, recoveredToBooked, jobValue, closeRate, protectedValue, atRiskValue, roiMultiple };
   }, [selectedClient, fallbackJobValue, fallbackCloseRate]);
 
+  // Response speed: use real client config (initialDelaySec / 60)
+  const clientResponseMinutes = Math.round(clientResponseSec / 60) || 1;
   const auditAverage = auditRows.length > 0
     ? Math.round(auditRows.reduce((sum, row) => sum + row.responseMinutes, 0) / auditRows.length)
     : 0;
-  const clientResponseMinutes = selectedClient?.workflowHealth === 'Healthy' ? 1 : 45;
-  const speedGap = Math.max(clientResponseMinutes - auditAverage, 0);
-  const auditWinner = clientResponseMinutes <= auditAverage ? 'Client / LRP wins' : 'Competitors currently faster';
+  const speedGap = auditAverage - clientResponseMinutes;
+  const auditWinner = clientResponseMinutes <= auditAverage
+    ? 'Client / Vantage wins — faster than market'
+    : 'Competitors currently faster';
 
   const weeklyReport = selectedClient ? [
     `Weekly Lost Lead Report — ${selectedClient.companyName}`,
@@ -158,6 +270,7 @@ export default function AdminAddOns() {
 
   function updateAudit(id: string, patch: Partial<AuditRow>) {
     setAuditRows((rows) => rows.map((row) => row.id === id ? { ...row, ...patch } : row));
+    setAuditDirty(true);
   }
 
   function addAuditRow() {
@@ -165,6 +278,12 @@ export default function AdminAddOns() {
       ...rows,
       { id: `audit-${Date.now()}`, competitor: 'New competitor', testedAt: new Date().toISOString().slice(0, 16), responseMinutes: 30, channel: 'call', quality: 'average', notes: '' },
     ]);
+    setAuditDirty(true);
+  }
+
+  function removeAuditRow(id: string) {
+    setAuditRows((rows) => rows.filter((r) => r.id !== id));
+    setAuditDirty(true);
   }
 
   if (loading) {
@@ -180,7 +299,7 @@ export default function AdminAddOns() {
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Add-On Tools</h1>
-          <p className="text-sm text-[#64748b] mt-0.5">Functional fulfillment workspace for the low-stress LRP value stack</p>
+          <p className="text-sm text-[#64748b] mt-0.5">Functional fulfillment workspace for the low-stress Vantage value stack</p>
         </div>
         <select
           value={selectedClient?.id ?? ''}
@@ -192,6 +311,7 @@ export default function AdminAddOns() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        {/* ─── Lead Leak Calculator ─── */}
         <SectionCard title="Lead Leak Calculator™" icon={Calculator} index={0}>
           <div className="grid grid-cols-2 gap-3 mb-4">
             {[
@@ -227,24 +347,46 @@ export default function AdminAddOns() {
           </div>
         </SectionCard>
 
+        {/* ─── Weekly Lost Lead Report ─── */}
         <SectionCard title="Weekly Lost Lead Report" icon={ClipboardList} index={1}>
           <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-4 min-h-[300px]">
             <pre className="whitespace-pre-wrap text-xs leading-relaxed text-[#cbd5e1] font-sans">{weeklyReport}</pre>
           </div>
-          <button
-            type="button"
-            onClick={() => navigator.clipboard?.writeText(weeklyReport)}
-            className="mt-3 rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-sm text-cyan-300 hover:bg-cyan-400/15 inline-flex items-center gap-2"
-          >
-            <Download className="w-4 h-4" />
-            Copy report
-          </button>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => navigator.clipboard?.writeText(weeklyReport)}
+              className="rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-sm text-cyan-300 hover:bg-cyan-400/15 inline-flex items-center gap-2"
+            >
+              <Download className="w-4 h-4" />
+              Copy report
+            </button>
+            <button
+              type="button"
+              onClick={sendWeeklyReport}
+              disabled={reportSending}
+              className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-300 hover:bg-emerald-400/15 inline-flex items-center gap-2 disabled:opacity-50"
+            >
+              {reportSending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : reportSent ? (
+                <Check className="w-4 h-4" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
+              {reportSent ? 'Sent!' : 'Send via SMS'}
+            </button>
+          </div>
+          {reportError && (
+            <p className="mt-2 text-xs text-red-400">{reportError}</p>
+          )}
         </SectionCard>
 
+        {/* ─── Local Response Speed Audit ─── */}
         <SectionCard title="Local Response Speed Audit™" icon={Crosshair} index={2}>
           <div className="grid grid-cols-3 gap-2 mb-4">
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
-              <p className="text-xs text-[#64748b]">Client</p>
+              <p className="text-xs text-[#64748b]">Client (Vantage)</p>
               <p className="text-lg font-semibold metric-value text-cyan-300">{clientResponseMinutes}m</p>
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
@@ -253,11 +395,13 @@ export default function AdminAddOns() {
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
               <p className="text-xs text-[#64748b]">Gap</p>
-              <p className="text-lg font-semibold metric-value text-[#e2e8f0]">{speedGap}m</p>
+              <p className={`text-lg font-semibold metric-value ${speedGap > 0 ? 'text-emerald-300' : speedGap < 0 ? 'text-red-300' : 'text-[#e2e8f0]'}`}>
+                {speedGap > 0 ? '+' : ''}{speedGap}m
+              </p>
             </div>
           </div>
-          <div className="rounded-xl border border-purple-400/20 bg-purple-400/10 p-3 mb-4">
-            <p className="text-xs text-purple-300">Audit verdict</p>
+          <div className={`rounded-xl border p-3 mb-4 ${clientResponseMinutes <= auditAverage ? 'border-emerald-400/20 bg-emerald-400/10' : 'border-red-400/20 bg-red-400/10'}`}>
+            <p className={`text-xs ${clientResponseMinutes <= auditAverage ? 'text-emerald-300' : 'text-red-300'}`}>Audit verdict</p>
             <p className="text-sm font-medium text-[#e2e8f0]">{auditWinner}</p>
           </div>
           <div className="space-y-2 max-h-[340px] overflow-y-auto pr-1">
@@ -265,7 +409,7 @@ export default function AdminAddOns() {
               <div key={row.id} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3 space-y-2">
                 <div className="flex items-center gap-2">
                   <input value={row.competitor} onChange={(e) => updateAudit(row.id, { competitor: e.target.value })} className="min-w-0 flex-1 rounded-lg border border-white/[0.06] bg-black/20 px-2 py-1 text-xs text-[#e2e8f0] outline-none" />
-                  <button onClick={() => setAuditRows((rows) => rows.filter((r) => r.id !== row.id))} className="text-red-300"><Trash2 className="w-4 h-4" /></button>
+                  <button onClick={() => removeAuditRow(row.id)} className="text-red-300"><Trash2 className="w-4 h-4" /></button>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   <input type="number" value={row.responseMinutes} onChange={(e) => updateAudit(row.id, { responseMinutes: Number(e.target.value) || 0 })} className="rounded-lg border border-white/[0.06] bg-black/20 px-2 py-1 text-xs text-[#e2e8f0] outline-none" />
@@ -280,10 +424,14 @@ export default function AdminAddOns() {
               </div>
             ))}
           </div>
-          <button onClick={addAuditRow} className="mt-3 rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-[#e2e8f0] inline-flex items-center gap-2">
-            <Plus className="w-4 h-4" />
-            Add competitor
-          </button>
+          <div className="mt-3 flex items-center gap-3">
+            <button onClick={addAuditRow} className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-[#e2e8f0] inline-flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              Add competitor
+            </button>
+            {auditSaving && <span className="text-xs text-[#64748b] inline-flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Saving...</span>}
+            {!auditSaving && !auditDirty && auditRows.length > 0 && <span className="text-xs text-emerald-400 inline-flex items-center gap-1"><Check className="w-3 h-3" /> Saved</span>}
+          </div>
         </SectionCard>
       </div>
 
@@ -292,7 +440,7 @@ export default function AdminAddOns() {
           {[
             ['Do not over-serve', 'Use the report generator and audit table. Avoid custom one-off analysis unless it sells a higher plan.'],
             ['Use client data first', 'The calculator pulls real missed/recovered/booked counts. Fallback assumptions are only for missing data.'],
-            ['Sell the gap', 'The audit exists to show competitive response speed pressure, then position LRP as the fix.'],
+            ['Sell the gap', 'The audit exists to show competitive response speed pressure, then position Vantage as the fix.'],
           ].map(([title, body]) => (
             <div key={title} className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
               <p className="text-sm font-semibold text-[#e2e8f0]">{title}</p>

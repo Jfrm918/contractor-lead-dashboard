@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -8,8 +9,9 @@ import {
   CalendarCheck,
   RotateCcw,
   Clock,
+  Loader2,
 } from 'lucide-react';
-import { alerts, getUrgencyPillClass, timeAgo } from '@/lib/data';
+import { alerts as mockAlerts, getUrgencyPillClass, timeAgo, type Alert } from '@/lib/data';
 
 interface AlertsPageProps {
   onViewLead: (id: string) => void;
@@ -25,6 +27,33 @@ const cardVariants = {
 };
 
 export default function AlertsPage({ onViewLead }: AlertsPageProps) {
+  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchAlerts() {
+      try {
+        const res = await fetch('/api/alerts');
+        if (cancelled) return;
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setAlerts(json.data);
+          }
+        }
+      } catch {
+        // Keep mock data on error
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchAlerts();
+    return () => { cancelled = true; };
+  }, []);
+
   const unread = alerts.filter((a) => !a.read);
   const read = alerts.filter((a) => a.read);
 
@@ -34,7 +63,7 @@ export default function AlertsPage({ onViewLead }: AlertsPageProps) {
       case 'emergency': return <AlertTriangle className="w-4 h-4 text-red-400" />;
       case 'estimate_requested': return <CalendarCheck className="w-4 h-4 text-amber-400" />;
       case 'follow_up': return <RotateCcw className="w-4 h-4 text-blue-400" />;
-      default: return <AlertCircle className="w-4 h-4 text-[#64748b]" />;
+      default: return <AlertCircle className="w-4 h-4 text-[var(--text-tertiary)]" />;
     }
   };
 
@@ -48,7 +77,7 @@ export default function AlertsPage({ onViewLead }: AlertsPageProps) {
     }
   };
 
-  const renderAlert = (a: typeof alerts[0], i: number) => (
+  const renderAlert = (a: Alert, i: number) => (
     <motion.button
       key={a.id}
       custom={i}
@@ -67,16 +96,16 @@ export default function AlertsPage({ onViewLead }: AlertsPageProps) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
-            <span className="text-xs font-medium text-[#64748b] uppercase tracking-wider">
+            <span className="label-caps">
               {alertLabel(a.type)}
             </span>
             <span className={getUrgencyPillClass(a.urgency)}>{a.urgency}</span>
           </div>
           <p className="text-sm font-medium mb-0.5">{a.contactName}</p>
-          <p className="text-sm text-[#94a3b8] leading-relaxed">{a.summary}</p>
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{a.summary}</p>
           <div className="mt-2 flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
             <span className="text-xs text-blue-400">{a.recommendation}</span>
-            <span className="text-xs text-[#475569] flex items-center gap-1">
+            <span className="text-xs text-[var(--text-faint)] flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {timeAgo(a.timestamp)}
             </span>
@@ -86,25 +115,43 @@ export default function AlertsPage({ onViewLead }: AlertsPageProps) {
     </motion.button>
   );
 
+  if (loading) {
+    return (
+      <div className="space-y-5">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Owner Alerts</h1>
+          <p className="text-sm text-[var(--text-tertiary)] mt-0.5">Loading alerts...</p>
+        </div>
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Owner Alerts</h1>
-        <p className="text-sm text-[#64748b] mt-0.5">{unread.length} unread alerts</p>
+        <h1 className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-white via-white to-amber-200/80 bg-clip-text text-transparent">Owner Alerts</h1>
+        <p className="text-sm text-[var(--text-tertiary)] mt-0.5">{unread.length} unread alerts</p>
       </div>
 
       {unread.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-xs font-medium text-[#64748b] uppercase tracking-wider ml-1">New</h2>
+          <h2 className="label-caps ml-1">New</h2>
           {unread.map((a, i) => renderAlert(a, i))}
         </div>
       )}
 
       {read.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-xs font-medium text-[#64748b] uppercase tracking-wider ml-1">Earlier</h2>
+          <h2 className="label-caps ml-1">Earlier</h2>
           {read.map((a, i) => renderAlert(a, i + unread.length))}
         </div>
+      )}
+
+      {alerts.length === 0 && (
+        <div className="glass p-8 text-center text-[var(--text-tertiary)] text-sm">No alerts at this time.</div>
       )}
     </div>
   );

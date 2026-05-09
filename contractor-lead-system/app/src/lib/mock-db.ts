@@ -37,9 +37,21 @@ export interface MockClientSettings {
   messageTiming: Record<string, number>;
   bookingMode: string;
   bookingUrl: string | null;
+  leadFilterEnabled: boolean;
+  missedCallAckTemplate: string | null;
   workflowEnabled: boolean;
   smsEnabled: boolean;
   alertsEnabled: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface MockKnownCaller {
+  id: string;
+  clientId: string;
+  phone: string;
+  label: string | null;
+  type: string; // team, vendor, existing_customer, spam, other
   createdAt: Date;
   updatedAt: Date;
 }
@@ -59,6 +71,7 @@ export interface MockLead {
   status: string;
   missedCall: boolean;
   recovered: boolean;
+  callerType: string;
   callSid: string | null;
   callOutcome: string | null;
   createdAt: Date;
@@ -142,6 +155,8 @@ const seedSettings: MockClientSettings[] = [
     messageTiming: { initialDelaySec: 60, followup1DelaySec: 3600, followup2DelaySec: 86400 },
     bookingMode: "manual_callback",
     bookingUrl: null,
+    leadFilterEnabled: true,
+    missedCallAckTemplate: null,
     workflowEnabled: true,
     smsEnabled: true,
     alertsEnabled: true,
@@ -181,6 +196,8 @@ const seedSettings: MockClientSettings[] = [
     messageTiming: { initialDelaySec: 60, followup1DelaySec: 3600 },
     bookingMode: "manual_callback",
     bookingUrl: null,
+    leadFilterEnabled: true,
+    missedCallAckTemplate: null,
     workflowEnabled: true,
     smsEnabled: true,
     alertsEnabled: true,
@@ -189,12 +206,17 @@ const seedSettings: MockClientSettings[] = [
   },
 ];
 
+// ─── Known callers seed ───
+
+const seedKnownCallers: MockKnownCaller[] = [];
+
 // ─── In-memory store (mutable copies) ───
 
 let clients = structuredClone(seedClients);
 let settings = structuredClone(seedSettings);
 let leads: MockLead[] = [];
 let events: MockLeadEvent[] = [];
+let knownCallers = structuredClone(seedKnownCallers);
 
 // ─── Accessors ───
 
@@ -245,6 +267,8 @@ export const mockDb = {
       messageTiming: {},
       bookingMode: "manual_callback",
       bookingUrl: null,
+      leadFilterEnabled: true,
+      missedCallAckTemplate: null,
       workflowEnabled: true,
       smsEnabled: true,
       alertsEnabled: true,
@@ -296,5 +320,34 @@ export const mockDb = {
     };
     events.push(event);
     return event;
+  },
+
+  // Known callers
+  findKnownCaller(clientId: string, normalisedPhone: string) {
+    return (
+      knownCallers.find(
+        (k) => k.clientId === clientId && k.phone === normalisedPhone,
+      ) ?? null
+    );
+  },
+
+  addKnownCaller(
+    data: Omit<MockKnownCaller, "id" | "createdAt" | "updatedAt">,
+  ): MockKnownCaller {
+    const existing = knownCallers.find(
+      (k) => k.clientId === data.clientId && k.phone === data.phone,
+    );
+    if (existing) {
+      Object.assign(existing, data, { updatedAt: new Date() });
+      return existing;
+    }
+    const record: MockKnownCaller = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    knownCallers.push(record);
+    return record;
   },
 };

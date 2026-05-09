@@ -23,15 +23,15 @@ type OutreachProspect = TulsaProspect & {
 };
 
 function emailOne(name: string, trade: ProspectTrade, angle: string) {
-  return `Subject: Quick question about missed ${trade.toLowerCase()} leads\n\nHi ${name} team,\n\nI’m reaching out because we’re helping Tulsa-area contractors catch leads that slip through when calls are missed or follow-up is slow.\n\nFor ${trade.toLowerCase()} companies, the leak is usually simple: a customer calls about something urgent, does not get a fast response, then calls the next company.\n\n${angle}\n\nWould it be worth a quick look at where leads may be leaking in your follow-up?\n\nBest,\nMadison\nLeadRecovery Pro`;
+  return `Subject: Quick question about missed ${trade.toLowerCase()} leads\n\nHi ${name} team,\n\nI'm reaching out because we're helping Tulsa-area contractors catch leads that slip through when calls are missed or follow-up is slow.\n\nFor ${trade.toLowerCase()} companies, the leak is usually simple: a customer calls about something urgent, does not get a fast response, then calls the next company.\n\n${angle}\n\nWould it be worth a quick look at where leads may be leaking in your follow-up?\n\nBest,\nMadison\nVantage`;
 }
 
 function followUpOne(name: string) {
-  return `Subject: Re: missed lead follow-up\n\nHi ${name} team,\n\nJust wanted to bump this up once.\n\nThe quick version: LeadRecovery Pro helps contractors respond when calls get missed, qualify the lead, and show the owner which opportunities are still alive.\n\nIf you’re already covered on every call, no worries. If a few slip through during busy hours or after hours, this may be worth a 10-minute look.\n\nBest,\nMadison`;
+  return `Subject: Re: missed lead follow-up\n\nHi ${name} team,\n\nJust wanted to bump this up once.\n\nThe quick version: Vantage helps contractors respond when calls get missed, qualify the lead, and show the owner which opportunities are still alive.\n\nIf you're already covered on every call, no worries. If a few slip through during busy hours or after hours, this may be worth a 10-minute look.\n\nBest,\nMadison`;
 }
 
 function breakupEmail(name: string) {
-  return `Subject: Should I close this out?\n\nHi ${name} team,\n\nI don’t want to clutter your inbox. Should I close this out, or would you want us to run a quick missed-lead / response-speed check for your company?\n\nEither way is fine.\n\nBest,\nMadison`;
+  return `Subject: Should I close this out?\n\nHi ${name} team,\n\nI don't want to clutter your inbox. Should I close this out, or would you want us to run a quick missed-lead / response-speed check for your company?\n\nEither way is fine.\n\nBest,\nMadison`;
 }
 
 export default function OutreachDashboard() {
@@ -144,30 +144,38 @@ export default function OutreachDashboard() {
   }
 
   if (loading) {
-    return <div className="rounded-3xl border border-pink-300/15 bg-pink-300/[0.06] p-8 text-pink-100">Loading Madison’s outreach desk…</div>;
+    return <div className="rounded-3xl border border-pink-300/15 bg-pink-300/[0.06] p-8 text-pink-100">Loading Madison's outreach desk…</div>;
   }
 
   return (
     <div className="space-y-6 relative">
-      <div className="pointer-events-none absolute -top-8 -right-8 h-64 w-64 rounded-full bg-pink-400/[0.10] blur-3xl" />
-      <div className="pointer-events-none absolute top-48 -left-10 h-56 w-56 rounded-full bg-rose-300/[0.08] blur-3xl" />
+      <div className="pointer-events-none absolute -top-12 -right-12 h-80 w-80 rounded-full bg-pink-400/[0.08] blur-[80px]" />
+      <div className="pointer-events-none absolute top-48 -left-14 h-72 w-72 rounded-full bg-rose-300/[0.06] blur-[80px]" />
+      <div className="pointer-events-none absolute bottom-24 right-1/4 h-56 w-56 rounded-full bg-fuchsia-400/[0.04] blur-[60px]" />
 
       <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-pink-300 mb-2 flex items-center gap-2"><Sparkles className="w-3.5 h-3.5" /> Madison workspace</p>
-          <h1 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-pink-200 via-rose-200 to-fuchsia-200 bg-clip-text text-transparent">Madison’s Outreach Desk</h1>
+          <h1 className="text-3xl font-semibold tracking-tight bg-gradient-to-r from-pink-200 via-rose-200 to-fuchsia-200 bg-clip-text text-transparent">Madison&apos;s Outreach Desk</h1>
           <p className="text-sm text-[#c4b5fd] mt-1 max-w-2xl">Email-first prospecting with only the essentials: best-fit leads, polished copy, status, notes, and handoff signals for Jason.</p>
-          <p className="text-xs mt-2 text-pink-200/70">{mode === 'live' ? 'Live shared pipeline — updates save for Jason and Madison.' : 'Demo preview — real login required to save shared updates.'}</p>
+          <p className="text-xs mt-2 text-pink-200/70">{mode === 'live' ? 'Live shared pipeline - updates save for Jason and Madison.' : 'Demo preview - real login required to save shared updates.'}</p>
         </div>
         <div className="grid grid-cols-4 gap-2 min-w-[360px]">
-          <div className="rounded-2xl border border-pink-300/15 bg-pink-300/[0.06] p-3"><p className="text-xs text-pink-200/70">Queue</p><p className="text-xl font-semibold metric-value text-pink-100">{prospects.length}</p></div>
-          <div className="rounded-2xl border border-rose-300/15 bg-rose-300/[0.06] p-3"><p className="text-xs text-pink-200/70">Sent</p><p className="text-xl font-semibold metric-value text-rose-200">{totals['Email Sent'] + totals['Follow-Up 1'] + totals['Follow-Up 2']}</p></div>
-          <div className="rounded-2xl border border-fuchsia-300/15 bg-fuchsia-300/[0.06] p-3"><p className="text-xs text-pink-200/70">Replies</p><p className="text-xl font-semibold metric-value text-fuchsia-200">{totals.Replied}</p></div>
-          <div className="rounded-2xl border border-purple-300/15 bg-purple-300/[0.06] p-3"><p className="text-xs text-pink-200/70">Demos</p><p className="text-xl font-semibold metric-value text-purple-200">{totals['Demo Booked']}</p></div>
+          {[
+            { label: 'Queue', value: prospects.length, borderColor: 'border-pink-300/15 border-t-pink-300/25', bgColor: 'bg-pink-300/[0.06]', textColor: 'text-pink-100', glowClass: 'inner-glow-pink', shadow: 'inset 0 1px 0 rgba(244,114,182,0.1), 0 4px 16px rgba(0,0,0,0.2)' },
+            { label: 'Sent', value: totals['Email Sent'] + totals['Follow-Up 1'] + totals['Follow-Up 2'], borderColor: 'border-rose-300/15 border-t-rose-300/25', bgColor: 'bg-rose-300/[0.06]', textColor: 'text-rose-200', glowClass: 'inner-glow-pink', shadow: 'inset 0 1px 0 rgba(251,113,133,0.1), 0 4px 16px rgba(0,0,0,0.2)' },
+            { label: 'Replies', value: totals.Replied, borderColor: 'border-fuchsia-300/15 border-t-fuchsia-300/25', bgColor: 'bg-fuchsia-300/[0.06]', textColor: 'text-fuchsia-200', glowClass: 'inner-glow-purple', shadow: 'inset 0 1px 0 rgba(217,70,239,0.1), 0 4px 16px rgba(0,0,0,0.2)' },
+            { label: 'Demos', value: totals['Demo Booked'], borderColor: 'border-purple-300/15 border-t-purple-300/25', bgColor: 'bg-purple-300/[0.06]', textColor: 'text-purple-200', glowClass: 'inner-glow-purple', shadow: 'inset 0 1px 0 rgba(139,92,246,0.1), 0 4px 16px rgba(0,0,0,0.2)' },
+          ].map((card) => (
+            <div key={card.label} className={`rounded-2xl border ${card.borderColor} ${card.bgColor} p-3 inner-glow ${card.glowClass} backdrop-blur-sm`} style={{ boxShadow: card.shadow }}>
+              <p className="text-xs text-pink-200/70 relative z-[1]">{card.label}</p>
+              <p className={`text-xl font-semibold metric-value ${card.textColor} relative z-[1]`}>{card.value}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="rounded-3xl border border-pink-300/15 bg-gradient-to-br from-pink-300/[0.08] via-white/[0.035] to-fuchsia-300/[0.06] p-4 shadow-lg shadow-pink-500/[0.03]">
+      <div className="rounded-3xl border border-pink-300/15 border-t-pink-300/25 bg-gradient-to-br from-pink-300/[0.08] via-white/[0.035] to-fuchsia-300/[0.06] p-4 backdrop-blur-xl" style={{ boxShadow: 'inset 0 1px 0 rgba(244,114,182,0.12), 0 4px 24px rgba(0,0,0,0.2), 0 0 40px rgba(244,114,182,0.03)' }}>
         <div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
           <div className="relative flex-1 max-w-xl">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-pink-300" />
@@ -185,7 +193,7 @@ export default function OutreachDashboard() {
         {prospects.map((p, index) => {
           const pState = state[p.name] ?? { status: 'Not Contacted' as OutreachStatus, note: '' };
           return (
-            <motion.div key={p.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(index * 0.02, 0.35) }} className="rounded-3xl border border-pink-200/[0.13] bg-gradient-to-br from-pink-200/[0.07] via-white/[0.035] to-purple-200/[0.045] p-4 shadow-lg shadow-pink-500/[0.025]">
+            <motion.div key={p.name} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(index * 0.025, 0.4), duration: 0.4, ease: [0.16, 1, 0.3, 1] }} className="rounded-3xl border border-pink-200/[0.13] border-t-pink-200/[0.22] bg-gradient-to-br from-pink-200/[0.07] via-white/[0.035] to-purple-200/[0.045] p-4 backdrop-blur-xl relative overflow-hidden" style={{ boxShadow: 'inset 0 1.5px 0 rgba(244,114,182,0.12), inset 0 -1px 0 rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.22), 0 0 32px rgba(244,114,182,0.025)' }}>
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
@@ -204,7 +212,7 @@ export default function OutreachDashboard() {
                 <p className="flex items-center gap-2"><Phone className="w-4 h-4 text-pink-200/50" />{p.phone}</p>
               </div>
 
-              <div className="mt-4 rounded-xl border border-pink-300/[0.12] bg-pink-300/[0.055] p-3">
+              <div className="mt-4 rounded-xl border border-pink-300/[0.12] border-t-pink-300/[0.20] bg-pink-300/[0.055] p-3 backdrop-blur-sm" style={{ boxShadow: 'inset 0 1px 0 rgba(244,114,182,0.08)' }}>
                 <p className="text-xs uppercase tracking-[0.14em] text-pink-300 mb-1 flex items-center gap-2"><Target className="w-3.5 h-3.5" /> Email angle</p>
                 <p className="text-sm text-pink-50/80 leading-relaxed">{p.madisonAngle}</p>
               </div>

@@ -54,9 +54,9 @@ export default function AdminProspectPipeline() {
       <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-purple-300 mb-2">Tulsa within 30 miles · quality-first list</p>
-          <h1 className="text-2xl font-semibold tracking-tight">LRP Prospect Pipeline</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Vantage Prospect Pipeline</h1>
           <p className="text-sm text-[#94a3b8] mt-1 max-w-3xl">
-            Curated contractor targets for Jason and Madison, ranked from least likely to most likely to see measurable results from LeadRecovery Pro.
+            Curated contractor targets for Jason and Madison, ranked from least likely to most likely to see measurable results from Vantage.
           </p>
         </div>
         <div className="grid grid-cols-3 gap-3 min-w-[320px]">

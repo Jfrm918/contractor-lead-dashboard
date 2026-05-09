@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LeadRecovery Pro — Contractor Lead Dashboard",
-  description: "Convert more leads. Recover missed calls. Book more estimates.",
+  title: "Vantage — Tulsa construction intelligence",
+  description: "The vantage on Tulsa construction. Verified permits + decision-maker contacts, delivered before your competitors hear about them.",
 };
 
 export default function RootLayout({

@@ -1,0 +1,173 @@
+import type { Action, Prospect } from './types';
+
+/* Seed data — used on first load. After that, the hub persists
+   user changes in localStorage. */
+
+export const MISSION =
+  "Tell small commercial operators who pulled the permit, what's being built, and who to call — before their competition figures it out.";
+
+export const LAUNCH_DATE = '2026-05-05'; // day 1
+export const PLAN_LENGTH_DAYS = 90;
+
+export const GOALS_90D: { label: string; week: number }[] = [
+  { label: 'LLC filed, bank open, domain live', week: 1 },
+  { label: '200-prospect list built', week: 2 },
+  { label: '5 verbal commits', week: 4 },
+  { label: 'First 5 paying customers', week: 6 },
+  { label: 'Tulsa scraper live + first auto digest', week: 8 },
+  { label: '$1,500 MRR', week: 13 },
+];
+
+export const SEED_ACTIONS: Action[] = [
+  {
+    id: 'a1',
+    who: 'Madison',
+    text: 'Send 20 cold emails to Tulsa material reps + insulation subs',
+    done: false,
+    priority: 'high',
+  },
+  {
+    id: 'a2',
+    who: 'Madison',
+    text: 'Triage replies from yesterday',
+    done: false,
+    priority: 'high',
+  },
+  {
+    id: 'a3',
+    who: 'Madison',
+    text: 'Add 15 new prospects to pipeline',
+    done: false,
+    priority: 'med',
+  },
+  {
+    id: 'a4',
+    who: 'Jason',
+    text: 'File Vantage LLC w/ OK Secretary of State',
+    done: false,
+    priority: 'high',
+  },
+  {
+    id: 'a5',
+    who: 'Jason',
+    text: 'Lock domain + point at Vercel',
+    done: false,
+    priority: 'high',
+  },
+  {
+    id: 'a6',
+    who: 'Jason',
+    text: 'Hub review — push prospect stages forward',
+    done: false,
+    priority: 'med',
+  },
+];
+
+export const SEED_PROSPECTS: Prospect[] = [
+  {
+    id: 'p1',
+    company: 'BMC West (Tulsa)',
+    contactName: 'Travis Holcomb',
+    role: 'Outside Sales Rep',
+    email: 'travis.holcomb@bmcwest.com',
+    phone: '(918) 555-0188',
+    metro: 'Tulsa',
+    segment: 'Material rep',
+    stage: 'cold',
+    lastTouchAt: '',
+    nextAction: 'Initial cold email',
+    owner: 'Madison',
+  },
+  {
+    id: 'p2',
+    company: 'Acme Insulation',
+    contactName: 'Brad Mosley',
+    role: 'Owner',
+    email: 'brad@acmeinsul.com',
+    phone: '(918) 555-0233',
+    metro: 'Tulsa',
+    segment: 'Subcontractor',
+    stage: 'cold',
+    lastTouchAt: '',
+    nextAction: 'Cold email + LinkedIn touch',
+    owner: 'Madison',
+  },
+  {
+    id: 'p3',
+    company: 'Mid-Continent Roofing',
+    contactName: 'Jamie Kruse',
+    role: 'VP Operations',
+    email: 'jkruse@midcontroofing.com',
+    metro: 'Tulsa',
+    segment: 'Subcontractor',
+    stage: 'cold',
+    lastTouchAt: '',
+    nextAction: 'Initial cold email',
+    owner: 'Madison',
+  },
+  {
+    id: 'p4',
+    company: 'Stronghold Mechanical',
+    contactName: 'Diane Pfeiffer',
+    role: 'Sales Manager',
+    email: 'dpfeiffer@strongholdmech.com',
+    metro: 'Tulsa',
+    segment: 'Subcontractor',
+    stage: 'cold',
+    lastTouchAt: '',
+    nextAction: 'Cold email',
+    owner: 'Madison',
+  },
+  {
+    id: 'p5',
+    company: 'BOK Construction Lending',
+    contactName: 'Eric Ramos',
+    role: 'Senior Underwriter',
+    email: 'eramos@bokf.com',
+    metro: 'Tulsa',
+    segment: 'Lender / insurer',
+    stage: 'cold',
+    lastTouchAt: '',
+    nextAction: 'Cold email',
+    owner: 'Madison',
+  },
+  {
+    id: 'p6',
+    company: 'Stan Johnson Co.',
+    contactName: 'Lacey Whitcomb',
+    role: 'Commercial Broker',
+    email: 'lwhitcomb@stanjohnsonco.com',
+    metro: 'Tulsa',
+    segment: 'CRE broker',
+    stage: 'cold',
+    lastTouchAt: '',
+    nextAction: 'Cold email',
+    owner: 'Madison',
+  },
+  {
+    id: 'p7',
+    company: 'Cherokee Foam Systems',
+    contactName: 'Aaron Boyd',
+    role: 'Owner',
+    email: 'aaron@cherokeefoam.com',
+    metro: 'Tulsa',
+    segment: 'Subcontractor',
+    stage: 'cold',
+    lastTouchAt: '',
+    nextAction: 'Warm intro via Jason',
+    owner: 'Jason',
+  },
+  {
+    id: 'p8',
+    company: 'Premier Insulation Supply',
+    contactName: 'Karen Estrella',
+    role: 'Account Executive',
+    email: 'kestrella@premierinsul.com',
+    metro: 'Tulsa',
+    segment: 'Material rep',
+    stage: 'cold',
+    lastTouchAt: '',
+    nextAction: 'Cold email',
+    owner: 'Madison',
+  },
+];

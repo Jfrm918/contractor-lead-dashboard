@@ -228,7 +228,7 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
   const lrpPipeline = [
     { stage: 'Leads tracked', count: totalLeadCount, detail: 'All inbound opportunities currently visible across client dashboards' },
     { stage: 'Missed calls', count: missedCallCount, detail: 'Actual missed-call count pulled from client lead records' },
-    { stage: 'Recovered by LRP', count: recoveredLeadCount, detail: 'Leads pulled back into conversation after missed or delayed follow-up' },
+    { stage: 'Recovered by Vantage', count: recoveredLeadCount, detail: 'Leads pulled back into conversation after missed or delayed follow-up' },
     { stage: 'Booked estimates', count: bookedEstimateCount, detail: 'Recovered/followed-up leads that became scheduled estimate opportunities' },
   ];
 
@@ -378,7 +378,7 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
         })}
       </div>
 
-      {/* LRP operating dashboard */}
+      {/* Vantage operating dashboard */}
       <motion.div
         custom={6}
         initial="hidden"
@@ -390,7 +390,7 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <PhoneForwarded className="w-4 h-4 text-cyan-400" />
-              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">LRP Operating Dashboard</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-[#64748b]">Vantage Operating Dashboard</p>
             </div>
             <h2 className="text-lg font-semibold text-[#e2e8f0]">Recover paid leads before they buy from someone else</h2>
             <p className="text-sm text-[#94a3b8] mt-1 max-w-3xl">
@@ -423,7 +423,7 @@ export default function AdminOverview({ onViewClient }: AdminOverviewProps) {
           <div className="glass-subtle p-4 rounded-2xl md:col-span-2">
             <p className="text-sm font-semibold text-[#e2e8f0] mb-2">Client value + close-rate data</p>
             <p className="text-xs text-[#94a3b8] leading-relaxed">
-              LRP now calculates from missed-call counts, recovered leads, booked estimates, each client&apos;s average booked job value, and each client&apos;s close rate. The inputs only fill gaps when a client does not have value data yet.
+              Vantage now calculates from missed-call counts, recovered leads, booked estimates, each client&apos;s average booked job value, and each client&apos;s close rate. The inputs only fill gaps when a client does not have value data yet.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3">

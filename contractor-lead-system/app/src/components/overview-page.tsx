@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Users,
@@ -13,15 +14,18 @@ import {
   AlertCircle,
   CheckCircle2,
   Bell,
+  Loader2,
 } from 'lucide-react';
 import {
-  dashboardMetrics,
-  funnelData,
-  leads,
-  recentActivity,
+  dashboardMetrics as mockDashboardMetrics,
+  funnelData as mockFunnelData,
+  leads as mockLeads,
+  recentActivity as mockRecentActivity,
   timeAgo,
   getStatusPillClass,
   getUrgencyPillClass,
+  type Lead,
+  type ActivityEvent,
 } from '@/lib/data';
 
 const cardVariants = {
@@ -37,49 +41,116 @@ interface OverviewPageProps {
   onViewLead: (id: string) => void;
 }
 
+interface DashboardMetrics {
+  totalLeads: number;
+  missedCalls: number;
+  recoveredLeads: number;
+  qualifiedLeads: number;
+  estimatesBooked: number;
+  avgResponseTime: string;
+}
+
+interface FunnelData {
+  leadsIn: number;
+  contacted: number;
+  qualified: number;
+  booked: number;
+}
+
 export default function OverviewPage({ onViewLead }: OverviewPageProps) {
+  const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics>(mockDashboardMetrics);
+  const [funnelDataState, setFunnelDataState] = useState<FunnelData>(mockFunnelData);
+  const [allLeads, setAllLeads] = useState<Lead[]>(mockLeads);
+  const [activity, setActivity] = useState<ActivityEvent[]>(mockRecentActivity);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchData() {
+      try {
+        const [statsRes, leadsRes] = await Promise.all([
+          fetch('/api/leads/stats'),
+          fetch('/api/leads?limit=20'),
+        ]);
+
+        if (cancelled) return;
+
+        if (statsRes.ok) {
+          const statsJson = await statsRes.json();
+          if (statsJson.success && statsJson.data) {
+            setDashboardMetrics(statsJson.data.metrics);
+            setFunnelDataState(statsJson.data.funnel);
+          }
+        }
+
+        if (leadsRes.ok) {
+          const leadsJson = await leadsRes.json();
+          if (leadsJson.success && leadsJson.data) {
+            setAllLeads(leadsJson.data);
+          }
+        }
+      } catch {
+        // Keep mock data on error
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchData();
+    return () => { cancelled = true; };
+  }, []);
+
   const metrics = [
-    { label: 'Total Leads', value: dashboardMetrics.totalLeads, icon: Users, color: 'text-blue-400', glow: 'rgba(59, 130, 246, 0.08)' },
-    { label: 'Missed Calls', value: dashboardMetrics.missedCalls, icon: PhoneMissed, color: 'text-red-400', glow: 'rgba(248, 113, 113, 0.08)' },
-    { label: 'Recovered', value: dashboardMetrics.recoveredLeads, icon: PhoneForwarded, color: 'text-cyan-400', glow: 'rgba(34, 211, 238, 0.08)' },
-    { label: 'Qualified', value: dashboardMetrics.qualifiedLeads, icon: UserCheck, color: 'text-emerald-400', glow: 'rgba(52, 211, 153, 0.08)' },
-    { label: 'Estimates Booked', value: dashboardMetrics.estimatesBooked, icon: CalendarCheck, color: 'text-amber-400', glow: 'rgba(251, 191, 36, 0.08)' },
-    { label: 'Avg Response', value: dashboardMetrics.avgResponseTime, icon: Clock, color: 'text-purple-400', glow: 'rgba(139, 92, 246, 0.08)' },
+    { label: 'Total Leads', value: dashboardMetrics.totalLeads, icon: Users, color: 'text-blue-400', glow: 'rgba(59, 130, 246, 0.10)', innerGlow: 'inner-glow-blue' },
+    { label: 'Missed Calls', value: dashboardMetrics.missedCalls, icon: PhoneMissed, color: 'text-red-400', glow: 'rgba(248, 113, 113, 0.10)', innerGlow: 'inner-glow-red' },
+    { label: 'Recovered', value: dashboardMetrics.recoveredLeads, icon: PhoneForwarded, color: 'text-cyan-400', glow: 'rgba(34, 211, 238, 0.10)', innerGlow: 'inner-glow-cyan' },
+    { label: 'Qualified', value: dashboardMetrics.qualifiedLeads, icon: UserCheck, color: 'text-emerald-400', glow: 'rgba(52, 211, 153, 0.10)', innerGlow: 'inner-glow-emerald' },
+    { label: 'Estimates Booked', value: dashboardMetrics.estimatesBooked, icon: CalendarCheck, color: 'text-amber-400', glow: 'rgba(251, 191, 36, 0.10)', innerGlow: 'inner-glow-amber' },
+    { label: 'Avg Response', value: dashboardMetrics.avgResponseTime, icon: Clock, color: 'text-purple-400', glow: 'rgba(139, 92, 246, 0.10)', innerGlow: 'inner-glow-purple' },
   ];
 
-  const hotLeads = leads
+  const hotLeads = allLeads
     .filter((l) => l.urgency === 'Urgent' && l.status !== 'Booked' && l.status !== 'Closed Lost')
     .slice(0, 4);
 
-  const conversations = leads
-    .filter((l) => l.conversation.length > 2)
+  const conversations = allLeads
+    .filter((l) => l.conversation && l.conversation.length > 2)
     .slice(0, 4);
 
-  const recoveredCount = leads.filter((l) => l.recovered).length;
-  const missedCount = leads.filter((l) => l.missedCall).length;
+  const recoveredCount = allLeads.filter((l) => l.recovered).length;
+  const missedCount = allLeads.filter((l) => l.missedCall).length;
 
   const funnelSteps = [
-    { label: 'Leads In', value: funnelData.leadsIn, pct: 100 },
-    { label: 'Contacted', value: funnelData.contacted, pct: Math.round((funnelData.contacted / funnelData.leadsIn) * 100) },
-    { label: 'Qualified', value: funnelData.qualified, pct: Math.round((funnelData.qualified / funnelData.leadsIn) * 100) },
-    { label: 'Booked', value: funnelData.booked, pct: Math.round((funnelData.booked / funnelData.leadsIn) * 100) },
+    { label: 'Leads In', value: funnelDataState.leadsIn, pct: 100 },
+    { label: 'Contacted', value: funnelDataState.contacted, pct: funnelDataState.leadsIn > 0 ? Math.round((funnelDataState.contacted / funnelDataState.leadsIn) * 100) : 0 },
+    { label: 'Qualified', value: funnelDataState.qualified, pct: funnelDataState.leadsIn > 0 ? Math.round((funnelDataState.qualified / funnelDataState.leadsIn) * 100) : 0 },
+    { label: 'Booked', value: funnelDataState.booked, pct: funnelDataState.leadsIn > 0 ? Math.round((funnelDataState.booked / funnelDataState.leadsIn) * 100) : 0 },
   ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {/* Page header */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-          <p className="text-sm text-[#64748b] mt-0.5">Today&apos;s lead activity overview</p>
+          <h1 className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-white via-white to-blue-200/80 bg-clip-text text-transparent">Dashboard</h1>
+          <p className="text-[13px] text-[var(--text-tertiary)] mt-0.5">Today&apos;s lead activity overview</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="pill pill-new">Today</span>
-          <span className="text-xs text-[#64748b]">Apr 24, 2026</span>
+          <span className="text-xs text-[var(--text-tertiary)]">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
         </div>
       </div>
 
-      {/* Metric cards — enhanced with glow and deeper glass */}
+      {/* Metric cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {metrics.map((m, i) => {
           const Icon = m.icon;
@@ -90,14 +161,14 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
               initial="hidden"
               animate="visible"
               variants={cardVariants}
-              className="glass p-4 flex flex-col gap-2 interactive-card"
-              style={{ boxShadow: `0 0 24px ${m.glow}, 0 2px 8px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.15)` }}
+              className={`glass inner-glow ${m.innerGlow} p-4 flex flex-col gap-2 interactive-card`}
+              style={{ boxShadow: `0 0 28px ${m.glow}, 0 2px 8px rgba(0,0,0,0.34), 0 8px 32px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.14)` }}
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-[#64748b] font-medium">{m.label}</span>
-                <Icon className={`w-4 h-4 ${m.color} opacity-70`} />
+              <div className="flex items-center justify-between relative z-[1]">
+                <span className="label-caps">{m.label}</span>
+                <Icon className={`w-4 h-4 ${m.color} opacity-80`} />
               </div>
-              <span className="text-2xl font-semibold metric-value">{m.value}</span>
+              <span className="text-2xl font-semibold metric-value relative z-[1]">{m.value}</span>
             </motion.div>
           );
         })}
@@ -121,10 +192,10 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
             {funnelSteps.map((step, i) => (
               <div key={step.label}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-[#94a3b8]">{step.label}</span>
+                  <span className="text-xs text-[var(--text-secondary)]">{step.label}</span>
                   <span className="text-sm font-semibold metric-value">{step.value}</span>
                 </div>
-                <div className="h-2.5 bg-white/[0.04] rounded-full overflow-hidden">
+                <div className="h-2.5 bg-white/[0.04] rounded-full overflow-hidden" style={{ boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)' }}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${step.pct}%` }}
@@ -158,14 +229,14 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
           <div className="flex items-end gap-4 mb-4">
             <div>
               <span className="text-4xl font-bold metric-value text-cyan-400">{recoveredCount}</span>
-              <span className="text-lg text-[#64748b] ml-1">/ {missedCount}</span>
+              <span className="text-lg text-[var(--text-tertiary)] ml-1">/ {missedCount || 1}</span>
             </div>
             <span className="text-sm text-emerald-400 font-medium pb-1">
-              {Math.round((recoveredCount / missedCount) * 100)}% recovery rate
+              {missedCount > 0 ? Math.round((recoveredCount / missedCount) * 100) : 0}% recovery rate
             </span>
           </div>
           <div className="space-y-1.5">
-            {leads.filter(l => l.recovered).slice(0, 4).map(l => (
+            {allLeads.filter(l => l.recovered).slice(0, 4).map(l => (
               <button
                 key={l.id}
                 onClick={() => onViewLead(l.id)}
@@ -175,7 +246,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
                   <PhoneForwarded className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
                   <span className="text-sm truncate">{l.name}</span>
                 </div>
-                <span className="text-xs text-[#64748b] flex-shrink-0 ml-2">{l.service}</span>
+                <span className="text-xs text-[var(--text-tertiary)] flex-shrink-0 ml-2">{l.service}</span>
               </button>
             ))}
           </div>
@@ -194,6 +265,9 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
             Hot Leads
           </h2>
           <div className="space-y-2">
+            {hotLeads.length === 0 && (
+              <p className="text-sm text-[var(--text-tertiary)]">No urgent leads right now.</p>
+            )}
             {hotLeads.map((l) => (
               <button
                 key={l.id}
@@ -204,7 +278,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
                   <span className="text-sm font-medium">{l.name}</span>
                   <span className={getUrgencyPillClass(l.urgency)}>{l.urgency}</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-[#64748b]">
+                <div className="flex items-center gap-2 text-xs text-[var(--text-tertiary)]">
                   <span>{l.service}</span>
                   <span>·</span>
                   <span>{l.city}</span>
@@ -231,7 +305,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
             Recent Activity
           </h2>
           <div className="space-y-0.5 max-h-[320px] overflow-y-auto">
-            {recentActivity.slice(0, 8).map((evt) => {
+            {activity.slice(0, 8).map((evt) => {
               const iconMap = {
                 missed_call_recovered: <PhoneForwarded className="w-3.5 h-3.5 text-cyan-400" />,
                 lead_replied: <MessageSquare className="w-3.5 h-3.5 text-blue-400" />,
@@ -248,8 +322,8 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
                     {iconMap[evt.type]}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-[#e2e8f0] leading-snug">{evt.description}</p>
-                    <p className="text-xs text-[#64748b] mt-0.5">{evt.leadName} · {timeAgo(evt.timestamp)}</p>
+                    <p className="text-sm text-[var(--text-primary)] leading-snug">{evt.description}</p>
+                    <p className="text-xs text-[var(--text-tertiary)] mt-0.5">{evt.leadName} · {timeAgo(evt.timestamp)}</p>
                   </div>
                 </div>
               );
@@ -270,6 +344,9 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
             Today&apos;s Conversations
           </h2>
           <div className="space-y-1.5 max-h-[320px] overflow-y-auto">
+            {conversations.length === 0 && (
+              <p className="text-sm text-[var(--text-tertiary)]">No conversations yet today.</p>
+            )}
             {conversations.map((l) => {
               const lastMsg = l.conversation[l.conversation.length - 1];
               return (
@@ -278,15 +355,15 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
                   onClick={() => onViewLead(l.id)}
                   className="w-full flex items-start gap-3 p-3 rounded-xl interactive-row text-left"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center flex-shrink-0 text-sm font-medium text-[#94a3b8] border border-white/[0.06]">
+                  <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center flex-shrink-0 text-sm font-medium text-[var(--text-secondary)] border border-white/[0.06]">
                     {l.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">{l.name}</span>
-                      <span className="text-xs text-[#64748b]">{timeAgo(lastMsg.timestamp)}</span>
+                      <span className="text-xs text-[var(--text-tertiary)]">{timeAgo(lastMsg.timestamp)}</span>
                     </div>
-                    <p className="text-xs text-[#94a3b8] mt-0.5 truncate">
+                    <p className="text-xs text-[var(--text-secondary)] mt-0.5 truncate">
                       {lastMsg.type === 'outbound' ? 'You: ' : ''}{lastMsg.content}
                     </p>
                   </div>

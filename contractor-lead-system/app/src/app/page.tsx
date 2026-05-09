@@ -17,6 +17,9 @@ import AdminDocs from '@/components/admin-docs';
 import AdminSalesPlaybook from '@/components/admin-sales-playbook';
 import AdminProspectPipeline from '@/components/admin-prospect-pipeline';
 import OutreachDashboard from '@/components/outreach-dashboard';
+import AdminBilling from '@/components/admin-billing';
+import AdminRoadmap from '@/components/admin-roadmap';
+import ClientBilling from '@/components/client-billing';
 
 export default function Home() {
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -120,6 +123,9 @@ export default function Home() {
       if (activePage === 'admin-sales-playbook') {
         return <AdminSalesPlaybook />;
       }
+      if (activePage === 'admin-billing') {
+        return <AdminBilling />;
+      }
       if (activePage === 'admin-addons') {
         return <AdminAddOns />;
       }
@@ -128,6 +134,9 @@ export default function Home() {
       }
       if (activePage === 'admin-docs') {
         return <AdminDocs />;
+      }
+      if (activePage === 'admin-roadmap') {
+        return <AdminRoadmap />;
       }
       return <AdminOverview onViewClient={handleViewClient} />;
     }
@@ -139,6 +148,7 @@ export default function Home() {
     if (activePage === 'leads') return <LeadsPage onViewLead={handleViewLead} />;
     if (activePage === 'alerts') return <AlertsPage onViewLead={handleViewLead} />;
     if (activePage === 'scorecard') return <ScorecardPage />;
+    if (activePage === 'billing') return <ClientBilling />;
     return <OverviewPage onViewLead={handleViewLead} />;
   };
 

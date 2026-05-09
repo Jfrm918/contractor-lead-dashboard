@@ -5,11 +5,21 @@ import {
   twilioCallWebhookSchema,
   type CallOutcome,
 } from "@/lib/schemas";
+import { triggerMissedCallSmsWorkflow, triggerMissedCallAck } from "@/lib/sms-workflow";
+import { classifyCaller } from "@/lib/lead-filter";
+import { validateTwilioSignature } from "@/lib/twilio-verify";
+import { checkRateLimit, getRequestIp } from "@/lib/rate-limit";
 
 // POST /api/webhooks/twilio/call
 // Twilio posts form-encoded data to this endpoint on each call event.
 export async function POST(req: Request) {
   try {
+    // Rate limit: 60 requests per minute per IP
+    const rl = checkRateLimit(getRequestIp(req), 60, 60_000);
+    if (!rl.allowed) {
+      return apiError("Rate limit exceeded", 429);
+    }
+
     // Twilio sends application/x-www-form-urlencoded
     const contentType = req.headers.get("content-type") ?? "";
     let raw: Record<string, unknown>;
@@ -18,6 +28,13 @@ export async function POST(req: Request) {
       raw = Object.fromEntries(formData.entries());
     } else {
       raw = await req.json();
+    }
+
+    // ── 0. Validate Twilio signature ──
+    const validSignature = await validateTwilioSignature(req, raw);
+    if (!validSignature) {
+      console.warn("[Twilio Call] Invalid signature — rejecting request");
+      return apiError("Invalid Twilio signature", 403);
     }
 
     const parsed = twilioCallWebhookSchema.safeParse(raw);
@@ -45,7 +62,7 @@ export async function POST(req: Request) {
     const outcome = classifyCallOutcome(data.CallStatus, data.CallDuration);
 
     // ── 3. Create or update lead ──
-    const lead = dbAvailable
+    const { lead, existingLead } = dbAvailable
       ? await upsertLeadDb(client.id, data, outcome)
       : upsertLeadMock(client.id, data, outcome);
 
@@ -81,6 +98,54 @@ export async function POST(req: Request) {
           outcome,
         },
       });
+    }
+
+    // ── 5. Filter caller and trigger appropriate SMS workflow ──
+    if (outcome === "missed") {
+      const isFirstCall = !existingLead; // no prior lead record = first call
+      const filterResult = await classifyCaller({
+        clientId: client.id,
+        callerPhone: data.From,
+        callerName: data.CallerName,
+        source: lead.source ?? null,
+        isFirstCall,
+      });
+
+      // Update lead with caller classification
+      if (dbAvailable) {
+        await prisma!.lead.update({
+          where: { id: lead.id },
+          data: { callerType: filterResult.callerType },
+        });
+      } else {
+        mockDb.updateLead(lead.id, { callerType: filterResult.callerType });
+      }
+
+      if (filterResult.shouldTriggerRecovery) {
+        // High-confidence lead (ad-sourced) → full recovery pipeline
+        const smsResult = await triggerMissedCallSmsWorkflow(
+          lead.id,
+          client.id,
+          data.From,
+          data.CallerName,
+        );
+        if (smsResult.triggered) {
+          console.log(`[Twilio] SMS recovery workflow triggered for lead ${lead.id}`);
+        }
+      } else if (filterResult.shouldSendAck) {
+        // Unknown first-time caller → neutral acknowledgment
+        const ackResult = await triggerMissedCallAck(
+          lead.id,
+          client.id,
+          data.From,
+          data.CallerName,
+        );
+        if (ackResult.triggered) {
+          console.log(`[Twilio] Missed-call ack sent for lead ${lead.id} (${filterResult.reason})`);
+        }
+      } else {
+        console.log(`[Twilio] Skipped SMS for lead ${lead.id} — ${filterResult.reason}`);
+      }
     }
 
     return apiSuccess({
@@ -158,7 +223,7 @@ async function upsertLeadDb(
   });
 
   if (existing) {
-    return prisma!.lead.update({
+    const lead = await prisma!.lead.update({
       where: { id: existing.id },
       data: {
         callSid: data.CallSid,
@@ -166,9 +231,10 @@ async function upsertLeadDb(
         missedCall: outcome !== "answered",
       },
     });
+    return { lead, existingLead: true };
   }
 
-  return prisma!.lead.create({
+  const lead = await prisma!.lead.create({
     data: {
       clientId,
       phone: data.From,
@@ -179,6 +245,7 @@ async function upsertLeadDb(
       status: "new",
     },
   });
+  return { lead, existingLead: false };
 }
 
 function upsertLeadMock(
@@ -188,13 +255,14 @@ function upsertLeadMock(
 ) {
   const existing = mockDb.findLeadByPhoneAndClient(data.From, clientId);
   if (existing) {
-    return mockDb.updateLead(existing.id, {
+    const lead = mockDb.updateLead(existing.id, {
       callSid: data.CallSid,
       callOutcome: outcome,
       missedCall: outcome !== "answered",
     })!;
+    return { lead, existingLead: true };
   }
-  return mockDb.createLead({
+  const lead = mockDb.createLead({
     clientId,
     phone: data.From,
     callerName: data.CallerName ?? null,
@@ -210,5 +278,7 @@ function upsertLeadMock(
     recovered: false,
     callSid: data.CallSid,
     callOutcome: outcome,
+    callerType: "unknown",
   });
+  return { lead, existingLead: false };
 }

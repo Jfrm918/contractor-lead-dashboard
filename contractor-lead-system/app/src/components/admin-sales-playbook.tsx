@@ -88,7 +88,7 @@ const lucrativeAddOns = [
   },
   {
     name: 'Weekly Lost Lead Report',
-    why: 'Turns LRP into a recurring management tool by showing leaked leads, recovered leads, owner actions, and protected value every week.',
+    why: 'Turns Vantage into a recurring management tool by showing leaked leads, recovered leads, owner actions, and protected value every week.',
     fulfillment: 'Auto-pull missed/recovered/booked metrics already in the dashboard and generate a 3-action owner summary.',
     backend: 'Low backend stress — uses existing lead metrics.',
   },
@@ -105,7 +105,7 @@ const guidedDemoSteps = [
     time: '0:00–1:00',
     title: 'Frame the leak',
     talkTrack: 'You are already paying for leads. The problem is not always lead volume — it is what happens when calls are missed or follow-up is slow.',
-    show: 'Open LRP Overview and point to missed calls, recovered leads, booked estimates, and revenue protected.',
+    show: 'Open Vantage Overview and point to missed calls, recovered leads, booked estimates, and revenue protected.',
   },
   {
     time: '1:00–2:30',
@@ -142,7 +142,7 @@ const guidedDemoSteps = [
 const demoObjections = [
   {
     objection: 'We already answer our calls.',
-    response: 'That is good. LRP is for the calls that still slip through — after hours, lunch, job-site chaos, bad timing, and overflow. We measure the leak instead of guessing.',
+    response: 'That is good. Vantage is for the calls that still slip through — after hours, lunch, job-site chaos, bad timing, and overflow. We measure the leak instead of guessing.',
   },
   {
     objection: 'We already have a CRM.',
@@ -165,11 +165,11 @@ const demoObjections = [
 const followUpAssets = [
   {
     label: 'After-demo text',
-    body: 'Good talking with you. The main thing I saw is that missed/slow follow-up could be costing real estimate opportunities. If you want, we can start with the 14-day LRP pilot: tracking number, missed-call text-back, lead qualification, weekly lost lead report, and response-speed audit.',
+    body: 'Good talking with you. The main thing I saw is that missed/slow follow-up could be costing real estimate opportunities. If you want, we can start with the 14-day Vantage pilot: tracking number, missed-call text-back, lead qualification, weekly lost lead report, and response-speed audit.',
   },
   {
     label: 'After-demo email',
-    body: 'Subject: LRP pilot recap\n\nQuick recap — LRP is built to help recover missed contractor leads, qualify them faster, and show the owner where lead value is leaking.\n\nPilot includes: missed-call recovery, Lead Leak Calculator™, Weekly Lost Lead Report, Local Response Speed Audit™, and script optimization.\n\nPilot terms: $500 setup + $750/month. We review the numbers after 14 days and decide if the recovered opportunity justifies continuing.',
+    body: 'Subject: Vantage pilot recap\n\nQuick recap — Vantage is built to help recover missed contractor leads, qualify them faster, and show the owner where lead value is leaking.\n\nPilot includes: missed-call recovery, Lead Leak Calculator™, Weekly Lost Lead Report, Local Response Speed Audit™, and script optimization.\n\nPilot terms: $500 setup + $750/month. We review the numbers after 14 days and decide if the recovered opportunity justifies continuing.',
   },
   {
     label: 'Pilot setup checklist',
@@ -242,7 +242,7 @@ function DemoTab() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2">
             <ScriptBlock>
-              “You are already paying for leads. LRP is built to stop those leads from dying when calls get missed, follow-up is slow, or the owner does not know who needs attention. I am going to show you the leak, the recovery workflow, and the pilot offer in under 10 minutes.”
+              “You are already paying for leads. Vantage is built to stop those leads from dying when calls get missed, follow-up is slow, or the owner does not know who needs attention. I am going to show you the leak, the recovery workflow, and the pilot offer in under 10 minutes.”
             </ScriptBlock>
           </div>
           <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/10 p-4">
@@ -256,7 +256,7 @@ function DemoTab() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {[
             { label: 'Problem', value: 'Paid leads die when calls are missed.', detail: 'Contractors spend on Google/LSA/referrals, then lose buyers because follow-up is slow.' },
-            { label: 'System', value: 'LRP responds, qualifies, and alerts.', detail: 'Missed call → instant SMS → qualification → hot lead alert → booked estimate push.' },
+            { label: 'System', value: 'Vantage responds, qualifies, and alerts.', detail: 'Missed call → instant SMS → qualification → hot lead alert → booked estimate push.' },
             { label: 'Proof', value: 'Dashboard shows recovered value.', detail: 'Owner sees missed calls, recovered leads, booked estimates, and revenue protected.' },
           ].map((item) => (
             <div key={item.label} className="glass-subtle p-4 rounded-2xl">
@@ -430,7 +430,7 @@ function ProofTab() {
         </div>
         <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4">
           <p className="text-sm text-[#e2e8f0] leading-relaxed">
-            In a 14-day pilot, LRP tracked <span className="text-white font-semibold">{missed}</span> missed calls, recovered <span className="text-white font-semibold">{recovered}</span>, and helped create <span className="text-white font-semibold">{booked}</span> booked estimate opportunities. At an average job value of <span className="text-white font-semibold">${jobValue.toLocaleString()}</span>, that represents <span className="text-emerald-300 font-semibold">${protectedValue.toLocaleString()}</span> in visible pipeline and a <span className="text-emerald-300 font-semibold">{recoveryRate}%</span> missed-call recovery rate.
+            In a 14-day pilot, Vantage tracked <span className="text-white font-semibold">{missed}</span> missed calls, recovered <span className="text-white font-semibold">{recovered}</span>, and helped create <span className="text-white font-semibold">{booked}</span> booked estimate opportunities. At an average job value of <span className="text-white font-semibold">${jobValue.toLocaleString()}</span>, that represents <span className="text-emerald-300 font-semibold">${protectedValue.toLocaleString()}</span> in visible pipeline and a <span className="text-emerald-300 font-semibold">{recoveryRate}%</span> missed-call recovery rate.
           </p>
         </div>
       </SectionCard>
@@ -450,7 +450,7 @@ function ProofTab() {
         </div>
         <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4">
           <p className="text-sm text-[#e2e8f0] leading-relaxed">
-            Local audit result: competitors responded in about <span className="text-white font-semibold">{competitorAvgMinutes} minutes</span>, while the client took about <span className="text-white font-semibold">{clientMinutes} minutes</span>. LRP closes that <span className="text-cyan-300 font-semibold">{responseGap}-minute speed gap</span> by triggering instant missed-call follow-up and owner alerts.
+            Local audit result: competitors responded in about <span className="text-white font-semibold">{competitorAvgMinutes} minutes</span>, while the client took about <span className="text-white font-semibold">{clientMinutes} minutes</span>. Vantage closes that <span className="text-cyan-300 font-semibold">{responseGap}-minute speed gap</span> by triggering instant missed-call follow-up and owner alerts.
           </p>
         </div>
       </SectionCard>

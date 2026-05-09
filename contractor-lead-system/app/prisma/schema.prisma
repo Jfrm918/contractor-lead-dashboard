@@ -39,10 +39,13 @@ model Client {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  settings ClientSettings?
-  leads    Lead[]
-  events   LeadEvent[]     // client-level events
-  users    User[]
+  settings       ClientSettings?
+  leads          Lead[]
+  events         LeadEvent[]     // client-level events
+  users          User[]
+  knownCallers   KnownCaller[]
+  subscription   Subscription?
+  paymentHistory PaymentHistory[]
 
   @@map("clients")
 }
@@ -87,6 +90,11 @@ model ClientSettings {
   competitorAuditRows Json @default("[]") @map("competitor_audit_rows")
   // [{id, competitor, testedAt, responseMinutes, channel, quality, notes}]
 
+  // Lead filtering
+  leadFilterEnabled Boolean @default(true) @map("lead_filter_enabled")
+  missedCallAckTemplate String? @map("missed_call_ack_template")
+  // Default: "Sorry we missed your call! If you're looking for a quote or service, reply QUOTE and we'll get right back to you."
+
   // Workflow toggles
   workflowEnabled  Boolean  @default(true) @map("workflow_enabled")
   smsEnabled       Boolean  @default(true) @map("sms_enabled")
@@ -120,6 +128,10 @@ model Lead {
   status      String   @default("new") // new, contacted, qualified, unqualified, booking_requested, booked, closed_lost
   missedCall  Boolean  @default(false) @map("missed_call")
   recovered   Boolean  @default(false)
+
+  // Caller classification
+  callerType  String   @default("unknown") @map("caller_type")
+  // unknown, lead, team, vendor, existing_customer, spam, other
 
   // Call metadata
   callSid     String?  @map("call_sid")   // Twilio Call SID
@@ -157,6 +169,31 @@ model LeadEvent {
   @@index([eventType])
   @@index([createdAt])
   @@map("lead_events")
+}
+
+// ─── Known Callers (lead filtering) ───
+
+model KnownCaller {
+  id       String   @id @default(uuid()) @db.Uuid
+  clientId String   @map("client_id") @db.Uuid
+  client   Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  phone    String                    // normalized 10-digit
+  label    String?                   // "Marcus (owner)", "ABC Supply", etc.
+  type     String                    // team, vendor, existing_customer, spam, other
+  // team = contractor's own staff / personal numbers
+  // vendor = suppliers, material distributors
+  // existing_customer = past jobs, current service contracts
+  // spam = known telemarketers, robo-callers
+  // other = anything else that isn't a prospect
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([clientId, phone])
+  @@index([clientId])
+  @@index([phone])
+  @@map("known_callers")
 }
 
 // ─── SMS Job Queue ───
@@ -212,4 +249,47 @@ model OutreachProspect {
   @@index([status])
   @@index([fitScore])
   @@map("outreach_prospects")
+}
+
+// ─── Billing ───
+
+model Subscription {
+  id                    String    @id @default(uuid()) @db.Uuid
+  clientId              String    @unique @map("client_id") @db.Uuid
+  client                Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  stripeCustomerId      String    @map("stripe_customer_id")
+  stripeSubscriptionId  String?   @unique @map("stripe_subscription_id")
+  planTier              String    @map("plan_tier") // starter, growth, pro
+  status                String    @default("active") // active, past_due, canceled, trialing, incomplete
+  currentPeriodStart    DateTime? @map("current_period_start")
+  currentPeriodEnd      DateTime? @map("current_period_end")
+  cancelAtPeriodEnd     Boolean   @default(false) @map("cancel_at_period_end")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([stripeCustomerId])
+  @@index([status])
+  @@map("subscriptions")
+}
+
+model PaymentHistory {
+  id                    String    @id @default(uuid()) @db.Uuid
+  clientId              String    @map("client_id") @db.Uuid
+  client                Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  stripePaymentIntentId String?   @map("stripe_payment_intent_id")
+  amount                Int       // cents
+  currency              String    @default("usd")
+  status                String    // succeeded, failed, refunded, pending
+  paidAt                DateTime? @map("paid_at")
+  invoiceUrl            String?   @map("invoice_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([clientId])
+  @@index([status])
+  @@index([paidAt])
+  @@map("payment_history")
 }
