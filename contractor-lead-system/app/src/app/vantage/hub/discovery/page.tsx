@@ -20,70 +20,70 @@ const QUESTIONS: {
   killIf: string;
 }[] = [
   {
-    q: "Walk me through how you currently find new commercial projects in your metro.",
+    q: "Walk me through how you currently find new commercial real estate signals in your metro.",
     why: "Establishes status quo + competitive landscape. Tells us what we're replacing.",
     listen:
-      "Manual portal grinding · BidClerk / ConstructConnect · word-of-mouth · broker relationships · trade publications.",
+      "Manual portal grinding · broker relationships · bank referral network · county recorder searches · Reonomy / CompStak / Crexi.",
     killIf:
-      "They already use Dodge or have an internal data team — they're upmarket of our pricing and unlikely to downgrade.",
+      "They already have a dedicated research analyst or enterprise data contract with clean local coverage — they're upmarket of our first pricing wedge.",
   },
   {
-    q: "Roughly how many new commercial projects do you close in a typical year?",
-    why: "Sizes the buyer's deal volume. Validates this is a 'pursuing growth' operator, not a referral-only business.",
+    q: "Which outcomes matter most: construction-loan origination, refi/take-out timing, future closings, lease-up, or investment sales?",
+    why: "Separates lender, title, broker, sponsor, and developer use cases so we don't sell a generic feed.",
     listen:
-      "2–15 new closes/year is our sweet spot. Above 15 means they have process/intel already; below 2 means lifestyle business.",
+      "A ranked use case with a clear workflow: lender origination queue, title future-closing list, broker lease-up/owner-rep timing, sponsor capital-source comparison.",
     killIf:
-      "Under 2 commercial closes/year with no pipeline aspiration — not a fit, they'll churn.",
+      "They say 'interesting data' but cannot name a workflow or owner for acting on it.",
   },
   {
-    q: "What does an ideal lead look like for you? Project type, size, GC, anything else.",
-    why: "Reveals their qualification rigor. Also gives us the filter spec for their account.",
+    q: "What does an ideal signal look like for you? Asset type, project value, sponsor, geography, maturity date, anything else.",
+    why: "Reveals qualification rigor. Also gives us the filter spec for their account.",
     listen:
-      "Specifics: 'commercial industrial >$1M', 'multi-family 50+ units', 'Crossland or Manhattan as GC', etc.",
+      "Specifics: 'industrial >$2M', 'multifamily 50+ units', 'known repeat sponsors', 'maturing mini-perms within 12 months'.",
     killIf:
       "They can't articulate it ('any commercial project'). Means they don't qualify, will be unhappy with anything we send.",
   },
   {
-    q: "If we showed you 5 fresh commercial permits this Monday with verified GC contacts, how would you action them?",
+    q: "If we showed you 5 fresh commercial permits this Monday with sponsor and project context, how would you action them?",
     why: "Tests intent. Anyone who's serious has a workflow already imagined.",
     listen:
-      "Concrete actions: 'call the PM same day', 'email + send my outside rep', 'feed to BD team for follow-up'.",
+      "Concrete actions: route to lender, call sponsor, flag title follow-up, map to broker assignment, add to CRM watchlist.",
     killIf:
       "'I'd think about it' / 'send to my team and see' — no real intent signal, they're tire-kicking.",
   },
   {
-    q: "What does missing a commercial project cost you, ballpark?",
+    q: "What does missing a qualified CRE opportunity cost you, ballpark?",
     why: "Anchors the value frame. They state the number, not us.",
     listen:
-      "A specific dollar figure — could be margin, lost bid, missed quota. The number doesn't matter as much as their willingness to give one.",
+      "A specific dollar figure — origination fee, title premium, broker commission, spread, or relationship value.",
     killIf:
-      "'Hard to say' / shrug — they don't track ROI on lead intel, won't justify recurring spend internally.",
+      "'Hard to say' / shrug — they don't track ROI on market intel, won't justify recurring spend internally.",
   },
   {
-    q: "What do you spend per month on lead intelligence today?",
+    q: "What do you spend per month on real estate data or lead intelligence today?",
     why: "Reveals budget headroom and sophistication level.",
     listen:
-      "$0 (greenfield buyer, sells on ROI) · $50–$300 (price-sensitive, fits Starter or Growth) · $500+ (sophisticated, may upgrade to Pro).",
+      "$0 (greenfield buyer, sells on ROI) · $300–$700 (fits Lender/Title/Broker) · $1,000+ (Pro Pipeline fit).",
     killIf:
       "$0 plus 'we'd never pay for that' — they're not a buyer at any price.",
   },
   {
-    q: "If we got you 10 verified commercial permits this Monday, fitting your filters, what would 1 closed deal off that be worth to you?",
+    q: "If we got you 10 verified CRE signals this Monday, fitting your filters, what would 1 closed deal off that be worth to you?",
     why: "The trial close. Forces them to articulate value in their own words.",
     listen:
-      "Concrete number — even an order-of-magnitude. The act of saying it out loud commits them mentally to the math.",
+      "Concrete number — origination fees, title fees, commission, spread, or sponsor lifetime value.",
     killIf:
-      "'It depends' or shrug after probing — they don't have margin clarity, can't internally justify the spend.",
+      "'It depends' or shrug after probing — they don't have economics clarity, can't internally justify the spend.",
   },
 ];
 
 const KILL_RULES = [
-  "Already paying Dodge or BuiltWith — too sophisticated, won't downgrade",
-  "Zero commercial closes per year and no growth motion",
-  "Can't articulate ideal lead profile after 2 attempts",
+  "Already paying Reonomy/CompStak/Crexi enterprise rates with local analyst coverage — too sophisticated for the first wedge",
+  "Zero construction/refi/closing/brokerage pipeline ownership and no growth motion",
+  "Can't articulate ideal CRE signal profile after 2 attempts",
   "Can't (or won't) name a dollar figure on a single closed deal",
   "Decision needs >2 people approval — not fit for our SMB pricing model",
-  "Asks for a custom contract, NDA, or vendor onboarding before trial — wrong-tier buyer",
+  "Asks for a custom contract, NDA, or procurement onboarding before trial — wrong-tier buyer",
 ];
 
 export default function DiscoveryPlaybookPage() {
@@ -166,9 +166,9 @@ export default function DiscoveryPlaybookPage() {
                 <strong className="not-italic text-amber-300">[specific thing they said]</strong>,
                 you close{' '}
                 <strong className="not-italic text-amber-300">[X deals/year]</strong>, and one
-                closed deal is worth roughly{' '}
-                <strong className="not-italic text-amber-300">[Y]</strong>. We're $149 / $299 /
-                $499 a month depending on metros and access. If we got you ten fresh permits next
+                closed loan, closing, listing, or deal is worth roughly{' '}
+                <strong className="not-italic text-amber-300">[Y]</strong>. We're $299 / $399 /
+                $499+ a month depending on audience and access. If we got you ten fresh permits next
                 Monday matching your filters, would you be in for a 14-day trial?"
               </p>
             </Card>

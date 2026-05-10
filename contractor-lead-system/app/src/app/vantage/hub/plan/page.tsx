@@ -13,7 +13,7 @@ export const metadata = {
    ============================================================ */
 
 const MONTHS: { label: string; goal: string; mrr: string; focus: string }[] = [
-  { label: 'May 2026 (now)', goal: '1–2 customers', mrr: '$200–$500', focus: 'Vantage live publicly · LLC + bank + Stripe · Stepdad pitch Saturday' },
+  { label: 'May 2026 (now)', goal: '1–2 customers', mrr: '$200–$500', focus: 'Vantage live publicly · LLC + bank + Stripe · warm CRE intro pitch Saturday' },
   { label: 'June 2026', goal: '+3 customers', mrr: '$1,000–$1,500', focus: '100 cold emails/week · Tulsa scraper live · free newsletter launches' },
   { label: 'July 2026', goal: '+4 customers', mrr: '$2,000–$2,500', focus: 'OKC metro live (second) · Madison build-in-public starts' },
   { label: 'August 2026', goal: '+5 customers', mrr: '$3,500–$4,500', focus: 'Madison WI live (third) · first case study published' },
@@ -31,9 +31,9 @@ const ENGINES: { name: string; expected: string; how: string }[] = [
     how: '100 personalized emails per week · I write every one, custom to the prospect\'s actual company permits · ~7% reply, ~50% demo, ~30% close (Lemlist / Mailshake benchmarks)',
   },
   {
-    name: "Stepdad's network",
+    name: "Warm CRE family network",
     expected: '1–2 customers/month',
-    how: 'Once stepdad is customer #1, his word in the insulation/foam community closes referrals fast · much higher close rate than cold',
+    how: "Grandma's lender network, Dave Cocolin at Paradigm, and Titan Title relationships create warm paths into lenders, brokers, and title teams · much higher close rate than cold",
   },
   {
     name: 'Free newsletter ("Tulsa Construction Pulse")',
@@ -48,7 +48,7 @@ const ENGINES: { name: string; expected: string; how: string }[] = [
   {
     name: 'Programmatic SEO',
     expected: '0.5–1 customer/month from month 6',
-    how: 'One page per Tulsa GC · ranks on long-tail "Crossland Construction permit history" type queries · 6–9 month delay before Google indexes',
+    how: 'One page per Tulsa sponsor/asset · ranks on long-tail "Tulsa commercial permit refinance pipeline" type queries · 6–9 month delay before Google indexes',
   },
 ];
 
@@ -78,8 +78,8 @@ const SCENARIOS: { name: string; customers: string; mrr: string; note: string; t
 
 const NEXT_ACTIONS = [
   'Tomorrow morning: domain decision (vantageco.io if available) + LLC name confirm',
-  'Saturday: stepdad meeting executed — Athena delivers full demo + pitch deck Friday night',
-  'Monday: if stepdad yes → Stripe live, customer #1 onboarded · if no → 30-min review, what did we learn, adjust pitch and start Madison\'s outbound list',
+  'Saturday: warm-intro CRE pitch executed — Athena delivers full demo + pitch deck Friday night',
+  'Monday: if warm intro validates → Stripe live, customer #1 onboarded · if no → 30-min review, what did we learn, adjust pitch and start Madison\'s outbound list',
 ];
 
 export default function PlanPage() {

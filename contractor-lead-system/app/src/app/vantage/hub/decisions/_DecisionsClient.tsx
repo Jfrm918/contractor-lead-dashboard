@@ -15,6 +15,15 @@ const STORAGE_KEY = 'vantage-decisions-v1';
 
 const SEED: Decision[] = [
   {
+    id: 'd10',
+    date: '2026-05-10',
+    title: 'Pivot Vantage to CRE capital/transaction intelligence',
+    reasoning:
+      'Stepdad market signal showed raw contractor permit feeds are saturated and price-anchored around raw lists. New ICP: commercial lenders, title/closing companies, CRE brokers, sponsors, and developers in Tulsa. Same permit/data engine, but positioned around origination, refi/take-out timing, future closings, lease-up, sponsor mapping, capital stack, and distress signals. Warm intro path is stronger through family lending/title/CRE relationships.',
+    decidedBy: 'Jason',
+    category: 'Strategy',
+  },
+  {
     id: 'd1',
     date: '2026-05-04',
     title: 'Greenlit Vantage as primary venture',
@@ -80,9 +89,9 @@ const SEED: Decision[] = [
   {
     id: 'd9',
     date: '2026-05-06',
-    title: 'Compete on differentiation, not price, vs. $25/week permit feeds',
+    title: 'Raw contractor permit feeds are not the wedge',
     reasoning:
-      "Jason's stepdad (Tulsa insulation co. owner) revealed he pays $25/wk for permit data — half our Starter price. Decision: do NOT match on price. Position as the verified-contacts + GC-pattern + curated-top-3 layer ABOVE raw permit feeds. Pitch frame: $25/wk gets you the list; we save 5 hrs/wk of grinding to find contacts and identify which permits matter. At $40/hr, our Starter pays back in week 1. Customer #1 prospect: convert stepdad. Either he upgrades (validates the differentiation thesis + we get a reference) or tells us exactly why (and we adjust). See /vantage/hub/competitors for the talking-track defense.",
+      'A Tulsa contractor reference showed raw weekly permit feeds can be price-anchored around ~$25/week. Decision: do not chase raw contractor workflows. Use the lesson as competitor research only, then reposition Vantage above raw permit lists for CRE buyers who can monetize one signal through origination, refi/take-out, title closing, or brokerage fees.',
     decidedBy: 'Jason',
     category: 'Strategy',
   },
@@ -228,7 +237,7 @@ export default function DecisionsClient() {
             <input
               type="text"
               value={draft.title ?? ''}
-              placeholder="e.g. Switched outbound from cold email to LinkedIn DMs for material reps"
+              placeholder="e.g. Switched outbound from contractor leads to lender/title/broker CRE signals"
               onChange={(e) => setDraft({ ...draft, title: e.target.value })}
               className="mt-1 w-full rounded-md border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-white focus:border-amber-300/40 focus:outline-none"
             />

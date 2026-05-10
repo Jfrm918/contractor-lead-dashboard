@@ -60,7 +60,7 @@ const SATURDAY_EXECUTION: { who: string; tasks: string[] }[] = [
   {
     who: 'Madison (≈2 hours)',
     tasks: [
-      'Build the 200-prospect list — Tulsa material reps + insulation/HVAC/roofing subs + lenders + brokers',
+      'Build the 200-prospect list — Tulsa commercial lenders + title/closing teams + CRE brokers + sponsors',
       'Use Apollo.io (free tier) + LinkedIn Sales Navigator trial + Google Maps + the city portal directly',
       'Drop each one into /vantage/hub prospect pipeline as you go',
       'No outreach yet — just list-build. Outreach starts Monday with verified mailbox at @vantageco.io',

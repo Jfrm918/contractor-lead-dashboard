@@ -188,7 +188,7 @@ function Mission() {
       <div className="mt-5 grid grid-cols-3 gap-3 border-t border-white/[0.05] pt-5">
         <Pillar title="Verified" body="Every contact bounce-tested before delivery." />
         <Pillar title="Fast" body="Fresh permits in your inbox by Monday 6am." />
-        <Pillar title="Specific" body="GC, value, contact — not just an address." />
+        <Pillar title="Specific" body="Sponsor, value, loan/refi signal — not just an address." />
       </div>
     </div>
   );
@@ -376,7 +376,7 @@ function ProspectPipeline({
       email: draft.email ?? '',
       phone: draft.phone,
       metro: draft.metro ?? 'Tulsa',
-      segment: (draft.segment as Prospect['segment']) ?? 'Subcontractor',
+      segment: (draft.segment as Prospect['segment']) ?? 'Commercial lender',
       stage: 'cold',
       lastTouchAt: '',
       nextAction: draft.nextAction ?? 'Initial cold email',
@@ -434,9 +434,9 @@ function ProspectPipeline({
           <Input placeholder="Email" value={draft.email} onChange={(v) => setDraft({ ...draft, email: v })} />
           <Input placeholder="Phone" value={draft.phone} onChange={(v) => setDraft({ ...draft, phone: v })} />
           <Select
-            value={draft.segment ?? 'Subcontractor'}
+            value={draft.segment ?? 'Commercial lender'}
             onChange={(v) => setDraft({ ...draft, segment: v as Prospect['segment'] })}
-            options={['Material rep', 'Subcontractor', 'Lender / insurer', 'CRE broker', 'GC']}
+            options={['Commercial lender', 'Title / closing', 'CRE broker', 'Sponsor / borrower', 'Developer']}
           />
           <Input placeholder="Metro" value={draft.metro ?? 'Tulsa'} onChange={(v) => setDraft({ ...draft, metro: v })} />
           <Select

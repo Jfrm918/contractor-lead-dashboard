@@ -21,44 +21,41 @@ type Template = {
 
 const TEMPLATES: Template[] = [
   {
-    segment: 'Material rep (insulation / roofing / mechanical)',
-    subject: 'quick question on the mingo warehouse',
+    segment: 'Commercial lender',
+    subject: 'new tulsa construction-loan signals',
     body: `Hey [first name],
 
-Saw [GC name] just pulled the permit on the 24,800 sf warehouse off N Mingo Rd. If you're spec'ing the insulation package on that, I figured I'd reach out.
+Saw the 24,800 sf warehouse permit off N Mingo and the 128-unit multifamily permit on E 71st both hit Tulsa this week. If your team originates construction, bridge, or construction-to-perm loans, those are early sponsor signals worth seeing before the draw request shows up.
 
-We track every commercial permit in Tulsa weekly — GC, project value, contact info, all verified. If it'd save you the time of grinding through the city portal, happy to send Monday's list.
+Vantage tracks every commercial permit weekly — sponsor/applicant, project value, asset type, GC, and contact context — then flags the lender-relevant ones for origination, refi, and maturity follow-up.
+
+Mind if I send Monday's lender view so you can judge if it's useful?
 
 — Madison`,
     whyItWorks: [
-      'Subject line is lowercase + specific — looks like a peer ping, not a sales blast.',
-      'Opens with a real, named project (proves we have data, not generic).',
-      'Names the GC by name — signals industry literacy.',
-      'Offers value before asking for anything (Monday\'s list is free).',
-      'No "synergy / leverage / streamline" language — talks like a person.',
+      'Leads with two real projects, not generic "leads" language.',
+      'Uses lender workflow terms: construction-to-perm, draw request, refi, maturity follow-up.',
+      'Positions the feed as early origination/risk signal, not contractor bid intel.',
+      'Soft ask: send the lender view first, call later only if useful.',
     ],
   },
   {
-    segment: 'Insulation / HVAC / roofing subcontractor',
-    subject: '12 commercial permits this week in tulsa',
+    segment: 'Title / closing company',
+    subject: 'future closings from this week’s permits',
     body: `Hey [first name],
 
-12 new commercial permits were filed in Tulsa metro this past week — total project value around $38M. A few that stood out for [their specialty]:
+Tulsa logged 47 commercial permits this week, including a warehouse off N Mingo and a 128-unit multifamily project on E 71st. Those projects turn into construction-loan closings, refis, take-outs, and eventual sale/lease transactions.
 
-- 24,800 sf warehouse on N Mingo (Crossland)
-- 128-unit multi-family on E 71st (Manhattan)
-- Self-storage on S Memorial (BL Harbert)
+We package the weekly permit feed for title teams: sponsor/applicant, entity names, project value, asset type, parcel/address, and warm follow-up timing.
 
-If you want the full list with verified GC project manager contacts, that's what we do. $149/mo, 1 metro, weekly digest. 14-day free trial — happy to send Monday's email and you tell me if it's useful.
-
-Worth 10 minutes?
+Want me to send the next Monday list so your commercial team can spot future closings earlier?
 
 — Madison`,
     whyItWorks: [
-      'Leads with the number — credibility through specificity.',
-      'Three real example projects names a GC each time — "we know your world."',
-      'Names the price up front. Saves a follow-up email and filters tire-kickers.',
-      'Asks for 10 minutes, not a meeting. Lower commitment ask.',
+      'Frames permits as future title/closing pipeline, not construction work.',
+      'Names the documents and entity data title teams care about.',
+      'Connects permit timing to closings, refis, take-outs, and transactions.',
+      'Keeps the ask low-friction: review next Monday\'s list.',
     ],
   },
   {
@@ -68,60 +65,56 @@ Worth 10 minutes?
 
 The 128-unit multi-family at 8420 E 71st filed last Friday — Manhattan as GC, $18–22M range. If your firm represents owners or tenants in that submarket, you probably already saw it. But if you're tracking similar projects across Tulsa, we send a verified weekly list every Monday.
 
-Most brokers we talk to use it for owner-rep prospecting (knowing who broke ground 6 weeks ago = a perfect lease-up call window).
+Most brokers we talk to use it for owner-rep prospecting, lease-up timing, and sponsor relationship mapping.
 
 Mind if I send next Monday's list? You can decide if it's useful.
 
 — Madison`,
     whyItWorks: [
       "Names a real project they may already track — establishes peer credibility.",
-      "Tells them how other brokers use the data (social proof in numbers).",
+      "Tells them how other brokers use the data without claiming fake customer numbers.",
       "Soft ask: 'mind if I send' is lighter than 'book a call.'",
       "Frames Monday's list as evaluation material, not a sales pitch.",
     ],
   },
   {
-    segment: 'Construction lender / insurer',
-    subject: 'commercial permit alerts for tulsa metro',
+    segment: 'Sponsor / borrower',
+    subject: 'your project showed up in the tulsa permit feed',
     body: `Hey [first name],
 
-If your team monitors active construction risk or new project origination in Tulsa metro, we run a verified weekly feed of every commercial permit filed — GC, project value, type, contact info.
+Saw the permit filing for [project/address]. We track Tulsa commercial permit activity for lenders, title teams, brokers, and sponsors who want cleaner market timing around construction starts, refinance windows, and take-out conversations.
 
-Most lenders we work with use it to:
-- Flag projects backed by their own loans (early default signal if construction slows)
-- Source new origination conversations 4–6 weeks before any draw request lands
+If you're comparing capital sources or want to know what similar sponsors are building nearby, I can send the current Tulsa view.
 
-$149–$499/mo depending on metros and integration. 14-day trial, no card.
-
-Worth a 15-min look?
+Worth a quick look?
 
 — Madison`,
     whyItWorks: [
-      "Names a use case the buyer cares about (risk monitoring + origination).",
-      "Shows we understand their workflow — not just 'we have leads.'",
-      "Ends with a low-friction ask (15 min, not 'demo').",
+      "Useful for sponsor-side conversations without sounding like a generic sales pitch.",
+      "References capital sources, refi windows, and take-out timing — sponsor language.",
+      "Keeps the ask concrete and optional.",
     ],
   },
   {
-    segment: 'GC tracking other GCs',
+    segment: 'CRE team lead / managing broker',
     subject: 'who else broke ground in tulsa this week',
     body: `Hey [first name],
 
-If you're tracking what other GCs are pulling permits on in Tulsa metro — for competitive intel, sub-recruiting, or pricing benchmarks — we send a weekly verified list every Monday.
+If you're tracking what owners and developers are moving on in Tulsa metro — for lease-up, investment sales, land, or lender-referral timing — we send a weekly verified list every Monday.
 
-This week: 47 permits, $38M total value, all four major GCs active. Top three:
+This week: 47 permits, $38M total value. Top three:
 
-- Crossland: 24,800 sf warehouse, $2.4M
-- Manhattan: 128-unit multi-family, $18M
-- BL Harbert: 3-bldg self-storage, $4.1M
+- 128-unit multi-family · Manhattan · $18M
+- Self-storage · BL Harbert · $4.1M
+- 24,800 sf warehouse · Crossland · $2.4M
 
 Want next Monday's list?
 
 — Madison`,
     whyItWorks: [
-      "GCs care about competitor activity. This frames us as competitive intel, not lead gen.",
-      "Listing competitor GCs and project values is the killer hook — they want it the second they see it.",
-      "No price in this version because larger GCs read price too early as 'cheap product.' Surface in reply.",
+      "CRE teams care about sponsor movement and timing. This frames us as market intel, not contractor lead gen.",
+      "Listing assets and project values is the hook — it maps directly to broker opportunities.",
+      "No price in this version because relationship-first buyers need to see the data before pricing.",
     ],
   },
 ];
@@ -136,7 +129,7 @@ const SUBJECT_LINE_RULES: { rule: string; example: string }[] = [
     example: '12 commercial permits this week in tulsa',
   },
   {
-    rule: 'Reference a real project or GC name',
+    rule: 'Reference a real project or sponsor name',
     example: 'tracking the 71st st multi-family',
   },
   {
@@ -197,7 +190,7 @@ export default function ColdEmailLibraryPage() {
               {[
                 'One sender, one name. Madison sends from madison@vantageco.io. Verified data: female senders see ~30% higher reply rates in B2B (Mailshake / Lemlist published benchmarks).',
                 'Plain text only. No images, no logos, no HTML signatures. They look like a peer ping, not a marketing blast.',
-                'Reference one real, specific thing in every email. Project name, GC name, address — proof we have data and aren\'t mass-blasting.',
+                'Reference one real, specific thing in every email. Project name, sponsor/borrower name, address — proof we have data and aren\'t mass-blasting.',
                 'Make the ask small. "Mind if I send Monday\'s list" beats "book a 30-min demo" every time.',
                 'Cap the sequence at 3 touches. After day 8, stop. Re-engage in 90 days if priority shifts.',
                 'Never use: synergy, leverage, streamline, revolutionary, game-changing, AI-powered. All read as bot.',

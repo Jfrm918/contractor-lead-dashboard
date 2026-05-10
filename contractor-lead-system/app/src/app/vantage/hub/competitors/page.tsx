@@ -26,168 +26,148 @@ type Competitor = {
 
 const COMPETITORS: Competitor[] = [
   {
+    name: 'Reonomy',
+    category: 'Direct CRE data competitor — national property intelligence',
+    founded: '2013 (acquired by Altus Group in 2021)',
+    pricing: 'Enterprise / sales quote — commonly benchmarked around $400+/mo per user',
+    pricingSource:
+      'No current public list price. Public reviews and prior buyer reports commonly cite mid-hundreds per month; enterprise quotes vary.',
+    who: 'CRE brokers, investors, lenders, and owners needing national property/owner data',
+    strengths: [
+      'Deep national property and ownership graph',
+      'Strong owner/entity search and parcel-level coverage',
+      'Recognized CRE-data brand',
+      'Useful for broad market prospecting beyond permits',
+    ],
+    weaknesses: [
+      'Not Tulsa-first and not permit-timing-first',
+      'National database can miss local nuance and warm relationship context',
+      'Pricing and contracts create friction for small regional teams',
+      'Does not package weekly lender/title/broker action lists out of Tulsa permits',
+    ],
+    ourWedge:
+      "We are the local action layer Reonomy doesn't try to be: fresh Tulsa permit signals translated into lender origination, title future-closing, broker lease-up, refi/take-out, and sponsor follow-up timing.",
+  },
+  {
+    name: 'CompStak',
+    category: 'Direct CRE data competitor — lease/sales comps',
+    founded: '2011',
+    pricing: 'Enterprise quote / data-exchange model',
+    pricingSource:
+      'CompStak does not publish list pricing. Public materials describe a broker data-exchange plus paid enterprise access.',
+    who: 'CRE brokers, appraisers, investors, lenders, and asset managers needing lease/sale comps',
+    strengths: [
+      'Strong lease and sale comps where the exchange has coverage',
+      'Trusted by institutional CRE users',
+      'Useful for valuation, underwriting, and market benchmarking',
+    ],
+    weaknesses: [
+      'Comps are backward-looking; permits are forward-looking',
+      'Exchange model is not a simple weekly pipeline product',
+      'Local coverage quality depends on contributor density',
+      'Not designed around sponsor outreach or construction-loan timing',
+    ],
+    ourWedge:
+      'CompStak helps price what already happened. Vantage flags what just started, who is behind it, and which lender/title/broker action should happen next.',
+  },
+  {
+    name: 'Crexi',
+    category: 'Adjacent CRE competitor — marketplace + broker tools',
+    founded: '2015',
+    pricing: 'Marketplace free tiers + paid broker/auction/listing tools',
+    pricingSource:
+      'Crexi publishes product pages but not a simple one-seat list price for all workflows; paid plans vary by product and market.',
+    who: 'CRE brokers, investors, buyers, sellers, and tenants using marketplace/listing workflows',
+    strengths: [
+      'Large marketplace mindshare in CRE',
+      'Listings, comps, auctions, and broker marketing in one workflow',
+      'Buyers already search it when actively looking for assets',
+    ],
+    weaknesses: [
+      'Listing-led; misses projects before they become public listings',
+      'Not a construction-permit intelligence feed',
+      'Does not map early sponsor movement to lender/title/broker timing',
+      'Competitive marketplace can be noisy once a deal is already marketed',
+    ],
+    ourWedge:
+      'Crexi is where a property may show up later. Vantage is the earlier signal: permit filed, sponsor identified, capital/closing/broker angle ready before broad market exposure.',
+  },
+  {
     name: 'Dodge Construction Network',
-    category: 'Direct competitor — enterprise tier',
+    category: 'Adjacent construction-data incumbent — targets contractors more than lenders',
     founded: '1891 (as McGraw-Hill Construction; rebranded Dodge in 2014)',
     pricing: 'Enterprise quote — typically $2,000–$10,000+/mo',
     pricingSource:
       'No public list price. Pricing widely reported in trade press and reseller listings; sales reps give custom quotes.',
-    who: 'Mid-market and enterprise GCs, building product manufacturers, large material distributors',
+    who: 'GCs, subcontractors, building-product manufacturers, and construction material sellers — not our new lender/title/broker ICP',
     strengths: [
-      'National coverage — every metro in the US',
+      'National construction-project coverage',
       'Deep historical data going back decades',
-      'Established brand among the largest GCs',
+      'Established brand among contractors and enterprise construction teams',
       'Robust integrations with enterprise CRMs',
     ],
     weaknesses: [
-      'Pricing locks out the entire SMB market — solo reps, 5–20 person subs',
-      'Bloated UI; old enterprise design',
-      'Long sales cycles (30–90 day procurement)',
-      'Annual contracts, not monthly — wrong for small operators',
+      'Construction workflow focus, not CRE capital/transaction timing',
+      'Pricing and procurement are too heavy for local Tulsa relationship sales',
+      'Overkill if the buyer only needs local permit signals tied to loans, closings, and brokerage timing',
+      'Does not package warm local CRE context around Jason\'s relationship network',
     ],
     ourWedge:
-      "We sit one tier below them. Buyers who'd never qualify for Dodge's $5K/mo quote — and don't need national coverage — pay us $149–499/mo. Same data shape, smaller scope, dramatically lower friction.",
-  },
-  {
-    name: 'ConstructConnect',
-    category: 'Direct competitor — mid-market',
-    founded: '2016 (formed from iSqFt + BidClerk + others)',
-    pricing: '~$200–$800/mo (varies by metro and tier)',
-    pricingSource:
-      'ConstructConnect public pages and reseller listings. Specific pricing shown to logged-in users; reported widely in industry forums.',
-    who: 'Subcontractors, material reps, small GCs',
-    strengths: [
-      'Strong bid-management workflow (RFP/RFQ tooling)',
-      'National permit + project data',
-      'Established network of GCs sending invitations',
-    ],
-    weaknesses: [
-      'Bid-management focus, not pure lead intel — overweight on workflow, light on contact data',
-      "Generic data — every customer sees the same pile, no curation",
-      'Verified contact info inconsistent (often missing PM email/phone)',
-      "UI feels enterprise — not designed for solo operators",
-    ],
-    ourWedge:
-      "We're sharper on lead intel: every permit ships with the verified PM contact and a 'top 3 worth your attention' curation. ConstructConnect is the wide-net option; we're the curated weekly digest.",
-  },
-  {
-    name: 'BuiltWith',
-    category: 'Indirect — the model we copy (different vertical)',
-    founded: '2007',
-    pricing: '$295 / $495 / $995 per month',
-    pricingSource: 'BuiltWith public pricing page (builtwith.com/pricing).',
-    who: 'B2B sales teams selling to web-based companies (different buyer entirely)',
-    strengths: [
-      "Solo / very small team running ~$15–22M ARR (per industry estimates and IndieHackers reporting)",
-      'Subscription model with 90%+ gross margins',
-      'Data archive compounds in value over time (their moat)',
-      'Pure-data product — no professional services drag',
-    ],
-    weaknesses: [
-      'Different vertical (web tech) — not actually competing for the same buyers',
-      'No moat against well-funded entrant (model is replicable)',
-    ],
-    ourWedge:
-      "Not a competitor — a model. We're applying their playbook (data subscription, niche vertical, solo operator economics) to construction permits instead of website tech profiling.",
-  },
-  {
-    name: 'BidClerk / Building Connected (Autodesk)',
-    category: 'Adjacent — bid invitations, not lead intel',
-    founded: 'BidClerk: 2002 · Building Connected: 2012 (acquired by Autodesk 2018)',
-    pricing: 'Custom / varies — often free for subs (paid by GCs)',
-    pricingSource:
-      'Building Connected pricing model is GC-funded; subs typically receive bid invitations free. Source: Autodesk product pages.',
-    who: 'Subs receiving bid invitations from GCs',
-    strengths: [
-      'Owned by Autodesk, integrated with Revit / BIM 360 ecosystem',
-      'Free for subs — GCs pay',
-      'Strong network effect once a GC standardizes on it',
-    ],
-    weaknesses: [
-      "Reactive not proactive — subs only see projects GCs invite them to",
-      "No discovery — you can't find new GCs you don't already know",
-      'Still requires the sub to grind a different tool for upstream lead intel',
-    ],
-    ourWedge:
-      "We're proactive intelligence (here's what's being permitted right now), they're reactive workflow (here are bids people sent you). Most subs use both.",
+      "Dodge is the contractor-world incumbent. Vantage now borrows useful permit context but sells a different outcome: CRE pipeline intelligence for lenders, title teams, brokers, and sponsors.",
   },
   {
     name: 'Construction Monitor',
-    category: 'Direct — likely the $25/week service Jason\'s stepdad pays',
+    category: 'Adjacent raw permit feed — targets contractors, useful contrast only',
     founded: '1989 (originally a mailed weekly newsletter)',
     pricing: 'Likely $20–30/week effective in Tulsa metro (NOT publicly listed)',
     pricingSource:
-      'Pricing scaled by market size + permit volume. Only public benchmark: 2012 trade-press article reported Los Angeles at $96/mo ($540/6mo, $960/yr). Tulsa is a smaller market so price is plausibly $80–120/mo (~$20–30/wk effective), matching stepdad\'s $25/wk. NOT publicly verified for Tulsa specifically — research 2026-05-06.',
-    who: 'Trade subs, material reps, small contractors; signature buyer is older operator who values weekly delivery in PDF/CSV',
+      'Pricing scaled by market size + permit volume. Only public benchmark: 2012 trade-press article reported Los Angeles at $96/mo ($540/6mo, $960/yr). Tulsa is a smaller market so price is plausibly $80–120/mo (~$20–30/wk effective). NOT publicly verified for Tulsa specifically — research 2026-05-06.',
+    who: 'Trade contractors and material sellers who want raw weekly permit lists; explicitly not the lender/title/broker buyer we are pivoting toward',
     strengths: [
-      'Weekly editions — explicitly delivered each week (matches stepdad\'s cadence claim)',
+      'Weekly editions — explicitly delivered each week',
       'Oklahoma coverage on order page; covers all 50 states',
-      'Legacy "mailed newsletter" heritage (1989) — buyer trust + low-tech buyers stick with it',
+      'Legacy mailed-newsletter heritage (1989) builds trust with low-tech buyers',
       'Multiple delivery formats: PDF + CSV email + REST API + FTP',
-      'Covers residential, commercial, solar, pool permits',
     ],
     weaknesses: [
-      'Raw permit dump — owner names + addresses + scope + value, but NO verified PM contact / email / phone on most permits (especially residential)',
-      'No enrichment — no GC pattern, no contact verification, no signal scoring',
-      'No GC normalization — same GC under multiple LLC entities looks like multiple GCs',
-      'PDF/CSV only — buyer must skip-trace contacts manually and dial cold',
-      'No CRM integration out of the box',
-      'Pricing not transparent — buyer can\'t self-serve sign-up at a known price',
-      'Static data — no "this just permitted, addition project, high-intent insulation prospect" signal scoring',
+      'Raw permit dump, not CRE capital/transaction intelligence',
+      'No lender/title/broker segmentation or refi/take-out timing',
+      'No sponsor relationship map, capital stack context, or distress signal layer',
+      'Price anchors contractor buyers too low; that is exactly why we pivoted',
     ],
     ourWedge:
-      "We sell what Construction Monitor doesn't include: verified PM contacts (name + email + phone, bounce-tested), GC 90-day pattern history, stakeholder map (owner / architect / engineer pulled from the permit doc), and a curated weekly top-3. Pitch frame: 'keep your $25/wk feed for raw coverage — add us at $149 to get the answers (who to call, what they spec, when to call) instead of doing the homework yourself.' At $40/hr, saving 5 hrs/wk of skip-tracing alone pays back our Starter in week 1. CRITICAL: get Jason's stepdad to confirm the company. The signature confirmation question is: 'Do you get a weekly PDF or spreadsheet emailed every Monday morning?' — that's Construction Monitor's tell.",
-  },
-  {
-    name: 'BuildChek (secondary candidate)',
-    category: 'Indirect — possible alternate $25/wk match, but contradicts the "all permits" claim',
-    pricing: '$2.50/report pay-as-you-go OR $34.99–$649/mo tiered (publicly listed)',
-    pricingSource: 'buildchek.com/pricing — public.',
-    who: 'Trade contractors looking up specific properties (lookup tool, not push feed)',
-    strengths: [
-      'Transparent public pricing',
-      'Oklahoma coverage including Tulsa, OKC, Norman, Broken Arrow',
-      'Self-serve sign-up at low entry price',
-    ],
-    weaknesses: [
-      'Pay-per-report or per-month tier — not a "weekly all permits" feed; contradicts stepdad\'s description',
-      'Lookup tool, not push delivery — buyer must actively pull data, easier to forget',
-      'Discourages volume usage — paying per pull means buyers leave leads on the table',
-    ],
-    ourWedge:
-      "Different product entirely. BuildChek is reactive lookup; we're proactive Monday digest with verified contacts and curation.",
+      'Construction Monitor proves permits are valuable, but its buyer is raw construction-permit workflow. Vantage repackages the signal for higher-value CRE outcomes: origination, closings, brokerage timing, and sponsor intelligence.',
   },
   {
     name: 'Public city/county permit portals',
-    category: 'Indirect — the free alternative we displace',
+    category: 'Indirect — the free alternative we automate',
     pricing: 'Free',
     pricingSource: 'Public records — Tulsa County, City of Tulsa, etc., openly accessible.',
-    who: 'Operators willing to grind portals manually',
+    who: 'Anyone willing to grind portals manually',
     strengths: [
       'Free',
       'Authoritative — primary source data',
       'Available immediately on filing',
     ],
     weaknesses: [
-      'No contact info attached — just owner name and address',
-      'No GC normalization (Crossland filed under 17 LLC entities looks like 17 different GCs)',
-      'No project value enrichment',
-      'No verification — emails/phones must be researched separately',
+      'No sponsor/entity normalization or contact context',
+      'No parcel-to-owner-to-capital-stack enrichment',
+      'No lender/title/broker workflow packaging',
       'Different format per city/county — every metro is a different grind',
-      "Pure time sink: industry estimates 4–8 hrs/week to keep current on one metro",
+      'Pure time sink for high-value producers',
     ],
     ourWedge:
-      "We are this — automated, normalized, enriched, verified, delivered. Customer math: at $40/hour wage equivalent, 5 hrs/week of grinding = $200/week of saved time. Our Starter tier is $149/month. Pays back week 1.",
+      'We are this — automated, normalized, enriched, and delivered as a weekly CRE action list instead of a portal-grinding chore.',
   },
 ];
 
 const POSITIONING: { x: string; y: string; label: string; us?: boolean }[] = [
   { x: 'low', y: 'low', label: 'Public portals (free, manual)' },
-  { x: 'low', y: 'low-mid', label: '$25/wk feeds (~$100/mo, raw)' },
-  { x: 'high', y: 'high', label: 'Dodge ($2K+/mo, national)' },
-  { x: 'med', y: 'med', label: 'ConstructConnect (~$300/mo)' },
-  { x: 'low', y: 'high', label: 'Building Connected (free for subs, narrow)' },
-  { x: 'low-mid', y: 'mid-high', label: 'Vantage ($149–499/mo)', us: true },
+  { x: 'high', y: 'high', label: 'Reonomy / CompStak (national CRE data)' },
+  { x: 'med', y: 'med', label: 'Crexi (marketplace)' },
+  { x: 'high', y: 'med', label: 'Dodge (contractor-focused)' },
+  { x: 'low', y: 'low-mid', label: 'Construction Monitor (raw permits for contractors)' },
+  { x: 'low-mid', y: 'mid-high', label: 'Vantage ($299–999/mo)', us: true },
 ];
 
 export default function CompetitorsPage() {
@@ -200,11 +180,11 @@ export default function CompetitorsPage() {
           <HubPageHeader
             eyebrow="Competitor intelligence · internal"
             title="Who we're up against, where they're soft, where we win."
-            blurb="One-page profiles of the five companies a buyer will compare us to (or already uses). Strengths, weaknesses, and the specific wedge we exploit."
+            blurb="One-page profiles of the CRE data companies a lender, title team, broker, or sponsor will compare us to. Strengths, weaknesses, and the specific wedge we exploit."
           />
 
           <Note>
-            <FactPill /> Pricing rows below are sourced from public vendor pages, trade press, or
+            <FactPill /> Pricing rows below are sourced from public product pages, public reviews, trade press, or
             reseller listings — source named explicitly in each profile. <ThesisPill /> Strengths
             / weaknesses / our wedge are our analysis based on industry knowledge.
           </Note>
@@ -281,10 +261,7 @@ export default function CompetitorsPage() {
 
           <Section title="Where we sit on the price/scope grid" eyebrow="Positioning">
             <Note>
-              <ThesisPill /> A buyer's mental map: cost on one axis, "how much hand-holding it
-              gives me" on the other. Free portals cost nothing but require all the work. Dodge
-              costs everything and gives you everything. We sit deliberately in the middle-low
-              right — small spend, focused scope, real intelligence.
+              <ThesisPill /> A buyer's mental map: cost on one axis, "how directly it maps to my CRE workflow" on the other. Free portals cost nothing but require all the work. National CRE data tools are broad but expensive. Construction products like Dodge and Construction Monitor mostly target contractors. We sit deliberately in the local-action lane — focused scope, CRE-specific workflow, real intelligence.
             </Note>
             <div className="mt-5 grid gap-3 lg:grid-cols-5">
               {POSITIONING.map((p) => (
@@ -315,24 +292,18 @@ export default function CompetitorsPage() {
             <div className="space-y-4">
               <Card>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300/90">
-                  "We already use Dodge"
+                  "We already use Reonomy / CompStak"
                 </div>
                 <p className="mt-2 text-[13.5px] italic leading-[1.55] text-zinc-200">
-                  "Got it — Dodge is great for the national / enterprise scope. We're built for
-                  operators who want a curated weekly list focused on their metros, at one-tenth
-                  the price. Most folks who use both keep Dodge for nationwide and us for the
-                  Tulsa / OKC slice. Want me to send next Monday's list so you can compare?"
+                  "Got it — those are strong national CRE datasets. We're not replacing them. We're the Tulsa action layer: fresh permits translated into sponsor, lending, title, refi/take-out, and broker timing. Want me to send next Monday's list so you can compare the local signal quality?"
                 </p>
               </Card>
               <Card>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300/90">
-                  "We already use ConstructConnect"
+                  "We already use Crexi"
                 </div>
                 <p className="mt-2 text-[13.5px] italic leading-[1.55] text-zinc-200">
-                  "ConstructConnect's bid-management piece is solid. We're not that — we're
-                  upstream lead intel: who broke ground, who's the GC, who's the PM, before a bid
-                  invitation hits anyone's inbox. Different layer. Most subs we work with use
-                  both."
+                  "Crexi is great once a property is being marketed. We're earlier: permits that show sponsor movement before lease-up, refi, take-out, sale, or tenant-rep opportunities are obvious. Different layer."
                 </p>
               </Card>
               <Card>
@@ -341,45 +312,34 @@ export default function CompetitorsPage() {
                 </div>
                 <p className="mt-2 text-[13.5px] italic leading-[1.55] text-zinc-200">
                   "Totally — that's how everyone starts. Two questions: how many hours a week
-                  does that take, and what's that hour worth to you? Most operators we talk to
-                  are at 4–6 hours a week and say it'd be worth $40–80/hour. At Starter ($149) we
-                  pay back in week 1. And you get the verified PM contact — that's the part the
-                  portal doesn't give you."
+                  does that take, and what is one missed loan, closing, listing, or referral worth? Vantage saves the portal grind and adds sponsor/entity context, project value, parcel/address, and the CRE workflow angle the portal does not give you."
                 </p>
               </Card>
               <Card>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300/90">
-                  "We pay $25/week for permits already"
+                  "We pay for a permit feed already"
                 </div>
                 <p className="mt-2 text-[13.5px] italic leading-[1.55] text-zinc-200">
-                  "Sweet — keep it. Different product. Most $25/wk feeds give you the permit
-                  itself: number, address, applicant. We give you the verified project manager's
-                  email and phone, the GC's last 90 days of activity, the architect and engineer
-                  on file, and a curated top-3 every Monday so you know which three to call this
-                  week. Want me to send next Monday's list side-by-side with what your $25 feed
-                  gave you? You'll see the difference in 5 minutes."
+                  "Good — that proves the raw feed matters. We are not selling raw permits to contractors. We turn permits into CRE actions: which sponsor moved, what loan/refi/title/broker angle exists, what to watch next, and why it matters this week. Want me to send our Monday view side-by-side with the raw feed?"
                 </p>
               </Card>
             </div>
           </Section>
 
-          <Section title="Questions to ask Jason's stepdad" eyebrow="Customer #1 prospect — the perfect first sale">
+          <Section title="Questions for warm CRE intro calls" eyebrow="Lender/title/broker validation">
             <Card>
               <p className="mb-4 text-[13.5px] leading-[1.55] text-zinc-200">
-                He runs the exact ICP company we target — Tulsa-area insulation sub. He's
-                already paying for permit data ($25/wk). Either he upgrades to us (and becomes
-                customer #1 + reference), or he tells us exactly why he won't (and we adjust).
-                Either outcome is gold.
+                The pivot customer is no longer a construction-supply buyer. Use warm lender, title, and CRE broker relationships to validate whether permit signals create enough origination, closing, refi/take-out, or lease-up value to support $299–999/mo.
               </p>
               <ol className="space-y-2 text-[13.5px] leading-[1.55] text-zinc-200">
                 {[
-                  '"Do you get a weekly PDF or spreadsheet emailed every Monday morning?" — if YES, it\'s almost certainly Construction Monitor. (Top research candidate as of 2026-05-06.)',
-                  "What's the company name? Confirm the service so we can study the exact gap.",
-                  'What does the $25/week service actually include? Permits only, or with applicant name, contact info, GC history?',
-                  "What does he have to do AFTER getting their email/CSV that he wishes was already done? (Where's the friction we solve?)",
-                  "If he had verified PM contacts + a curated weekly top-3 + the GC's 90-day permit history, what would 1 closed commercial deal a quarter be worth to his company?",
-                  'Would he be willing to be customer #1 at a discount in exchange for honest feedback over the first 60 days?',
-                  'Who else does he know in his world (other Tulsa-area subs / material reps / small contractors) that pays for permit data?',
+                  '"Which data tools do you already trust — Reonomy, CompStak, Crexi, county records, internal analyst, or none?"',
+                  "What missing local signal would make you take a call immediately?",
+                  'Which use case has the highest value: origination, refi/take-out, future title closings, lease-up, or investment sales?',
+                  "What do you do after seeing a new permit — call sponsor, route to lender, flag title follow-up, update CRM, or ignore?",
+                  "If Vantage surfaced one qualified loan/closing/listing per quarter, what is that worth in fees or relationship value?",
+                  'Would you review the Monday CRE view for 2 weeks and tell us what is missing before we ask for money?',
+                  'Who else in Tulsa lending, title, brokerage, or development would have a sharp opinion on this?',
                 ].map((q, i) => (
                   <li key={q} className="flex items-start gap-3">
                     <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/[0.08] font-mono text-[11px] font-semibold text-amber-300">

@@ -31,7 +31,7 @@ export function DigestPreview() {
               24,800 sf warehouse · 3104 N Mingo Rd
             </div>
             <dl className="mt-4 grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-zinc-500">GC</dt>
+              <dt className="text-zinc-500">Sponsor</dt>
               <dd className="text-zinc-100">Crossland Construction</dd>
               <dt className="text-zinc-500">Est. value</dt>
               <dd className="font-medium tabular-nums text-zinc-100">$2.4M – $3.2M</dd>
@@ -47,7 +47,7 @@ export function DigestPreview() {
               128-unit multi-family · 8420 E 71st St
             </div>
             <dl className="mt-4 grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-zinc-500">GC</dt>
+              <dt className="text-zinc-500">Sponsor</dt>
               <dd className="text-zinc-100">Manhattan Construction</dd>
               <dt className="text-zinc-500">Est. value</dt>
               <dd className="font-medium tabular-nums text-zinc-100">$18M – $22M</dd>
@@ -99,7 +99,7 @@ export function PortalPreview() {
     { key: 'Metro', value: 'Tulsa' },
     { key: 'Type', value: 'Industrial, Multi-family' },
     { key: 'Min value', value: '$500K' },
-    { key: 'GC', value: 'Any' },
+    { key: 'Sponsor', value: 'Any' },
   ];
 
   return (
@@ -221,7 +221,7 @@ export function WebhookPreview() {
     "estimated_value_min": 2400000,
     "estimated_value_max": 3200000
   },
-  "general_contractor": {
+  "sponsor": {
     "name": "Crossland Construction",
     "permits_90d": 11,
     "avg_value_90d": 2800000

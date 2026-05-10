@@ -9,7 +9,7 @@ export const metadata = {
 /* ============================================================
    Industry primer / glossary
    What Madison needs to know to sound credible on a discovery
-   call. Standard commercial construction concepts.
+   call. Commercial real estate, lending, title, and brokerage concepts.
    ============================================================ */
 
 const PERMIT_TYPES: { name: string; what: string; cycle: string; matters: string }[] = [
@@ -18,67 +18,68 @@ const PERMIT_TYPES: { name: string; what: string; cycle: string; matters: string
     what: 'Permit to build a new structure from scratch — vertical construction, foundation through finish.',
     cycle: '12–24 months from permit to substantial completion typical for commercial mid-size.',
     matters:
-      'Highest dollar value per project. Subs spec\'d in months 1–3. Material orders weeks 4–12. This is the prime hunting ground.',
+      'Highest dollar value per project. Lenders see construction-to-perm and draw opportunities; title teams see future closings; brokers see lease-up and investment-sale timing.',
   },
   {
     name: 'Tenant improvement (TI)',
     what: 'Interior buildout of an existing leased space — common in retail, office, restaurant fit-outs.',
     cycle: '6–16 weeks from permit to occupancy.',
     matters:
-      'Faster cycle, smaller dollar amounts, but high frequency. Good fit for HVAC, electrical, finishes subs.',
+      'High-frequency churn signal. Brokers can spot tenant movement; lenders and title teams can track smaller refi or owner-occupier activity.',
   },
   {
     name: 'Addition / alteration',
     what: 'Adding to or modifying an existing structure — expansion, rebuild after damage, modernization.',
     cycle: 'Varies wildly — a 6-month addition is common.',
-    matters: 'Often spec\'d to match existing — easier sale if you already have a relationship with that GC.',
+    matters: 'Expansion signals sponsor confidence, possible new debt, refi needs, and future valuation changes.',
   },
   {
     name: 'Repair / replacement',
-    what: 'Roof replacement, mechanical equipment swap, structural repair.',
+    what: 'Major building-system replacement, structural repair, or capital improvement permit.',
     cycle: '2–10 weeks typical.',
-    matters: 'Fast turn, recurring buyer relationships. Roofing/HVAC/foam reps live here.',
+    matters: 'Often hints at refinance prep, insurance events, deferred maintenance, or a property being readied for sale/lease.',
   },
   {
     name: 'Demolition',
     what: 'Permit to tear down a structure (often paired with a new-construction permit at the same site).',
     cycle: 'Usually 2–8 weeks before ground-up permit lands.',
-    matters: 'Demo permit is an early signal a new project is coming. Track these as "future leads."',
+    matters: 'Early signal a new project is coming. Useful for construction lenders, title teams, land brokers, and developers before public marketing catches up.',
   },
 ];
 
 const GC_ROLES: { role: string; whatTheyDo: string; whoSellsThem: string }[] = [
   {
-    role: 'Project Manager (PM)',
+    role: 'Sponsor / borrower',
     whatTheyDo:
-      'Owns the project end-to-end. Schedules subs, signs off on changes, manages the budget, signs invoices.',
+      'Controls the project economics, capital stack, lender selection, and exit/refi plan.',
     whoSellsThem:
-      'Material reps and major subs (mechanical, structural). PM is who you want on Day 1 of a permit.',
+      'Commercial lenders, title teams, brokers, insurance, and advisory relationships. This is often the highest-value contact.',
   },
   {
-    role: 'Estimator',
+    role: 'Commercial lender',
     whatTheyDo:
-      'Builds the bid before the project wins. Scope-of-work documents, takeoffs, sub solicitations, pricing.',
+      'Originates or manages construction loans, bridge loans, refis, and take-out financing.',
     whoSellsThem:
-      'Material reps trying to influence spec. Subs sending in bids. Estimator decides who gets invited to bid.',
+      'Sponsors seeking capital, brokers with borrower relationships, title teams with closing visibility, and data providers like us.',
   },
   {
-    role: 'Superintendent (Super)',
+    role: 'Title / closing officer',
     whatTheyDo:
-      'On-site daily operations. Manages subs in the field, schedule, safety, quality, day-to-day execution.',
+      'Handles title commitments, escrow, closing coordination, lien searches, and policy issuance.',
     whoSellsThem:
-      'Subs already on the project who need product or scope changes mid-build.',
+      'Lenders, sponsors, CRE brokers, attorneys, and referral partners tied to upcoming transactions.',
   },
   {
-    role: 'Director of Operations / VP',
-    whatTheyDo: 'Oversees multiple projects. Strategic relationships, vendor approvals, account-level decisions.',
+    role: 'CRE broker',
+    whatTheyDo:
+      'Sources leasing, investment sales, land, owner-rep, or tenant-rep opportunities tied to project movement.',
     whoSellsThem:
-      'Material reps doing master-agreement deals. Software/data vendors (us). Approves new vendors company-wide.',
+      'Owners, sponsors, tenants, lenders with REO/distress signals, and investors needing market timing.',
   },
   {
-    role: 'Owner / Principal',
-    whatTheyDo: 'On smaller GCs (under ~50 employees), often still touches every deal personally.',
-    whoSellsThem: 'Anyone trying to land a relationship-level account at a smaller firm.',
+    role: 'General contractor',
+    whatTheyDo: 'Executes the build and often appears on permit records, but is no longer our primary buyer.',
+    whoSellsThem: 'Useful context for credibility and project validation; buyer focus stays on capital/transaction stakeholders.',
   },
 ];
 
@@ -86,71 +87,65 @@ const BID_TIMING: { phase: string; weekRange: string; whoMatters: string }[] = [
   {
     phase: 'Permit filed',
     weekRange: 'Week 0',
-    whoMatters: 'PM is named, project goes public. This is the data we sell.',
+    whoMatters: 'Project becomes public. Vantage flags sponsor/applicant, asset type, value, and potential lender/title/broker angle.',
   },
   {
-    phase: 'Architect / engineering finalization',
+    phase: 'Construction loan / capital stack check',
     weekRange: 'Week 0–4',
     whoMatters:
-      'Architect locks insulation, roofing, glazing specs. Material reps need to influence spec NOW.',
+      'Lenders verify whether the project is already financed, whether take-out/refi timing exists, and whether sponsor relationship outreach is worth it.',
   },
   {
-    phase: 'Sub bid solicitation',
-    weekRange: 'Week 2–6',
-    whoMatters: 'Estimator sends RFPs. Subs respond. Best window for an unknown sub to get on a bid list.',
+    phase: 'Title and entity diligence',
+    weekRange: 'Week 0–8',
+    whoMatters: 'Title teams map ownership entities, parcel history, lien risk, and upcoming closing/refi work.',
   },
   {
-    phase: 'Sub awards',
-    weekRange: 'Week 4–8',
-    whoMatters: 'Mechanical, electrical, plumbing, structural awards. Material orders go out shortly after.',
+    phase: 'Broker market mapping',
+    weekRange: 'Week 2–12',
+    whoMatters: 'CRE brokers track lease-up, owner-rep, tenant-rep, land, and investment-sale angles before the project is widely marketed.',
   },
   {
-    phase: 'Material orders',
-    weekRange: 'Week 6–12',
-    whoMatters: 'Distributors and reps fulfilling. Lead times start mattering.',
+    phase: 'Construction draw cycle',
+    weekRange: 'Month 1–18',
+    whoMatters: 'Lenders monitor progress, draw timing, distress signals, and borrower performance.',
   },
   {
-    phase: 'Mobilization / groundbreaking',
-    weekRange: 'Week 8–12',
-    whoMatters: 'Site supers active. Day-of-construction subs (excavation, utilities) on site.',
-  },
-  {
-    phase: 'Substantial completion',
+    phase: 'Stabilization / lease-up',
     weekRange: 'Month 12–24',
-    whoMatters:
-      'CRE brokers start lease-up calls. Property managers active. Insurance binding.',
+    whoMatters: 'Brokers, lenders, and title teams prepare lease-up, refi, sale, and take-out conversations.',
   },
 ];
 
 const WHO_SPECS_WHAT: { role: string; controls: string }[] = [
-  { role: 'Architect', controls: 'Insulation, roofing, glazing, finishes, fire protection systems' },
-  { role: 'MEP engineer', controls: 'HVAC, plumbing, electrical, controls, fire alarm' },
-  { role: 'Structural engineer', controls: 'Steel, concrete, reinforcement, foundations' },
-  { role: 'Civil engineer', controls: 'Sitework, utilities, drainage, paving' },
-  { role: 'Owner', controls: 'Final budget approvals, brand-driven finish overrides' },
+  { role: 'Sponsor / borrower', controls: 'Capital stack, lender selection, hold/sell/refi decision, project budget' },
+  { role: 'Commercial lender', controls: 'LTC/LTV limits, covenants, draw process, rate/spread, maturity/take-out requirements' },
+  { role: 'Title / closing', controls: 'Title commitment, escrow process, closing timeline, lien exceptions, policy issuance' },
+  { role: 'CRE broker', controls: 'Lease-up strategy, buyer/tenant relationships, market comps, assignment timing' },
+  { role: 'Developer', controls: 'Site control, entitlement path, project scope, sponsor equity story' },
 ];
 
 const ACRONYMS: { term: string; meaning: string }[] = [
-  { term: 'GC', meaning: 'General contractor' },
-  { term: 'PM', meaning: 'Project manager' },
-  { term: 'TI', meaning: 'Tenant improvement' },
-  { term: 'MEP', meaning: 'Mechanical, electrical, plumbing' },
-  { term: 'BIM', meaning: 'Building information modeling — the 3D digital design model' },
-  { term: 'CD', meaning: 'Construction documents — the final stamped drawings' },
-  { term: 'RFI', meaning: 'Request for information — sub asks PM/architect a clarifying question' },
-  { term: 'RFP / RFQ', meaning: 'Request for proposal / quote — formal bid solicitation' },
-  { term: 'Sub', meaning: 'Subcontractor — performs a specific scope (insulation, HVAC, etc.)' },
-  { term: 'Spec', meaning: 'Specification — written description of materials and methods' },
-  { term: 'Submittal', meaning: 'Sub\'s formal product approval doc sent to architect/PM' },
-  { term: 'Punch list', meaning: 'Final defect list before owner accepts the building' },
+  { term: 'CRE', meaning: 'Commercial real estate' },
+  { term: 'Sponsor', meaning: 'Borrower/developer/operator behind the project and capital stack' },
+  { term: 'LTC', meaning: 'Loan-to-cost — loan amount divided by total project cost' },
+  { term: 'LTV', meaning: 'Loan-to-value — loan amount divided by stabilized/current property value' },
+  { term: 'Construction-to-perm', meaning: 'Construction loan designed to convert into permanent financing after stabilization' },
+  { term: 'Mini-perm', meaning: 'Shorter-term permanent loan used after construction before long-term take-out/refi' },
+  { term: 'Refi', meaning: 'Refinance — replacing existing debt with new debt, often after value creation' },
+  { term: 'Take-out', meaning: 'Permanent loan or sale proceeds used to pay off construction/bridge debt' },
+  { term: 'Capital stack', meaning: 'Full mix of senior debt, mezz debt, preferred equity, and sponsor equity' },
+  { term: 'NOI', meaning: 'Net operating income — property income after operating expenses, before debt service' },
+  { term: 'DSCR', meaning: 'Debt service coverage ratio — NOI divided by required debt payments' },
+  { term: 'Bridge loan', meaning: 'Short-term debt used before permanent financing, sale, or stabilization' },
+  { term: 'Draw', meaning: 'Scheduled construction-loan disbursement tied to progress and inspections' },
+  { term: 'Title commitment', meaning: 'Title company promise to issue policy subject to listed requirements/exceptions' },
+  { term: 'Escrow', meaning: 'Neutral closing account/process that holds funds and documents until conditions are met' },
+  { term: 'Lease-up', meaning: 'Period after delivery when vacant space/units are being leased' },
+  { term: 'Comps', meaning: 'Comparable sales or leases used for valuation and pricing' },
+  { term: 'Cap rate', meaning: 'NOI divided by property value; shorthand for market yield/pricing' },
   { term: 'CO', meaning: 'Certificate of occupancy — building is legal to occupy' },
-  { term: 'Substantial completion', meaning: 'Project usable for intended purpose; warranties begin' },
-  { term: 'Closeout', meaning: 'Final payment + warranty transfer at project end' },
-  { term: 'Change order (CO)', meaning: 'Mid-project scope or price modification' },
-  { term: 'Bid leveling', meaning: 'Estimator normalizing competing bids to compare apples-to-apples' },
-  { term: 'Buyout', meaning: 'GC has finished awarding all subs and locked the project budget' },
-  { term: 'Master service agreement (MSA)', meaning: 'Pre-negotiated terms between two companies for repeat work' },
-  { term: 'Pre-bid meeting', meaning: 'Walk-through of the project for interested subs before bids are due' },
+  { term: 'GC', meaning: 'General contractor — executes the build; useful context, not our primary buyer' },
 ];
 
 export default function GlossaryPage() {
@@ -163,14 +158,11 @@ export default function GlossaryPage() {
           <HubPageHeader
             eyebrow="Industry primer · internal"
             title="Read this once and sound credible on every call."
-            blurb="Permit types, GC org chart, bid timing windows, who specs what, and a working glossary. Designed to be skimmed in 10 minutes and re-referenced before any prospect call."
+            blurb="Permit signals, capital/closing stakeholders, CRE timing windows, who controls what, and a working glossary. Designed to be skimmed in 10 minutes and re-referenced before any prospect call."
           />
 
           <Note>
-            <FactPill /> Definitions and standard cycles below are drawn from CSI MasterFormat,
-            AIA contract documents, ABC industry data, and standard commercial construction
-            project management practice. Specific cycle ranges are typical commercial mid-size
-            projects ($1–20M); larger/smaller projects vary.
+            <FactPill /> Definitions below blend standard commercial construction permit timing with CRE finance, title, and brokerage terminology. Specific cycle ranges are typical commercial mid-size projects ($1–20M); larger/smaller projects vary.
           </Note>
 
           <div className="mt-10" />
@@ -195,7 +187,7 @@ export default function GlossaryPage() {
             </div>
           </Section>
 
-          <Section title="GC roles — who to talk to" eyebrow="The org chart of a project">
+          <Section title="Stakeholder roles — who to talk to" eyebrow="Capital + transaction map">
             <div className="space-y-3">
               {GC_ROLES.map((r) => (
                 <Card key={r.role}>
@@ -207,18 +199,16 @@ export default function GlossaryPage() {
                       <div className="mt-1 text-[14.5px] font-semibold text-white">{r.role}</div>
                     </div>
                     <Field label="What they do" value={r.whatTheyDo} />
-                    <Field label="Who sells to them" value={r.whoSellsThem} />
+                    <Field label="Why we care" value={r.whoSellsThem} />
                   </div>
                 </Card>
               ))}
             </div>
           </Section>
 
-          <Section title="Bid timing windows" eyebrow="When each buyer cares about a project">
+          <Section title="CRE timing windows" eyebrow="When each buyer cares about a project">
             <Note>
-              The timing column is the most actionable part of our data. A material rep sees the
-              "permit filed → architect spec finalization" window (week 0–4) as their golden
-              hour. An HVAC sub sees "sub bid solicitation" (week 2–6).
+              The timing column is the most actionable part of our data. Lenders care when a project needs construction debt, refi, or take-out. Title teams care before closings. Brokers care before lease-up, sale, or tenant movement becomes obvious.
             </Note>
             <div className="mt-5 overflow-hidden rounded-xl border border-white/[0.06]">
               <table className="w-full text-[13px]">
@@ -244,19 +234,16 @@ export default function GlossaryPage() {
             </div>
           </Section>
 
-          <Section title="Who specs what" eyebrow="Influence map">
+          <Section title="Who controls what" eyebrow="CRE influence map">
             <Note>
-              On a commercial project, the architect and engineers — not the GC — control most
-              material and system decisions. Material reps spend 80% of their time on architects
-              and engineers, not GCs. Knowing this is what separates a credible discovery call
-              from a clueless one.
+              On a commercial project, the sponsor controls the capital decision, lenders shape leverage and take-out options, title teams control closing risk, and brokers control market relationships. Knowing who controls which lever is what separates a credible discovery call from a clueless one.
             </Note>
             <div className="mt-5 overflow-hidden rounded-xl border border-white/[0.06]">
               <table className="w-full text-[13.5px]">
                 <thead className="bg-white/[0.02] text-[10.5px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
                   <tr>
                     <th className="px-4 py-2.5 text-left">Role</th>
-                    <th className="px-4 py-2.5 text-left">Controls the spec for</th>
+                    <th className="px-4 py-2.5 text-left">Controls</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.04]">
@@ -292,11 +279,7 @@ export default function GlossaryPage() {
           <Section title="The 60-second elevator framing" eyebrow="If a prospect asks 'so what do you do'">
             <Card>
               <p className="text-[14.5px] italic leading-[1.65] text-zinc-200/95">
-                "We track every commercial construction permit filed in your metro. Every Monday
-                morning we send you a verified list with the GC, project value, address, and the
-                project manager's email and phone. Most of our customers use it to get on bids
-                two weeks earlier than they would otherwise. $149 to $499 a month depending on
-                metros and how you want the data delivered. That's it."
+                "We track every commercial construction permit filed in your metro and turn it into CRE pipeline intelligence. Every Monday you get sponsor/applicant, asset type, project value, address, and likely lender/title/broker angle. Lenders use it for origination and refi timing, title teams for future closings, and brokers for lease-up or investment-sale timing. $299 to $999 a month depending on audience and access. That's it."
               </p>
             </Card>
             <p className="mt-4 text-[13px] leading-[1.6] text-zinc-400">

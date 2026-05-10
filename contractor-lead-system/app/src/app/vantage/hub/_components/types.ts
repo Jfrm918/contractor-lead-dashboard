@@ -9,11 +9,11 @@ export type Prospect = {
   phone?: string;
   metro: string;
   segment:
-    | 'Material rep'
-    | 'Subcontractor'
-    | 'Lender / insurer'
+    | 'Commercial lender'
+    | 'Title / closing'
     | 'CRE broker'
-    | 'GC';
+    | 'Sponsor / borrower'
+    | 'Developer';
   stage: Stage;
   lastTouchAt: string;
   nextAction: string;

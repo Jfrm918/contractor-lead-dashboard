@@ -137,7 +137,7 @@ const IDEAS: { category: string; items: Idea[] }[] = [
       },
       {
         title: 'Filter customization UI for customers',
-        why: "Customers self-serve their filter preferences (metro, project type, value range, GC names). Reduces support load and improves digest relevance.",
+        why: "Customers self-serve their filter preferences (metro, asset type, value range, sponsor/borrower names, lender/title/broker use case). Reduces support load and improves digest relevance.",
         effort: 'L',
         priority: 'P2',
         category: 'Customer-facing',
@@ -198,7 +198,7 @@ const IDEAS: { category: string; items: Idea[] }[] = [
       },
       {
         title: 'About page (Jason + Madison story)',
-        why: "Authenticity beats polish. 'Built by a spray foam installer and his wife in Tulsa' is a stronger founding story than enterprise-pitched competitors can match.",
+        why: "Authenticity beats polish. 'Built by a Tulsa operator and his wife using real permit data plus family CRE/lending relationships' is a stronger founding story than enterprise-pitched competitors can match.",
         effort: 'S',
         priority: 'P2',
         category: 'Landing',
@@ -272,7 +272,7 @@ const IDEAS: { category: string; items: Idea[] }[] = [
       },
       {
         title: 'Slack-based delivery channel',
-        why: "Some buyers prefer Slack to email. Bot delivers Monday digest into a private channel. Upmarket buyers (mid-size GCs, distributor sales teams) love this.",
+        why: "Some buyers prefer Slack to email. Bot delivers Monday digest into a private channel. Upmarket buyers (regional lenders, title teams, broker teams) love this.",
         effort: 'L',
         priority: 'P3',
         category: 'Customer-facing',
@@ -287,8 +287,8 @@ const IDEAS: { category: string; items: Idea[] }[] = [
         doWhen: 'When the first customer asks about adding teammates',
       },
       {
-        title: 'White-label resale to manufacturers',
-        why: "Insulation manufacturers (Demilec, Icynene) want to give 'permit intel' as a value-add to their distributor network. Reseller deal pipeline.",
+        title: 'White-label resale to title/lending networks',
+        why: "Title groups, community banks, and CRE brokerages can package permit intel as a value-add for producers and referral partners. Reseller deal pipeline.",
         effort: 'XL',
         priority: 'P3',
         category: 'Channel',
