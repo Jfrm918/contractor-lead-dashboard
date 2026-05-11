@@ -124,16 +124,16 @@ export default function DiscoveryPlaybookPage() {
           <Section title="The opener (90 seconds)" eyebrow="Frame the call">
             <Card>
               <p className="text-[14.5px] italic leading-[1.65] text-zinc-200/95">
-                "Hey [name], thanks for grabbing 15 minutes. Quick context: we send weekly
+                &quot;Hey [name], thanks for grabbing 15 minutes. Quick context: we send weekly
                 commercial permit intelligence to [their segment] in [their metro]. I want to
                 learn how you currently find new projects, see if what we do is actually useful,
-                and if not — kick you back to your day. Cool with that?"
+                and if not — kick you back to your day. Cool with that?&quot;
               </p>
             </Card>
             <ul className="mt-5 space-y-1.5 text-[13px] text-zinc-400">
               <li>· Names what you do in one sentence (no jargon, no buzzwords).</li>
-              <li>· Permission-based ("cool with that?") — small commitment increases follow-through.</li>
-              <li>· Frame ends with "kick you back to your day" — signals you're not desperate, won't waste their time.</li>
+              <li>· Permission-based (&quot;cool with that?&quot;) — small commitment increases follow-through.</li>
+              <li>· Frame ends with &quot;kick you back to your day&quot; — signals you&apos;re not desperate, won&apos;t waste their time.</li>
             </ul>
           </Section>
 
@@ -146,7 +146,7 @@ export default function DiscoveryPlaybookPage() {
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <div className="flex-1">
-                      <p className="text-[15.5px] font-medium leading-[1.45] text-white">"{q.q}"</p>
+                      <p className="text-[15.5px] font-medium leading-[1.45] text-white">&quot;{q.q}&quot;</p>
                       <div className="mt-4 grid gap-4 border-t border-white/[0.05] pt-4 sm:grid-cols-3">
                         <Field label="Why ask" value={q.why} />
                         <Field label="Listen for" value={q.listen} />
@@ -162,20 +162,20 @@ export default function DiscoveryPlaybookPage() {
           <Section title="The trial close (after Q7)" eyebrow="Recap + ask">
             <Card>
               <p className="text-[14.5px] italic leading-[1.65] text-zinc-200/95">
-                "Quick recap — sounds like you'd value{' '}
+                &quot;Quick recap — sounds like you&apos;d value{' '}
                 <strong className="not-italic text-amber-300">[specific thing they said]</strong>,
                 you close{' '}
                 <strong className="not-italic text-amber-300">[X deals/year]</strong>, and one
                 closed loan, closing, listing, or deal is worth roughly{' '}
-                <strong className="not-italic text-amber-300">[Y]</strong>. We're $299 / $399 /
+                <strong className="not-italic text-amber-300">[Y]</strong>. We&apos;re $299 / $399 /
                 $499+ a month depending on audience and access. If we got you ten fresh permits next
-                Monday matching your filters, would you be in for a 14-day trial?"
+                Monday matching your filters, would you be in for a 14-day trial?&quot;
               </p>
             </Card>
             <p className="mt-4 text-[13px] leading-[1.6] text-zinc-400">
               The recap forces them to confirm or correct. Once they confirm, the price feels
-              tiny against the deal value they just stated. Listen for "yes / let me think /
-              no" — that's your answer. Don't talk past it.
+              tiny against the deal value they just stated. Listen for &quot;yes / let me think /
+              no&quot; — that&apos;s your answer. Don&apos;t talk past it.
             </p>
           </Section>
 
@@ -193,7 +193,7 @@ export default function DiscoveryPlaybookPage() {
             <p className="mt-4 text-[13px] leading-[1.6] text-zinc-400">
               Killing fast is a kindness — to them, to you, to the customers who deserve your
               attention. A bad-fit customer churns in 60 days, costs ~$400 in support, and burns
-              the time you could've spent on the next 5 prospects.
+              the time you could&apos;ve spent on the next 5 prospects.
             </p>
           </Section>
 
@@ -204,8 +204,8 @@ export default function DiscoveryPlaybookPage() {
                   Yes
                 </div>
                 <p className="mt-2 text-[13.5px] leading-[1.55] text-zinc-200/90 italic">
-                  "Great — calendar invite for a 30-min walkthrough next [day]. Bring your laptop.
-                  I'll pull permits matching your filters in advance so we review them live."
+                  &quot;Great — calendar invite for a 30-min walkthrough next [day]. Bring your laptop.
+                  I&apos;ll pull permits matching your filters in advance so we review them live.&quot;
                 </p>
               </Card>
               <Card>
@@ -213,8 +213,8 @@ export default function DiscoveryPlaybookPage() {
                   Maybe
                 </div>
                 <p className="mt-2 text-[13.5px] leading-[1.55] text-zinc-200/90 italic">
-                  "What would make this an easy yes for you?" — wait for their answer, address it,
-                  then ask: "If I solved that, would you trial it next Monday?"
+                  &quot;What would make this an easy yes for you?&quot; — wait for their answer, address it,
+                  then ask: &quot;If I solved that, would you trial it next Monday?&quot;
                 </p>
               </Card>
               <Card>
@@ -222,8 +222,8 @@ export default function DiscoveryPlaybookPage() {
                   No
                 </div>
                 <p className="mt-2 text-[13.5px] leading-[1.55] text-zinc-200/90 italic">
-                  "Appreciate the time. If your situation changes, you have my contact." Don't
-                  push. Don't follow up unsolicited. Add to a 90-day re-engagement list.
+                  &quot;Appreciate the time. If your situation changes, you have my contact.&quot; Don&apos;t
+                  push. Don&apos;t follow up unsolicited. Add to a 90-day re-engagement list.
                 </p>
               </Card>
             </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import SignIn from '@/components/sign-in';
 import DashboardShell, { type AppMode } from '@/components/dashboard-shell';
@@ -33,6 +33,7 @@ export default function Home() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (isAuthenticated && (params.get('demo') === 'madison' || params.get('demo') === 'outreach')) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- demo URL routing reacts to async auth
       setMode('outreach');
       setActivePage('outreach-desk');
       setSelectedLeadId(null);
@@ -49,6 +50,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isOutreach) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- role-based redirect reacts to auth state
       setMode('outreach');
       setActivePage('outreach-desk');
       setSelectedLeadId(null);

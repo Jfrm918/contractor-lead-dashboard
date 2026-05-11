@@ -1,4 +1,4 @@
-import { MouseLight, RoutedTabs } from '../../_components/interactions';
+import { RoutedTabs } from '../../_components/interactions';
 import { PortalPreview, PREVIEW_TABS } from '../../_components/previews';
 import { VantageAtmosphere, VantagePreviewNav } from '../../_components/shell';
 

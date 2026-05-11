@@ -79,6 +79,7 @@ function useSystemHealth(pollIntervalMs = 30_000) {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial fetch + polling interval
     fetchHealth();
     const id = setInterval(fetchHealth, pollIntervalMs);
     return () => clearInterval(id);

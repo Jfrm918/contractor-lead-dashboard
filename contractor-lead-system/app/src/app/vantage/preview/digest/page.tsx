@@ -1,4 +1,4 @@
-import { MouseLight, RoutedTabs } from '../../_components/interactions';
+import { RoutedTabs } from '../../_components/interactions';
 import { DigestPreview, PREVIEW_TABS } from '../../_components/previews';
 import { VantageAtmosphere, VantagePreviewNav } from '../../_components/shell';
 
@@ -18,7 +18,7 @@ export default function DigestPreviewPage() {
             </h1>
             <p className="mt-4 text-[15px] leading-[1.6] text-zinc-300/85">
               Top three highlights, full sortable table of every new permit. One read, one cup of
-              coffee, you know what's on the board this week.
+              coffee, you know what&apos;s on the board this week.
             </p>
           </header>
 

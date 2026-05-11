@@ -15,7 +15,6 @@ import {
   MessageSquare,
   FileText,
   Clock,
-  PhoneForwarded,
   TrendingUp,
   Loader2,
 } from 'lucide-react';

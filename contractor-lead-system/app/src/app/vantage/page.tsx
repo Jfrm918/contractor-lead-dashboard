@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CursorGlow, FadeUp, HoverSpot, MouseLight, TiltCard } from './_components/interactions';
+import { CursorGlow, FadeUp, HoverSpot, TiltCard } from './_components/interactions';
 import { PREVIEW_TABS } from './_components/previews';
 import { VantageAtmosphere } from './_components/shell';
 
@@ -435,13 +435,13 @@ function PreviewMini({ kind }: { kind: string }) {
       <div className="px-3 py-2 text-zinc-300">
         <div><span className="text-zinc-500">{`{`}</span></div>
         <div className="pl-3">
-          <span className="text-amber-300/90">"permit_id"</span>
+          <span className="text-amber-300/90">&quot;permit_id&quot;</span>
           <span className="text-zinc-500">: </span>
-          <span className="text-emerald-300/90">"TUL-2026-04832"</span>
+          <span className="text-emerald-300/90">&quot;TUL-2026-04832&quot;</span>
           <span className="text-zinc-500">,</span>
         </div>
         <div className="pl-3">
-          <span className="text-amber-300/90">"value_max"</span>
+          <span className="text-amber-300/90">&quot;value_max&quot;</span>
           <span className="text-zinc-500">: </span>
           <span className="text-zinc-100">3200000</span>
         </div>
@@ -475,7 +475,7 @@ function Coverage() {
             </h2>
             <p className="mt-4 text-[15px] leading-[1.6] text-zinc-300/85">
               We launch each new metro by hand — verifying every city and county portal, mapping the
-              local permit codes, and standardizing the data before we sell it. No "national coverage"
+              local permit codes, and standardizing the data before we sell it. No &quot;national coverage&quot;
               handwave.
             </p>
           </div>
@@ -567,7 +567,7 @@ function Pricing() {
           <div className="max-w-2xl">
             <Eyebrow>Pricing</Eyebrow>
             <h2 className="mt-3 text-balance text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
-              Recover one project, you're paid for a year.
+              Recover one project, you&apos;re paid for a year.
             </h2>
             <p className="mt-4 text-[15px] leading-[1.6] text-zinc-300/85">
               14-day free trial. Monthly billing. Cancel anytime, no annual lock-in.
@@ -716,7 +716,7 @@ function Footer() {
                     Start with two free weeks.
                   </h2>
                   <p className="mt-3 max-w-md text-[15px] leading-[1.6] text-zinc-300/85">
-                    We onboard the first 20 customers personally. One email and you're in.
+                    We onboard the first 20 customers personally. One email and you&apos;re in.
                   </p>
                 </div>
                 <form className="flex flex-col gap-3 sm:flex-row lg:items-center lg:self-end">

@@ -1,6 +1,6 @@
 import { VantageAtmosphere } from '../../_components/shell';
 import HubNav from '../_components/HubNav';
-import { Card, FactPill, HubPageHeader, Note, Section, ThesisPill } from '../_components/PageBits';
+import { Card, FactPill, HubPageHeader, Note, Section } from '../_components/PageBits';
 
 export const metadata = {
   title: 'Vantage — Industry primer',
@@ -279,7 +279,7 @@ export default function GlossaryPage() {
           <Section title="The 60-second elevator framing" eyebrow="If a prospect asks 'so what do you do'">
             <Card>
               <p className="text-[14.5px] italic leading-[1.65] text-zinc-200/95">
-                "We track every commercial construction permit filed in your metro and turn it into CRE pipeline intelligence. Every Monday you get sponsor/applicant, asset type, project value, address, and likely lender/title/broker angle. Lenders use it for origination and refi timing, title teams for future closings, and brokers for lease-up or investment-sale timing. $299 to $999 a month depending on audience and access. That's it."
+                &quot;We track every commercial construction permit filed in your metro and turn it into CRE pipeline intelligence. Every Monday you get sponsor/applicant, asset type, project value, address, and likely lender/title/broker angle. Lenders use it for origination and refi timing, title teams for future closings, and brokers for lease-up or investment-sale timing. $299 to $999 a month depending on audience and access. That&apos;s it.&quot;
               </p>
             </Card>
             <p className="mt-4 text-[13px] leading-[1.6] text-zinc-400">

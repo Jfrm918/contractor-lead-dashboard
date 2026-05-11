@@ -87,11 +87,10 @@ export function Card({
 /* Wrapper for any hub sub-page content. Provides consistent
    max-width and padding. */
 export function HubMain({
-  active,
   children,
   width = 'max-w-6xl',
 }: {
-  active: string;
+  active?: string;
   children: ReactNode;
   width?: string;
 }) {

@@ -144,8 +144,8 @@ export default function CustomerSuccessPage() {
           />
 
           <Note>
-            <FactPill /> Industry data: B2B SMB SaaS customers who don't reach a "first value
-            moment" within 14 days churn at ~3× the rate of those who do (per ChartMogul,
+            <FactPill /> Industry data: B2B SMB SaaS customers who don&apos;t reach a &quot;first value
+            moment&quot; within 14 days churn at ~3× the rate of those who do (per ChartMogul,
             Profitwell, and OpenView Partners published reports). The day-1 through day-30 plan
             below is calibrated to engineer a first-value moment fast.
           </Note>
@@ -156,7 +156,7 @@ export default function CustomerSuccessPage() {
             <Note>
               <ThesisPill /> Day 1 sets the tone for the relationship. Generic SaaS sends a
               confirmation email and disappears. We send a personal note from a real human
-              within 5 minutes — that's our entire customer-experience moat against the bigger
+              within 5 minutes — that&apos;s our entire customer-experience moat against the bigger
               players.
             </Note>
             <div className="mt-5 space-y-3">
@@ -240,7 +240,7 @@ export default function CustomerSuccessPage() {
 
           <Section title="Upsell triggers" eyebrow="Grow the account">
             <Note>
-              <ThesisPill /> Don't push upsell on day one. Wait for the customer to display
+              <ThesisPill /> Don&apos;t push upsell on day one. Wait for the customer to display
               behavior that <em>creates</em> the upsell case naturally — then offer it as the
               obvious next step.
             </Note>
@@ -274,8 +274,8 @@ export default function CustomerSuccessPage() {
             </Card>
             <p className="mt-4 text-[13px] leading-[1.6] text-zinc-400">
               Multiple-choice format makes it easy to reply (a/b/c/d) — way higher response rate
-              than open-ended "why did you leave." The 90-day filter retention is genuine — keep
-              it. We get back ~10–15% of churned customers within 90 days when we don't burn the
+              than open-ended &quot;why did you leave.&quot; The 90-day filter retention is genuine — keep
+              it. We get back ~10–15% of churned customers within 90 days when we don&apos;t burn the
               relationship on exit.
             </p>
           </Section>
@@ -290,7 +290,7 @@ export default function CustomerSuccessPage() {
                   <li>· Check digest open rate per customer</li>
                   <li>· Review portal login activity (Mon morning)</li>
                   <li>· Reply triage: any in-bound feedback or filter requests</li>
-                  <li>· Action any "high severity" churn signals same-day</li>
+                  <li>· Action any &quot;high severity&quot; churn signals same-day</li>
                 </ul>
               </Card>
               <Card>
@@ -298,8 +298,8 @@ export default function CustomerSuccessPage() {
                   Monthly
                 </div>
                 <ul className="mt-2 space-y-1.5 text-[13px] leading-[1.5] text-zinc-300/85">
-                  <li>· "Did Vantage pay for itself this month?" check-in (NPS-light)</li>
-                  <li>· Review every customer's filter freshness — propose updates</li>
+                  <li>· &quot;Did Vantage pay for itself this month?&quot; check-in (NPS-light)</li>
+                  <li>· Review every customer&apos;s filter freshness — propose updates</li>
                   <li>· Pull churn list, run win-back on anyone gone 30+ days</li>
                   <li>· Identify upsell candidates from behavior signals</li>
                 </ul>
@@ -309,7 +309,7 @@ export default function CustomerSuccessPage() {
                   Quarterly
                 </div>
                 <ul className="mt-2 space-y-1.5 text-[13px] leading-[1.5] text-zinc-300/85">
-                  <li>· Customer success review — what's working, what's broken</li>
+                  <li>· Customer success review — what&apos;s working, what&apos;s broken</li>
                   <li>· Pricing model audit (raise, hold, restructure)</li>
                   <li>· Product feedback synthesis → roadmap input</li>
                   <li>· Win/loss report on cancelled customers</li>

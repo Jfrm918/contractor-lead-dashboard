@@ -28,32 +28,29 @@
 
 ## 3. Work in flight (claim before starting; clear when done)
 
-- **(none right now)** — claim format: `[YYYY-MM-DD HH:MM] [Athena|Argus] working on <project>:<area> — eta <X>` 
+- **[2026-05-10 21:50] Athena working on marquee-studio:hub build — eta tonight.** New project at `~/.openclaw/workspace/marquee-studio/`. Internal hub for Marquee Studio (local web design freelance, Tulsa-area trades, Webflow handoff model). Liquid-glass design, 8 pages (overview/pricing/process/roles/discovery/contract/handoff/pipeline). Not deployed yet — pending Jason's OK.
 
 ---
 
 ## 4. Recent decisions (last 10, newest first — older roll off)
 
-- 2026-05-10 20:31 — **Argus broadened Kalshi watchdog to all markets.** Script now scans open events with nested markets across all categories (politics/entertainment/tech/novelty included) and filters by edge/microstructure/time-decay only; cron/silence/dedupe/6-day cap unchanged.
-- 2026-05-10 20:10 — **Argus added Kalshi opportunity watchdog.** Script: `~/.hermes/scripts/check-kalshi-opportunities.py`; Hermes cron `b2ca254bfcb7` runs every 15 min, no-agent, Telegram delivery, self-silences outside 7am-11pm CT and caps alerts at 6/day. Public API note: `trading-api.kalshi.com` returns migration notice; live unauth endpoint is `https://api.elections.kalshi.com/trade-api/v2`.
-- 2026-05-10 19:35 — **Vantage 2.0 LIVE on apexdataco.vercel.app.** Athena committed (3ca9fb4), pushed, deployed. Hub view, landing, pricing tiers all show CRE/lender/title/broker positioning. Argus's earlier cleanup commit (9d857cc) also live. Plus: created `/Users/jfrm918/.openclaw/workspace/vantage-product-marketing-context.md` — persistent source of truth for all Vantage marketing/sales output (per Corey Haines marketing-skills repo pattern). Both Athena + Argus must read it before drafting any landing copy, cold email, demo script. Day-30 kill criteria locked: zero customers + zero warm intros + zero "this is exactly what I need" cold reactions → pivot to AI-augmented productized agency for SMB vertical.
-- 2026-05-10 18:15 — **Vantage strategic pivot locked.** Was: B2B intel for construction-supply vendors (insulation, roofing, equipment rental). Stepdad market signal said vendors are saturated. New: B2B intel for **commercial lenders, title/closing companies, and CRE brokers** in Tulsa. Same scraper + permit data + AI enrichment, plus new layers (property transfers from county recorder, loan maturity tracking, distress signals). Pricing reset: Lender $499/mo, Title $399/mo, Broker $299/mo, Pro Pipeline $999/mo. Why now: Jason's grandma is in lending (40 yr Tulsa network), papa Dave Cocolin = CEO of Paradigm Realty Advisors, uncle Jason Hadrava = co-founder Titan Title (9 offices). Warm-intro path is real once the rebuild is done. Competitors to position against: Reonomy ($400/mo, national, no permits), CompStak (lease/sales comps), Crexi (marketplace). Athena handling rewrite now.
-- 2026-05-10 17:30 — **Argus promoted to Rung 2** — can now autonomously apply + locally-commit lint fixes, formatting, confirmed-dead-code removal, unused imports, stale-pending-note cleanup, and comment typos. Commit messages prefixed `[argus auto]` for audit. Cap: 5 autonomous commits/day. Still NEVER pushes to remote, deploys, modifies schema, or touches .env. SOUL.md updated with full Rung 2 rules + trust ladder. Promotion to Rung 3 (small logic fixes + preview deploys) requires 1 week of zero mistakes.
-- 2026-05-10 15:05 — Argus capabilities expanded: (a) **vercel-deploy-watch** cron added — checks every 15 min for failed deploys on foamdial + apexdata projects, alerts Telegram only if broken (silent otherwise). Script at `~/.hermes/scripts/check-vercel-deploys.sh`. (b) Subagent delegation enabled — morning-sweep cron now spawns parallel subagents per project for faster, deeper sweeps. SOUL.md updated with delegation guidance.
-- 2026-05-10 14:35 — Athena fixed all 3 issues from Argus's first sweep: (1) 7 ESLint set-state-in-effect errors silenced with `// eslint-disable-next-line` + justification (legit data-fetch / auto-fill patterns), (2) viewport export split from metadata in layout.tsx (Next 16 spec), (3) deleted stale `_field-events-pending.md` (work it described shipped May 10). Also cleaned up unused `equipmentExpanded`/`inputMode`/`logMode`/`selectedBrand` from the JobLogger refactor. Build green, deployed to foamdial.vercel.app.
-- 2026-05-10 — Argus runs on GPT-5 (OpenAI Codex OAuth), Athena on Claude. Argus is read-only / Path A — alerts only, Athena handles fixes via forward-from-Jason.
-- 2026-05-10 — FoamDial JobLogger split into 3 phases (Morning / Midday / EOD) with phase-specific sections. Equipment readings now required + always visible. Sets/gallons toggle removed (gallons-only). Brand chips removed. Address read-only when site linked.
-- 2026-05-10 — FoamDial site lifecycle: status changes happen at EOD close-out via "How did the day end?" picker. Bottom site-actions panel is for manual override only.
-- 2026-05-10 — Estimated material cost now gated to `viewMode === "owner"` (sidebar pill toggle Owner | Installer); installers don't see cost.
-- 2026-05-10 — Installed Hermes Agent at `~/.hermes/`. Created Argus persona for background dev/QA.
-- 2026-05-09 — Vantage hub: built `/vantage/hub/tulsa` with 18-trade filter + AI outreach drafts. Stepdad said no on Vantage ("I already use someone, get as many leads as I want") — paused, focus shifted to FoamDial.
-- 2026-05-08 → 09 — Apex Data renamed to Vantage across the codebase. Pricing locked at $149/$299/$499/mo three tiers (NOT $99 — old pilot placeholder).
+- 2026-05-11 11:55 — **Athena cleaned contractor-lead-system/app lint 166→0.** Categories: 136 `react/no-unescaped-entities` (scripted via positional ESLint JSON output), 14 unused imports/vars (mechanical), 1 `require()` → top-level import in `twilio-verify.ts`, 5 `prefer-const` (auto-fix), 10 `react-hooks/set-state-in-effect` disabled per-line with intent comments (SSR-safe localStorage hydration, hover/motion media-query feature detection, demo-URL routing, polling fetch). No logic changed.
+- 2026-05-10 22:18 — **Marquee Studio renamed to Green Country Web Co.** (regional brand — "Green Country" is NE Oklahoma's nickname). Tier names also renamed: Marquee/Marquee+ → Main Street/Main Street+. Hub repo path still `marquee-studio/` (folder rename deferred). All page copy + nav + contract + memory updated.
+- 2026-05-10 21:50 — **NEW PROJECT: Green Country Web Co.** (originally named Marquee). Jason's 4th income stream alongside FoamDial, Vantage/Apex, Kalshi. Side-income freelance web design for Tulsa-area local businesses. **Argus role:** twice-daily scrape of local biz directories (Yelp, Maps, BBB) → site-quality scoring (mobile + desktop) → top 5 candidates per scan to Telegram. **Madison:** outreach voice + cadence. **Jason:** closes. **Athena:** builds in Webflow + handoff. Pricing $1.5K-$3.5K one-time. Clean walk-away (client owns domain/host/email). **ARGUS — REVIEW REQUESTED:** see `marquee-studio/` hub + section 7 below for what we want from you.
+- 2026-05-10 21:55 — **Jason un-paused FoamDial Job Sites.** Reversing the 21:25 pause. Still confirming with him whether to resume work tonight or just remove from parked list.
+- 2026-05-10 21:24 — **Athena improved Kalshi alert readability** (`9cf4b7b`): Argus alerts/digests now show Kalshi-style % first with cents in parentheses, e.g. `23% (23¢)`.
+- 2026-05-10 21:20 — **Argus cleared his active WIP claim.** Kalshi C0→C2 is committed; remaining A3/A4 weekly retro + C4 ack-rate auto-tune are queued for tomorrow/cap reset, not active tonight. `~/.hermes/cron/jobs.json` has scheduler timestamp drift only.
+- 2026-05-10 21:17 — **Argus shipped Kalshi C2 work-hours digest mode** (`648d62f`): Mon-Fri 7-17 CT candidates queue to `kalshi-pending-digest.json`; end-hour digest emits top remaining, journals emitted items, dry-run no-write verified.
+- 2026-05-10 21:17 — **Argus hit 5 `[argus auto]` commits/24h cap** in `~/.hermes`; defer A3/A4 weekly retro + C4 ack-rate auto-tune until cap resets or Jason explicitly overrides.
+- 2026-05-10 21:05 — **Argus shipped Kalshi C1-C3 config+ack sweep** (`50df263`): defaults include work-hours/ack knobs; `kalshi-ack-sweep.py` runs every 30m no-agent.
+- 2026-05-10 21:03 — **Argus shipped Kalshi A1-A2 journal write-on-emit** (`a4e2f11`): emitted alerts append to `~/.hermes/state/kalshi-journal.json` with `ack_status=unseen`.
 
 ---
 
 ## 5. Open issues / known bugs (lowest-effort first)
 
-- *(none flagged at the moment — Argus will populate this section as he sweeps)*
+- **[2026-05-11 07:00] foam-dial-pro lint warnings remain:** build/typecheck pass; `npx eslint .` reports 11 warnings (unused imports/vars, unused disable comments, `<img>` optimization warnings, one hook dependency warning). Argus auto-fix skipped because `[argus auto]` 24h cap is already at 5.
+- **[2026-05-11 11:55] contractor-lead-system/app lint CLEAN.** Athena cleared all 166 problems (136 unescaped entities scripted, 14 unused imports/vars, 1 require()→import, 10 set-state-in-effect disabled per-line with intent comments). Build + typecheck still pass.
 
 ---
 
@@ -64,3 +61,20 @@
 - Never touch `.env` files.
 - If you discover the OTHER agent has work-in-flight on the same file, defer or coordinate — never silently double-handle.
 - When you update this file, mention it in your reply to Jason ("Updated SHARED.md with X") so he knows the source of truth changed.
+
+---
+
+## 7. Marquee Studio — ARGUS REVIEW REQUEST (Athena, 2026-05-10 21:50)
+
+**The ask:** I built the v0.1 internal hub at `~/.openclaw/workspace/marquee-studio/` (Next.js 16, Tailwind v4, liquid-glass design, 8 pages). Before Jason deploys it, would value your read on the operational/prospecting side — that's your lane.
+
+**Specifically:**
+1. **Prospecting source mix.** Hub assumes Yelp + Google Maps + BBB scrapes. Anything I'm missing for Tulsa-area trades/restaurants/services? (Nextdoor business listings? Chamber of commerce? County business license public data?)
+2. **Site-quality scoring rubric** (see `/pipeline` page). I proposed weights for mobile-broken (+30), no-SSL (+20), old-design (+15), no-CTA (+15), slow-load (+10), stock-photo overload (+10). You've built more scoring rubrics than I have — push back if these weights are off or if I'm missing a signal.
+3. **Cadence.** Twice-daily Argus scan, top 5 per scan. That's 70/week — far more than Madison can outreach (target: 25 sends/wk). Should I drop to once-daily, or keep 2× and let Madison cherry-pick?
+4. **Validation phase metrics.** I set: 30-day window, kill if 0 builds + reply rate <5% on 25+ sends. Fair? Or too aggressive / too lenient?
+5. **Demo mock automation.** I want a v2 where Argus generates an AI-rebuilt static screenshot of the prospect's site BEFORE outreach goes out. Feasible in your stack? Or is that better as an Athena-side Webflow + Playwright job?
+
+**Not asking you to write anything tonight** — drop thoughts in section 4 (Recent decisions) when you have cycles. No urgency, this is validation-phase not build-now.
+
+**Files to skim:** `marquee-studio/src/app/pipeline/page.tsx` (scoring + validation), `marquee-studio/src/app/roles/page.tsx` (your role spec). Hub will run at localhost:3000 once Athena boots dev; not deployed.

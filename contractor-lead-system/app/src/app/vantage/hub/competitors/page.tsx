@@ -261,7 +261,7 @@ export default function CompetitorsPage() {
 
           <Section title="Where we sit on the price/scope grid" eyebrow="Positioning">
             <Note>
-              <ThesisPill /> A buyer's mental map: cost on one axis, "how directly it maps to my CRE workflow" on the other. Free portals cost nothing but require all the work. National CRE data tools are broad but expensive. Construction products like Dodge and Construction Monitor mostly target contractors. We sit deliberately in the local-action lane — focused scope, CRE-specific workflow, real intelligence.
+              <ThesisPill /> A buyer&apos;s mental map: cost on one axis, &quot;how directly it maps to my CRE workflow&quot; on the other. Free portals cost nothing but require all the work. National CRE data tools are broad but expensive. Construction products like Dodge and Construction Monitor mostly target contractors. We sit deliberately in the local-action lane — focused scope, CRE-specific workflow, real intelligence.
             </Note>
             <div className="mt-5 grid gap-3 lg:grid-cols-5">
               {POSITIONING.map((p) => (
@@ -292,35 +292,35 @@ export default function CompetitorsPage() {
             <div className="space-y-4">
               <Card>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300/90">
-                  "We already use Reonomy / CompStak"
+                  &quot;We already use Reonomy / CompStak&quot;
                 </div>
                 <p className="mt-2 text-[13.5px] italic leading-[1.55] text-zinc-200">
-                  "Got it — those are strong national CRE datasets. We're not replacing them. We're the Tulsa action layer: fresh permits translated into sponsor, lending, title, refi/take-out, and broker timing. Want me to send next Monday's list so you can compare the local signal quality?"
+                  &quot;Got it — those are strong national CRE datasets. We&apos;re not replacing them. We&apos;re the Tulsa action layer: fresh permits translated into sponsor, lending, title, refi/take-out, and broker timing. Want me to send next Monday&apos;s list so you can compare the local signal quality?&quot;
                 </p>
               </Card>
               <Card>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300/90">
-                  "We already use Crexi"
+                  &quot;We already use Crexi&quot;
                 </div>
                 <p className="mt-2 text-[13.5px] italic leading-[1.55] text-zinc-200">
-                  "Crexi is great once a property is being marketed. We're earlier: permits that show sponsor movement before lease-up, refi, take-out, sale, or tenant-rep opportunities are obvious. Different layer."
+                  &quot;Crexi is great once a property is being marketed. We&apos;re earlier: permits that show sponsor movement before lease-up, refi, take-out, sale, or tenant-rep opportunities are obvious. Different layer.&quot;
                 </p>
               </Card>
               <Card>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300/90">
-                  "We just check the city portal ourselves"
+                  &quot;We just check the city portal ourselves&quot;
                 </div>
                 <p className="mt-2 text-[13.5px] italic leading-[1.55] text-zinc-200">
-                  "Totally — that's how everyone starts. Two questions: how many hours a week
-                  does that take, and what is one missed loan, closing, listing, or referral worth? Vantage saves the portal grind and adds sponsor/entity context, project value, parcel/address, and the CRE workflow angle the portal does not give you."
+                  &quot;Totally — that&apos;s how everyone starts. Two questions: how many hours a week
+                  does that take, and what is one missed loan, closing, listing, or referral worth? Vantage saves the portal grind and adds sponsor/entity context, project value, parcel/address, and the CRE workflow angle the portal does not give you.&quot;
                 </p>
               </Card>
               <Card>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-300/90">
-                  "We pay for a permit feed already"
+                  &quot;We pay for a permit feed already&quot;
                 </div>
                 <p className="mt-2 text-[13.5px] italic leading-[1.55] text-zinc-200">
-                  "Good — that proves the raw feed matters. We are not selling raw permits to contractors. We turn permits into CRE actions: which sponsor moved, what loan/refi/title/broker angle exists, what to watch next, and why it matters this week. Want me to send our Monday view side-by-side with the raw feed?"
+                  &quot;Good — that proves the raw feed matters. We are not selling raw permits to contractors. We turn permits into CRE actions: which sponsor moved, what loan/refi/title/broker angle exists, what to watch next, and why it matters this week. Want me to send our Monday view side-by-side with the raw feed?&quot;
                 </p>
               </Card>
             </div>

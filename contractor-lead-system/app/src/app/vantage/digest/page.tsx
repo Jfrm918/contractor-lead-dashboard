@@ -129,7 +129,7 @@ function Opener() {
       <p>
         Hey — Madison here. Three projects worth your attention this week.{' '}
         <span className="font-medium text-white">Crossland Construction</span> filed three
-        commercial permits in five days, and there's a 24,800 sf warehouse on Mingo Rd that's
+        commercial permits in five days, and there&apos;s a 24,800 sf warehouse on Mingo Rd that&apos;s
         likely to move quickly. Top three are below, full table at the bottom.
       </p>
       <p className="mt-4 text-zinc-500">— Madison</p>

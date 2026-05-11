@@ -38,6 +38,7 @@ export default function HubClient() {
       if (raw) {
         const parsed = JSON.parse(raw) as HubState;
         if (parsed.prospects && parsed.actions) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe localStorage hydration on mount
           setState(parsed);
         }
       }

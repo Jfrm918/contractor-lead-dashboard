@@ -183,7 +183,7 @@ export default function ColdEmailLibraryPage() {
             <Note>
               <ThesisPill /> The principles below are what works for us specifically — small B2B,
               single-sender, real human voice. They borrow from established cold-email playbooks
-              (Steli Efti / Close, Outbound Sales by Jeb Blount, Mailshake's docs) but the
+              (Steli Efti / Close, Outbound Sales by Jeb Blount, Mailshake&apos;s docs) but the
               specific phrasing is calibrated for our buyers.
             </Note>
             <ul className="mt-5 space-y-2 text-[14px] leading-[1.6] text-zinc-300/90">

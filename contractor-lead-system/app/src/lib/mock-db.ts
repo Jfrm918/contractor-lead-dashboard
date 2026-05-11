@@ -212,11 +212,11 @@ const seedKnownCallers: MockKnownCaller[] = [];
 
 // ─── In-memory store (mutable copies) ───
 
-let clients = structuredClone(seedClients);
-let settings = structuredClone(seedSettings);
-let leads: MockLead[] = [];
-let events: MockLeadEvent[] = [];
-let knownCallers = structuredClone(seedKnownCallers);
+const clients = structuredClone(seedClients);
+const settings = structuredClone(seedSettings);
+const leads: MockLead[] = [];
+const events: MockLeadEvent[] = [];
+const knownCallers = structuredClone(seedKnownCallers);
 
 // ─── Accessors ───
 

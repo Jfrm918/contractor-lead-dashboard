@@ -8,7 +8,7 @@
  */
 
 import { env } from "./env";
-import { createHmac } from "crypto";
+import { createHmac, timingSafeEqual as nodeTimingSafeEqual } from "crypto";
 
 /**
  * Validate that an incoming request was signed by Twilio.
@@ -98,10 +98,9 @@ function timingSafeEqual(a: string, b: string): boolean {
   const bufA = Buffer.from(a);
   const bufB = Buffer.from(b);
 
-  // Node's crypto.timingSafeEqual requires equal-length buffers
+  // Node's crypto.timingSafeEqual requires equal-length buffers (guarded above).
   try {
-    const { timingSafeEqual: tse } = require("crypto");
-    return tse(bufA, bufB);
+    return nodeTimingSafeEqual(bufA, bufB);
   } catch {
     // Fallback — still constant-time-ish
     let result = 0;

@@ -46,8 +46,8 @@ function Header() {
       </h1>
       <p className="mt-3 max-w-3xl text-[15px] leading-[1.6] text-zinc-300/85">
         Every number on this page is tagged{' '}
-        <FactPill /> if it's from a verifiable public source, or <ThesisPill /> if it's our
-        strategic call — with the reasoning shown so it's defensible. No fabricated stats.
+        <FactPill /> if it&apos;s from a verifiable public source, or <ThesisPill /> if it&apos;s our
+        strategic call — with the reasoning shown so it&apos;s defensible. No fabricated stats.
       </p>
     </header>
   );
@@ -136,9 +136,9 @@ function ROICalc() {
   return (
     <Section title="One closed lead pays for years of subscription" eyebrow="Customer ROI math">
       <Note>
-        <ThesisPill /> The framing below uses industry-standard ratios that we'll verify with each
+        <ThesisPill /> The framing below uses industry-standard ratios that we&apos;ll verify with each
         customer in discovery. Numbers shown are illustrative — when we pitch a specific buyer,
-        we'll plug in their actual margins.
+        we&apos;ll plug in their actual margins.
       </Note>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
@@ -171,8 +171,8 @@ function ROICalc() {
       <div className="mt-6 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 text-sm text-zinc-300/90">
         <span className="font-semibold text-white">The pricing thesis in one line:</span>{' '}
         if the customer closes <em className="text-amber-300 not-italic">one</em> deal a year off
-        our digest, the ROI math is unambiguous. We're not selling against "is it worth it" — we're
-        selling against "do you trust the data."
+        our digest, the ROI math is unambiguous. We&apos;re not selling against &quot;is it worth it&quot; — we&apos;re
+        selling against &quot;do you trust the data.&quot;
       </div>
     </Section>
   );
@@ -295,7 +295,7 @@ function Competitive() {
     <Section title="What customers compare us to" eyebrow="Competitive landscape">
       <Note>
         <FactPill /> Pricing rows are from public/published vendor sources, with the source named
-        in the right column. "Enterprise quote" means we couldn't find a public list price.
+        in the right column. &quot;Enterprise quote&quot; means we couldn&apos;t find a public list price.
       </Note>
       <div className="mt-6 overflow-hidden rounded-xl border border-white/[0.06]">
         <table className="w-full text-[13px]">
@@ -327,7 +327,7 @@ function Competitive() {
         <span className="font-semibold text-white">Where we sit:</span>{' '}
         priced 5–10× cheaper than Dodge, similar tier to ConstructConnect, but with a sharper
         product (curated digest + verified contacts vs. bid management). The free permit portals
-        are the real "competition" — we win when the buyer's time is worth more than $5/hour.
+        are the real &quot;competition&quot; — we win when the buyer&apos;s time is worth more than $5/hour.
       </div>
     </Section>
   );
@@ -381,7 +381,7 @@ function UnitEconomics() {
       <Note>
         <ThesisPill /> Operating cost figures are from current vendor pricing on Apollo, Hunter,
         Smartlead, Resend, Vercel — public list prices as of 2026. Customer acquisition cost is
-        modeled, not measured (we don't have customers yet to measure).
+        modeled, not measured (we don&apos;t have customers yet to measure).
       </Note>
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <UnitCard
@@ -445,7 +445,7 @@ function RevisitTriggers() {
   return (
     <Section title="When we revisit pricing" eyebrow="Revisit triggers">
       <Note>
-        <ThesisPill /> Strategic call. Don't change prices at random — change them on signal.
+        <ThesisPill /> Strategic call. Don&apos;t change prices at random — change them on signal.
       </Note>
       <div className="mt-6 grid gap-3 lg:grid-cols-2">
         {[
@@ -635,8 +635,8 @@ function RevenueProjections() {
         <span className="font-semibold text-amber-300">Year-1 reality check:</span>{' '}
         the original target was $80K – $300K ARR. At the realistic mix, that translates to
         roughly <span className="font-semibold tabular-nums">25 to 100 paying customers</span>{' '}
-        — meaning the goal isn't "find one giant whale," it's "close 1–2 customers a week
-        sustained." That's a Madison job we can actually do.
+        — meaning the goal isn&apos;t &quot;find one giant whale,&quot; it&apos;s &quot;close 1–2 customers a week
+        sustained.&quot; That&apos;s a Madison job we can actually do.
       </div>
     </Section>
   );

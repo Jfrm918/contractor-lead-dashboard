@@ -18,7 +18,7 @@ export default function BillingPage() {
             blurb="Today logs events from the Customers tab. Friday we wire Stripe webhooks so real charges + failures + renewals flow in automatically."
           />
           <Note>
-            <ThesisPill /> Stripe integration is on Friday's build list. Account setup waits on LLC + bank (Saturday morning).
+            <ThesisPill /> Stripe integration is on Friday&apos;s build list. Account setup waits on LLC + bank (Saturday morning).
           </Note>
           <div className="mt-8" />
           <BillingClient />

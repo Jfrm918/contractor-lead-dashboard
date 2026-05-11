@@ -90,8 +90,8 @@ export default function MorningBriefingPage() {
           />
 
           <Note>
-            <FactPill /> Status of every "done" item is reflected in the live codebase (you can verify
-            by visiting the linked route). <ThesisPill /> Recommendations on decisions are Athena's
+            <FactPill /> Status of every &quot;done&quot; item is reflected in the live codebase (you can verify
+            by visiting the linked route). <ThesisPill /> Recommendations on decisions are Athena&apos;s
             opinion with reasoning — you decide.
           </Note>
 
@@ -153,7 +153,7 @@ export default function MorningBriefingPage() {
                     </div>
                     <div>
                       <div className="text-[10.5px] font-semibold uppercase tracking-wider text-emerald-300/80">
-                        Athena's call
+                        Athena&apos;s call
                       </div>
                       <div className="mt-1 text-[13px] leading-[1.5] text-zinc-200">{d.recommendation}</div>
                     </div>
@@ -198,10 +198,10 @@ export default function MorningBriefingPage() {
                 ))}
               </ol>
               <p className="mt-5 border-t border-white/[0.05] pt-4 text-[12px] leading-[1.6] text-zinc-400">
-                These weren't done overnight because each is a multi-hour task with breaking-change
-                risk (DB schema, auth, external scraper). I'd rather build them with you in the loop
+                These weren&apos;t done overnight because each is a multi-hour task with breaking-change
+                risk (DB schema, auth, external scraper). I&apos;d rather build them with you in the loop
                 so you can verify before I commit to deployment. Confirm any/all tomorrow evening
-                and I'll execute.
+                and I&apos;ll execute.
               </p>
             </Card>
           </Section>
@@ -238,7 +238,7 @@ export default function MorningBriefingPage() {
                 <Pulse label="Domain" value="Not yet locked (Saturday)" />
               </div>
               <p className="mt-5 border-t border-white/[0.05] pt-4 text-[13px] leading-[1.55] text-zinc-300/85">
-                We're on day 2. The hub + landing page are built. The brand is locked. Pricing is
+                We&apos;re on day 2. The hub + landing page are built. The brand is locked. Pricing is
                 set with defensible math. The next 5 days are about{' '}
                 <span className="font-semibold text-amber-300">paperwork (Saturday)</span> and{' '}
                 <span className="font-semibold text-amber-300">prospect list-building</span> so

@@ -316,7 +316,7 @@ export default function IdeasBacklogPage() {
           />
 
           <Note>
-            <ThesisPill /> Priorities and effort estimates are Athena's call. Effort sizes:{' '}
+            <ThesisPill /> Priorities and effort estimates are Athena&apos;s call. Effort sizes:{' '}
             <span className="font-mono">S</span> = under 30 min,{' '}
             <span className="font-mono">M</span> = 30 min–2 hr,{' '}
             <span className="font-mono">L</span> = 2–6 hr,{' '}
@@ -383,7 +383,7 @@ export default function IdeasBacklogPage() {
                     2
                   </span>
                   <span>
-                    Tell me which 1–3 P1s you want shipped this week. I'll execute in order of your
+                    Tell me which 1–3 P1s you want shipped this week. I&apos;ll execute in order of your
                     pick.
                   </span>
                 </li>
@@ -392,8 +392,8 @@ export default function IdeasBacklogPage() {
                     3
                   </span>
                   <span>
-                    P2/P3 stay parked unless conditions change. I'll surface them on the morning
-                    briefing when their "do when" trigger fires.
+                    P2/P3 stay parked unless conditions change. I&apos;ll surface them on the morning
+                    briefing when their &quot;do when&quot; trigger fires.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
@@ -402,7 +402,7 @@ export default function IdeasBacklogPage() {
                   </span>
                   <span>
                     I add new ideas to this list any time I find something that could move the
-                    business. You don't have to do anything with them until you want to.
+                    business. You don&apos;t have to do anything with them until you want to.
                   </span>
                 </li>
               </ol>

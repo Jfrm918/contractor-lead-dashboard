@@ -54,6 +54,7 @@ function useAdminState() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as AdminState;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe localStorage hydration on mount
         if (parsed.customers && parsed.events) setState(parsed);
       }
     } catch { /* ignore */ }
@@ -260,7 +261,7 @@ export function CustomersClient() {
             {state.customers.length === 0 && (
               <tr>
                 <td colSpan={7} className="px-4 py-12 text-center text-sm text-zinc-500">
-                  No customers yet. The "+ Add customer" button is ready for the moment stepdad says yes.
+                  No customers yet. The &quot;+ Add customer&quot; button is ready for the moment stepdad says yes.
                 </td>
               </tr>
             )}

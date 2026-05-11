@@ -61,7 +61,7 @@ export default function OverviewPage({ onViewLead }: OverviewPageProps) {
   const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics>(mockDashboardMetrics);
   const [funnelDataState, setFunnelDataState] = useState<FunnelData>(mockFunnelData);
   const [allLeads, setAllLeads] = useState<Lead[]>(mockLeads);
-  const [activity, setActivity] = useState<ActivityEvent[]>(mockRecentActivity);
+  const activity: ActivityEvent[] = mockRecentActivity;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

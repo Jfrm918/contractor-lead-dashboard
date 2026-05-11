@@ -19,10 +19,10 @@ export default function VantageHub() {
               Today
             </p>
             <h1 className="mt-2 text-balance text-4xl font-semibold tracking-[-0.03em] text-white sm:text-[44px]">
-              Tonight's board.
+              Tonight&apos;s board.
             </h1>
             <p className="mt-3 max-w-3xl text-[15px] leading-[1.6] text-zinc-300/85">
-              One screen for what we're building, who we're chasing, and where we are on the
+              One screen for what we&apos;re building, who we&apos;re chasing, and where we are on the
               90-day plan.
             </p>
           </header>

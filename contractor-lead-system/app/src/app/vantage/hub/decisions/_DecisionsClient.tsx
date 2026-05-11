@@ -122,6 +122,7 @@ export default function DecisionsClient() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as Decision[];
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe localStorage hydration on mount
         if (Array.isArray(parsed)) setDecisions(parsed);
       }
     } catch { /* ignore */ }

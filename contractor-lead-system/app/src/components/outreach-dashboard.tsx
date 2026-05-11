@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, ExternalLink, Heart, Mail, Phone, Search, Send, Sparkles, Star, StickyNote, Target } from 'lucide-react';
+import { Copy, ExternalLink, Heart, Mail, Phone, Search, Send, Sparkles, StickyNote, Target } from 'lucide-react';
 import { tulsaProspects, type ProspectTrade, type TulsaProspect } from '@/lib/tulsa-prospects';
 
 type OutreachStatus = 'Not Contacted' | 'Email Sent' | 'Follow-Up 1' | 'Follow-Up 2' | 'Replied' | 'Demo Booked' | 'Pilot Offered' | 'Won' | 'Lost';
@@ -144,7 +144,7 @@ export default function OutreachDashboard() {
   }
 
   if (loading) {
-    return <div className="rounded-3xl border border-pink-300/15 bg-pink-300/[0.06] p-8 text-pink-100">Loading Madison's outreach desk…</div>;
+    return <div className="rounded-3xl border border-pink-300/15 bg-pink-300/[0.06] p-8 text-pink-100">Loading Madison&apos;s outreach desk…</div>;
   }
 
   return (

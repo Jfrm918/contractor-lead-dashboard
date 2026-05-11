@@ -25,6 +25,7 @@ export default function FunnelClient() {
       if (raw) {
         const parsed = JSON.parse(raw) as HubState;
         if (parsed && Array.isArray(parsed.prospects)) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe localStorage hydration on mount
           setState(parsed);
         }
       }
@@ -54,7 +55,6 @@ export default function FunnelClient() {
   const total = state.prospects.length || 1;
   const customers = counts.customer;
   const verbal = counts.verbal;
-  const demo = counts.demo;
   const replied = counts.replied + counts.demo + counts.verbal + counts.customer;
   const cold = counts.cold;
 

@@ -1,10 +1,7 @@
 import { prisma, dbAvailable } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { apiSuccess, apiError, apiServerError } from "@/lib/api-response";
-import {
-  leads as mockLeads,
-  type Lead as MockLead,
-} from "@/lib/data";
+import { leads as mockLeads } from "@/lib/data";
 import type { NextRequest } from "next/server";
 
 // GET /api/leads

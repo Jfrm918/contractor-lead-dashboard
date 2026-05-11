@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, ExternalLink, MapPin, Search, Star, Users, Target, Filter, ClipboardCheck } from 'lucide-react';
+import { Mail, Phone, ExternalLink, MapPin, Search, Star, Target, Filter, ClipboardCheck } from 'lucide-react';
 import { tulsaProspects, type ProspectTier, type ProspectTrade } from '@/lib/tulsa-prospects';
 
 const tiers: ProspectTier[] = ['Nurture', 'Solid Fit', 'Strong Fit', 'Best Bets'];

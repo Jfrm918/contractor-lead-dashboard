@@ -21,6 +21,7 @@ export function CursorGlow({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (!window.matchMedia('(hover: hover)').matches) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe hover capability check
     setEnabled(true);
   }, []);
 
@@ -158,6 +159,7 @@ export function MouseLight({
     if (typeof window === 'undefined') return;
     if (!window.matchMedia('(hover: hover)').matches) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe hover + motion check
     setEnabled(true);
   }, []);
 
@@ -230,6 +232,7 @@ export function HoverSpot({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (!window.matchMedia('(hover: hover)').matches) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe hover capability check
     setEnabled(true);
   }, []);
 

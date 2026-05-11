@@ -20,8 +20,8 @@ export default function DecisionsLogPage() {
             blurb="Tomorrow-Jason and tomorrow-Madison won't remember why we made a call today. This is where we save the WHY so we can defend, revisit, or reverse with full context."
           />
           <Note>
-            <ThesisPill /> Best practice from Amazon (the "memo culture"), Stripe internal docs,
-            and Notion's company-wiki playbook: every non-trivial decision deserves 3 sentences
+            <ThesisPill /> Best practice from Amazon (the &quot;memo culture&quot;), Stripe internal docs,
+            and Notion&apos;s company-wiki playbook: every non-trivial decision deserves 3 sentences
             of written reasoning. Skipping this step is the #1 reason small companies drift —
             you forget why you chose X and end up undoing it for nothing.
           </Note>
