@@ -1,11 +1,12 @@
 import { VantageAtmosphere } from '../../_components/shell';
 import HubNav from '../_components/HubNav';
 import permitsData from '@/data/tulsa-permits-live.json';
-import TradeFilteredPermits from './_TradeFilteredPermits';
+import AudienceFilteredPermits from './_AudienceFilteredPermits';
 
 export const metadata = {
-  title: 'Vantage — Tulsa live permits',
-  description: 'Live high-value Tulsa construction permits with verified contractor contacts, filtered by trade.',
+  title: 'Vantage — Tulsa commercial real estate signal',
+  description:
+    'Live Tulsa commercial construction permits with sponsor contacts — filtered for lenders, title companies, brokers, and developers.',
 };
 
 type Contact = {
@@ -51,7 +52,12 @@ const DATA = permitsData as PermitsFile;
 
 export default function TulsaLivePermits() {
   const fetchedAt = new Date(DATA.fetchedAt);
-  const fetchedLabel = fetchedAt.toLocaleString('en-US', { month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  const fetchedLabel = fetchedAt.toLocaleString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
   const withEmail = DATA.permits.filter((p) => p.contacts.some((c) => c.email)).length;
   const withPhone = DATA.permits.filter((p) => p.contacts.some((c) => c.phone)).length;
 
@@ -63,16 +69,17 @@ export default function TulsaLivePermits() {
         <main className="mx-auto max-w-7xl px-6 py-10 sm:py-14">
           <header className="mb-10">
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-300/90">
-              Tulsa · live · multi-trade
+              Tulsa · live · commercial real estate signal
             </p>
             <h1 className="mt-2 text-balance text-4xl font-semibold tracking-[-0.03em] text-white sm:text-[44px]">
-              {DATA.enrichedCount} high-value permits, {withEmail} verified contacts, sliced by trade.
+              {DATA.enrichedCount} commercial permits, {withEmail} verified sponsor contacts.
             </h1>
             <p className="mt-3 max-w-3xl text-[15px] leading-[1.6] text-zinc-300/85">
-              The last {DATA.windowDays} days of Tulsa construction activity, pulled directly from
-              the City of Tulsa Self-Service Portal. Filter the same dataset by trade — each vendor
-              gets the slice that matters to them, the right outreach window, and a draft email
-              ready to send.
+              The last {DATA.windowDays} days of Tulsa commercial construction activity, pulled
+              directly from the City of Tulsa Self-Service Portal. Filter the same dataset by
+              audience — lenders see refinance &amp; construction-loan opportunities, title
+              companies see future closings, brokers see leasing &amp; investment plays. Each gets
+              the right outreach window and a draft email ready to send.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] text-zinc-400">
               <span className="flex items-center gap-1.5">
@@ -81,22 +88,27 @@ export default function TulsaLivePermits() {
               </span>
               <span>Fetched {fetchedLabel}</span>
               <span>{DATA.totalCandidates} candidates scanned</span>
-              <span>{withEmail}/{DATA.enrichedCount} have email</span>
-              <span>{withPhone}/{DATA.enrichedCount} have phone</span>
+              <span>
+                {withEmail}/{DATA.enrichedCount} have email
+              </span>
+              <span>
+                {withPhone}/{DATA.enrichedCount} have phone
+              </span>
             </div>
           </header>
 
-          <TradeFilteredPermits permits={DATA.permits} />
+          <AudienceFilteredPermits permits={DATA.permits} />
 
           <footer className="mt-12 rounded-lg border border-white/10 bg-white/[0.02] p-5 text-[13px] leading-[1.6] text-zinc-400">
             <p className="mb-2 font-medium text-zinc-200">Methodology</p>
             <p>
               Vantage queries the City of Tulsa Self-Service Portal (Tyler EnerGov) directly,
-              filters for high-value construction work, and enriches each record with the project's
-              billing applicant and contractor contacts on file with the city. The same dataset
-              feeds every trade — what changes per subscriber is the filter, the outreach
-              timing, and the draft email tailored to their product. Updated daily; weekly digest
-              delivered Monday at 6:00 AM CT.
+              filters for commercial work above each audience&apos;s materiality threshold, and
+              enriches every record with the sponsor (applicant) and contractor on file with the
+              city. The same dataset feeds every audience — what changes per subscriber is the
+              filter, the outreach timing, and the draft email tailored to their workflow
+              (construction-to-perm financing, closing pipeline, leasing strategy, etc.). Updated
+              daily; weekly digest delivered Monday at 6:00 AM CT.
             </p>
           </footer>
         </main>

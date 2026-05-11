@@ -2,16 +2,16 @@
 
 import { useMemo, useState } from 'react';
 import {
-  ALL_TRADES_ID,
+  ALL_AUDIENCES_ID,
+  AUDIENCES,
+  AUDIENCES_BY_CATEGORY,
+  AUDIENCES_BY_ID,
   CATEGORY_LABELS,
-  permitMatchesTrade,
+  permitMatchesAudience,
   renderOutreachEmail,
-  TRADES,
-  TRADES_BY_CATEGORY,
-  TRADES_BY_ID,
-  type Trade,
-  type TradeCategory,
-} from '@/data/trades';
+  type Audience,
+  type AudienceCategory,
+} from '@/data/audiences';
 
 type Contact = {
   role: string | null;
@@ -43,72 +43,77 @@ type Permit = {
   portalUrl: string;
 };
 
-const CATEGORY_ORDER: TradeCategory[] = ['core-supply', 'finish', 'equipment', 'professional', 'services'];
+const CATEGORY_ORDER: AudienceCategory[] = ['lender', 'title', 'broker', 'developer'];
 
-export default function TradeFilteredPermits({ permits }: { permits: Permit[] }) {
-  const [selectedId, setSelectedId] = useState<string>(ALL_TRADES_ID);
-  const selectedTrade: Trade | null = selectedId === ALL_TRADES_ID ? null : TRADES_BY_ID[selectedId] || null;
+export default function AudienceFilteredPermits({ permits }: { permits: Permit[] }) {
+  const [selectedId, setSelectedId] = useState<string>(ALL_AUDIENCES_ID);
+  const selectedAudience: Audience | null =
+    selectedId === ALL_AUDIENCES_ID ? null : AUDIENCES_BY_ID[selectedId] || null;
 
   const filtered = useMemo(() => {
-    if (!selectedTrade) return permits;
-    return permits.filter((p) => permitMatchesTrade(p.type, selectedTrade));
-  }, [permits, selectedTrade]);
+    if (!selectedAudience) return permits;
+    return permits.filter((p) =>
+      permitMatchesAudience({ type: p.type, valuation: p.valuation }, selectedAudience),
+    );
+  }, [permits, selectedAudience]);
 
-  // Counts per trade for the badge display
-  const countsByTrade = useMemo(() => {
+  // Counts per audience for the pill badges
+  const countsByAudience = useMemo(() => {
     const counts: Record<string, number> = {};
-    for (const t of TRADES) {
-      counts[t.id] = permits.filter((p) => permitMatchesTrade(p.type, t)).length;
+    for (const a of AUDIENCES) {
+      counts[a.id] = permits.filter((p) =>
+        permitMatchesAudience({ type: p.type, valuation: p.valuation }, a),
+      ).length;
     }
     return counts;
   }, [permits]);
 
   return (
     <>
-      {/* Trade selector */}
+      {/* Audience selector */}
       <div className="mb-8 rounded-lg border border-white/10 bg-white/[0.02] p-4">
         <div className="mb-3 flex items-baseline justify-between">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-zinc-400">
-            Filter by trade
+            Filter by audience
           </p>
           <p className="text-[11px] text-zinc-500">
-            {selectedTrade
-              ? `${filtered.length} permit${filtered.length === 1 ? '' : 's'} match — ${selectedTrade.label}`
+            {selectedAudience
+              ? `${filtered.length} permit${filtered.length === 1 ? '' : 's'} match — ${selectedAudience.label}`
               : `Showing all ${permits.length} permits`}
           </p>
         </div>
 
         <button
           type="button"
-          onClick={() => setSelectedId(ALL_TRADES_ID)}
+          onClick={() => setSelectedId(ALL_AUDIENCES_ID)}
           className={`mb-3 inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[12px] font-medium transition-colors ${
-            selectedId === ALL_TRADES_ID
+            selectedId === ALL_AUDIENCES_ID
               ? 'border-amber-400/40 bg-amber-500/10 text-amber-100'
               : 'border-white/10 bg-white/[0.02] text-zinc-300 hover:border-white/20 hover:text-white'
           }`}
         >
-          All trades
+          All audiences
           <span className="text-[10.5px] text-zinc-500">{permits.length}</span>
         </button>
 
         <div className="space-y-2.5">
           {CATEGORY_ORDER.map((cat) => {
-            const tradesInCat = TRADES_BY_CATEGORY[cat];
-            if (!tradesInCat?.length) return null;
+            const audiencesInCat = AUDIENCES_BY_CATEGORY[cat];
+            if (!audiencesInCat?.length) return null;
             return (
               <div key={cat} className="flex flex-wrap items-center gap-2">
-                <span className="w-[88px] shrink-0 text-[10px] font-semibold uppercase tracking-[0.12em] text-zinc-500">
+                <span className="w-[110px] shrink-0 text-[10px] font-semibold uppercase tracking-[0.12em] text-zinc-500">
                   {CATEGORY_LABELS[cat]}
                 </span>
-                {tradesInCat.map((t) => {
-                  const c = countsByTrade[t.id] || 0;
-                  const selected = selectedId === t.id;
+                {audiencesInCat.map((a) => {
+                  const c = countsByAudience[a.id] || 0;
+                  const selected = selectedId === a.id;
                   const dim = c === 0 && !selected;
                   return (
                     <button
-                      key={t.id}
+                      key={a.id}
                       type="button"
-                      onClick={() => setSelectedId(t.id)}
+                      onClick={() => setSelectedId(a.id)}
                       disabled={c === 0}
                       className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[11.5px] font-medium transition-colors ${
                         selected
@@ -118,7 +123,7 @@ export default function TradeFilteredPermits({ permits }: { permits: Permit[] })
                             : 'border-white/10 bg-white/[0.02] text-zinc-300 hover:border-white/20 hover:text-white'
                       }`}
                     >
-                      {t.shortLabel}
+                      {a.shortLabel}
                       <span className="text-[10px] text-zinc-500">{c}</span>
                     </button>
                   );
@@ -128,12 +133,12 @@ export default function TradeFilteredPermits({ permits }: { permits: Permit[] })
           })}
         </div>
 
-        {selectedTrade && (
+        {selectedAudience && (
           <div className="mt-4 border-t border-white/5 pt-3">
-            <p className="text-[12px] text-zinc-300">{selectedTrade.vendorDescription}</p>
+            <p className="text-[12px] text-zinc-300">{selectedAudience.buyerDescription}</p>
             <p className="mt-1 text-[11.5px] text-zinc-500">
-              <span className="font-medium text-amber-300/80">Why now:</span>{' '}
-              {selectedTrade.pitchAngle}
+              <span className="font-medium text-amber-300/80">Why this matters:</span>{' '}
+              {selectedAudience.signalAngle}
             </p>
           </div>
         )}
@@ -143,16 +148,16 @@ export default function TradeFilteredPermits({ permits }: { permits: Permit[] })
       {filtered.length === 0 ? (
         <div className="rounded-lg border border-white/10 bg-white/[0.02] p-8 text-center">
           <p className="text-[14px] text-zinc-300">
-            No permits in the last 14 days match the {selectedTrade?.label} filter.
+            No permits in the last 14 days match the {selectedAudience?.label} filter.
           </p>
           <p className="mt-1 text-[12px] text-zinc-500">
-            This trade waits on bigger or different work — check back next week or pick another trade above.
+            This audience tracks larger or different work — check back next week or pick another audience above.
           </p>
         </div>
       ) : (
         <div className="space-y-3">
           {filtered.map((p) => (
-            <PermitCard key={p.caseId} permit={p} trade={selectedTrade} />
+            <PermitCard key={p.caseId} permit={p} audience={selectedAudience} />
           ))}
         </div>
       )}
@@ -160,23 +165,24 @@ export default function TradeFilteredPermits({ permits }: { permits: Permit[] })
   );
 }
 
-function PermitCard({ permit: p, trade }: { permit: Permit; trade: Trade | null }) {
+function PermitCard({ permit: p, audience }: { permit: Permit; audience: Audience | null }) {
   const [showEmail, setShowEmail] = useState(false);
-  const primary = pickPrimaryContact(p.contacts);
+  const primary = pickPrimaryContact(p.contacts, audience?.primaryContactRole);
   const tier = tierForType(p.type);
 
-  // Compute why-now date when trade is selected
-  const whyNowDate = trade
-    ? new Date(new Date(p.appliedDate).getTime() + trade.whyNowWeek * 7 * 24 * 3600 * 1000)
+  // Compute why-now date when audience is selected
+  const whyNowDate = audience
+    ? new Date(new Date(p.appliedDate).getTime() + audience.whyNowWeek * 7 * 24 * 3600 * 1000)
     : null;
 
-  // Render outreach email if trade selected
-  const outreach = trade
-    ? renderOutreachEmail(trade, {
+  // Render outreach email if audience selected
+  const outreach = audience
+    ? renderOutreachEmail(audience, {
         type: p.type,
         address: p.address,
         appliedDate: p.appliedDate,
         firstName: primary?.firstName,
+        valuation: p.valuation,
       })
     : null;
 
@@ -187,6 +193,11 @@ function PermitCard({ permit: p, trade }: { permit: Permit; trade: Trade | null 
           <div className="flex items-center gap-2 text-[10.5px] uppercase tracking-[0.14em]">
             <TierBadge tier={tier} />
             <span className="text-zinc-500">{p.type}</span>
+            {p.valuation && p.valuation > 0 && (
+              <span className="ml-auto rounded-sm border border-emerald-400/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-300">
+                {formatMoney(p.valuation)}
+              </span>
+            )}
           </div>
           <h2 className="mt-2 text-[19px] font-semibold tracking-[-0.015em] text-white">
             {p.address}
@@ -213,16 +224,18 @@ function PermitCard({ permit: p, trade }: { permit: Permit; trade: Trade | null 
             <span className="text-zinc-500">{p.status}</span>
           </div>
 
-          {trade && whyNowDate && (
+          {audience && whyNowDate && (
             <div className="mt-4 inline-flex items-center gap-2 rounded-md border border-amber-400/25 bg-amber-500/[0.06] px-2.5 py-1.5">
               <svg className="h-3.5 w-3.5 text-amber-300/90" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="8" cy="8" r="6.5" />
                 <path d="M8 4.5V8l2.25 1.5" />
               </svg>
               <span className="text-[11.5px] text-amber-100/95">
-                <span className="font-semibold">{trade.shortLabel} contact window:</span>{' '}
-                {trade.whyNowLabel} · target send by{' '}
-                <span className="font-mono text-amber-200">{formatDate(whyNowDate.toISOString())}</span>
+                <span className="font-semibold">{audience.shortLabel} contact window:</span>{' '}
+                {audience.whyNowLabel} · target send by{' '}
+                <span className="font-mono text-amber-200">
+                  {formatDate(whyNowDate.toISOString())}
+                </span>
               </span>
             </div>
           )}
@@ -230,7 +243,7 @@ function PermitCard({ permit: p, trade }: { permit: Permit; trade: Trade | null 
 
         <div className="lg:border-l lg:border-white/10 lg:pl-5">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
-            Decision-maker contact
+            Sponsor / decision-maker
           </p>
           {primary ? (
             <div className="mt-2">
@@ -284,8 +297,8 @@ function PermitCard({ permit: p, trade }: { permit: Permit; trade: Trade | null 
         </div>
       </div>
 
-      {/* Per-trade outreach draft (only shown when a trade is selected) */}
-      {trade && outreach && primary?.email && (
+      {/* Per-audience outreach draft (only shown when an audience is selected) */}
+      {audience && outreach && primary?.email && (
         <div className="mt-4 border-t border-white/10 pt-4">
           <button
             type="button"
@@ -297,7 +310,7 @@ function PermitCard({ permit: p, trade }: { permit: Permit; trade: Trade | null 
                 <rect x="2" y="3" width="12" height="10" rx="1" />
                 <path d="M2 5l6 4 6-4" />
               </svg>
-              Sample outreach email — {trade.shortLabel}
+              Sample outreach email — {audience.shortLabel}
             </span>
             <span className="text-[11px] text-zinc-500">{showEmail ? 'Hide' : 'Show'}</span>
           </button>
@@ -322,7 +335,7 @@ function PermitCard({ permit: p, trade }: { permit: Permit; trade: Trade | null 
                   Copy to clipboard
                 </button>
                 <span className="text-[11px] text-zinc-500">
-                  Tailored to {trade.shortLabel} · personalize before sending
+                  Tailored to {audience.shortLabel} · personalize before sending
                 </span>
               </div>
             </div>
@@ -345,10 +358,20 @@ function formatPhone(p: string | null) {
     return `(${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
   return p;
 }
-function pickPrimaryContact(contacts: Contact[]): Contact | null {
+function formatMoney(n: number): string {
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `$${Math.round(n / 1_000)}K`;
+  return `$${n}`;
+}
+function pickPrimaryContact(contacts: Contact[], preferredRole?: 'Applicant' | 'Contractor'): Contact | null {
   const byRole = (role: string) =>
     contacts.find((c) => c.role?.toLowerCase() === role.toLowerCase() && (c.email || c.phone));
-  return byRole('Contractor') || byRole('Applicant') || contacts.find((c) => c.email || c.phone) || contacts[0] || null;
+  if (preferredRole) {
+    const preferred = byRole(preferredRole);
+    if (preferred) return preferred;
+  }
+  // Fallback chain: Applicant > Contractor > anyone-with-contact
+  return byRole('Applicant') || byRole('Contractor') || contacts.find((c) => c.email || c.phone) || contacts[0] || null;
 }
 
 function TierBadge({ tier }: { tier: 'commercial' | 'residential' | 'other' }) {

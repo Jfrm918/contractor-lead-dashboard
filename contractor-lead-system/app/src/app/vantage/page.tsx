@@ -117,12 +117,13 @@ function Hero() {
             </div>
 
             <h1 className="mt-6 max-w-xl text-balance text-5xl font-semibold tracking-[-0.03em] text-white sm:text-[64px] sm:leading-[1.05]">
-              Know which projects broke ground this week.
+              The deal signal for Tulsa commercial real estate.
             </h1>
             <p className="mt-6 max-w-lg text-[17px] leading-[1.6] text-zinc-300/90">
-              Vantage delivers a verified weekly feed of every commercial, industrial, and
-              multi-family construction permit in your metros — with general contractor, project
-              value, and direct contact information already attached.
+              Vantage tracks every commercial construction permit in Tulsa daily — with sponsor
+              name, project value, and direct contact already attached. Lenders see construction
+              loan and refi opportunities. Title companies see future closings. Brokers see
+              tenant-rep and investment plays. One feed, four audiences.
             </p>
 
             <form className="mt-10 flex max-w-md flex-col gap-3 sm:flex-row" id="cta-top">
@@ -241,10 +242,10 @@ function Buyers() {
         <div className="mx-auto max-w-6xl px-6 py-12">
           <Eyebrow>Built for</Eyebrow>
           <div className="mt-5 grid gap-x-10 gap-y-3 text-[15px] text-zinc-300/90 sm:grid-cols-2 lg:grid-cols-4">
-            <div>Material reps & distributors</div>
-            <div>Subcontractors (HVAC, insulation, roofing)</div>
-            <div>Construction lenders & insurers</div>
-            <div>Commercial real estate brokers</div>
+            <div>Commercial lenders &amp; private credit</div>
+            <div>Title &amp; closing companies</div>
+            <div>CRE brokers (tenant + landlord rep)</div>
+            <div>Active developers &amp; investors</div>
           </div>
         </div>
       </FadeUp>
@@ -256,14 +257,14 @@ function Buyers() {
 function Features() {
   const features = [
     {
-      title: 'Verified contact data',
+      title: 'Verified sponsor contacts',
       body:
-        "Every permit ships with the GC project manager, email, and direct phone. Verified weekly against public registries and bounce-tested before delivery.",
+        "Every permit ships with the project sponsor (the borrower / owner / developer), email, and direct phone — pulled from the city's official applicant record. Bounce-tested before delivery.",
     },
     {
       title: 'Project enrichment',
       body:
-        "Square footage, estimated budget range, project type, and the GC's 90-day permit history — pulled from public records and standardized.",
+        "Square footage, estimated valuation, project type, parcel ID, and contractor on file — straight from the city's permit record, ready to drop into your CRM or underwriting workflow.",
     },
     {
       title: 'CRM-ready delivery',
@@ -533,7 +534,7 @@ function Pricing() {
     {
       name: 'Growth',
       price: 299,
-      blurb: 'For sales teams and small distributors.',
+      blurb: 'For solo brokers and small title teams.',
       features: [
         '3 metros',
         'Weekly digest + portal access',
@@ -655,7 +656,7 @@ function FAQ() {
     },
     {
       q: 'How accurate are the contacts?',
-      a: 'Every email is bounce-tested before delivery. We re-verify GC project manager assignments weekly against public registries. If a contact bounces, we replace it and notify you.',
+      a: 'Every email is bounce-tested before delivery. We re-verify sponsor contacts weekly against public records (city applicant filings + secretary-of-state entity lookups). If a contact bounces, we replace it and notify you.',
     },
     {
       q: 'Can I get a sample before I sign up?',

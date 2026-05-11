@@ -254,7 +254,7 @@ function Highlights() {
 
             <div className="grid gap-6 px-5 py-5 sm:grid-cols-2">
               <dl className="space-y-3 text-sm">
-                <Field label="General contractor" value={c.gc} />
+                <Field label="Builder on file" value={c.gc} />
                 <Field label="Filed" value={c.filed} />
                 <Field label="Estimated value" value={c.value} bold />
               </dl>

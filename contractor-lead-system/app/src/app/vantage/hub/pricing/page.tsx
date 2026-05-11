@@ -42,7 +42,7 @@ function Header() {
         Pricing rationale · internal
       </p>
       <h1 className="mt-2 text-balance text-4xl font-semibold tracking-[-0.03em] text-white sm:text-[44px]">
-        Why $149 / $299 / $499.
+        Why $299 / $499 / $999.
       </h1>
       <p className="mt-3 max-w-3xl text-[15px] leading-[1.6] text-zinc-300/85">
         Every number on this page is tagged{' '}
@@ -76,22 +76,22 @@ function Tiers() {
         {[
           {
             name: 'Starter',
-            price: '$149',
-            buyer: 'Solo rep / 1-truck sub',
-            includes: ['1 metro', 'Weekly digest', '~50 permits/wk', 'CSV export'],
+            price: '$299',
+            buyer: 'Solo broker / new lender / 1-person title office',
+            includes: ['Tulsa metro', 'Weekly digest', '~50 permits/wk', 'Sponsor contacts', 'CSV export'],
           },
           {
             name: 'Growth',
-            price: '$299',
-            buyer: 'Small sales team / regional distributor',
-            includes: ['3 metros', 'Portal access', '~200 permits/wk', 'CRM webhook', 'Custom alerts'],
+            price: '$499',
+            buyer: '2-10 person team — lender, title agency, or brokerage',
+            includes: ['Tulsa + 1 metro', 'Portal access', '~200 permits/wk', 'CRM webhook', 'Custom alerts on $1M+ projects'],
             featured: true,
           },
           {
             name: 'Pro',
-            price: '$499',
-            buyer: 'Multi-region operator / large sub',
-            includes: ['Unlimited metros', 'API access', 'Unlimited permits', 'Onboarding', 'Priority support'],
+            price: '$999',
+            buyer: 'Multi-office firm or large brokerage / lending team',
+            includes: ['Up to 5 metros', 'API access', 'Unlimited permits', 'Multi-user', 'Onboarding + priority support'],
           },
         ].map((t) => (
           <div
@@ -143,28 +143,28 @@ function ROICalc() {
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         <ROICard
-          who="Insulation sub"
-          example="Wins 1 commercial job from a Monday digest"
-          revenue="$50K – $100K"
-          margin="$10K – $20K"
-          source="Industry benchmark: insulation 2–4% of commercial project value, ~20% gross margin (NIA / ABC industry data)"
-          payback="Starter ($149/mo) pays back in <2 weeks; gives 3–4 years of subscription off one win"
+          who="Commercial lender"
+          example="Originates 1 construction-to-perm loan from a Vantage signal"
+          revenue="$2M – $10M loan"
+          margin="$20K – $100K (origination fees + interest spread)"
+          source="Standard commercial construction loan origination fees: 0.5–1% + spread"
+          payback="Growth ($499/mo) recovered <1 month on a single $2M+ loan; pays for itself ~50× annually"
         />
         <ROICard
-          who="Material rep"
-          example="Closes 1 quote on $500K in materials"
-          revenue="$500K supply order"
-          margin="$25K – $40K commission"
-          source="Industry standard rep commission 5–8% on materials"
-          payback="Pro ($499/mo) recovered in <2 weeks; subscription pays for itself ~50× annually on a single deal"
+          who="Title & closing"
+          example="Lands 1 commercial closing per month from sponsor relationships"
+          revenue="$1.5K – $4K per commercial closing (premium + fees)"
+          margin="$1K – $3K per closing"
+          source="ALTA / industry standard commercial title premium + closing fee schedules"
+          payback="Starter ($299/mo) covered after the first closing; Growth covered after 2"
         />
         <ROICard
           who="CRE broker"
-          example="Originates 1 commercial sale or lease referral"
-          revenue="$60K+ commission typical"
-          margin="$60K (broker share)"
+          example="Wins 1 leasing or investment-sale assignment from sponsor outreach"
+          revenue="$30K – $100K+ commission"
+          margin="$15K – $60K (broker split)"
           source="NAR / commercial brokerage standard 3–6% commission split"
-          payback="Growth ($299/mo) covered for ~17 years on one referral"
+          payback="Pro ($999/mo) covered ~30× annually on a single closed assignment"
         />
       </div>
 
@@ -349,7 +349,7 @@ function SegmentationThesis() {
         />
         <Tier
           name="$299 — Growth (most popular)"
-          who="2–10 person sales team, regional distributor, GC tracking multiple metros"
+          who="2-10 person team — lender, title agency, or brokerage tracking deals across Tulsa metro"
           why="The 'real value' tier. CRM webhook is the unlock — at this price the customer expects the data to flow into their existing pipeline. Most popular because it matches the operator who's serious enough to have a CRM but small enough to feel $499."
         />
         <Tier
