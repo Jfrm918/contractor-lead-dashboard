@@ -9,6 +9,7 @@ A Node-only, heuristic scoring engine that turns a business URL into a "how badl
 - `score-site.mjs` — the engine. One URL → JSON score breakdown.
 - `generate-demo-screenshot.mjs` — Madison outreach demo generator. Prospect → PNG concept mock + state entry.
 - `greencountry-followups.mjs` — Day 7 / Day 14 cadence checker and state updater for Madison replies.
+- `greencountry-triage-reply.mjs` — reply classifier + outreach state updater for hot/cold responses.
 
 ## CLI
 
@@ -42,6 +43,11 @@ node greencountry-followups.mjs add \
 node greencountry-followups.mjs sent --id <prospect_id> --stage day7
 node greencountry-followups.mjs skip --id <prospect_id> --reason "bad fit"
 node greencountry-followups.mjs reply --id <prospect_id> --status live
+
+# triage a prospect reply and update outreach status
+node greencountry-triage-reply.mjs \
+  --name "VR Electric" \
+  --text "Sounds good, send me pricing and a time to talk."
 ```
 
 ## Rubric (mirrors `/pipeline` page)

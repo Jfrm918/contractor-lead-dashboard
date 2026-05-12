@@ -34,6 +34,7 @@
 
 ## 4. Recent decisions (last 10, newest first — older roll off)
 
+- 2026-05-11 20:22 — **Green Country Task 3 shipped: reply triage MVP.** Added `marquee-studio/scripts/greencountry-triage-reply.mjs`; classifies interested / not_interested / wrong_person / needs_info / spam, updates `greencountry-outreach.json`, and prints a Telegram-ready hot-reply alert. Open upgrade: swap deterministic keyword rules for Claude classification once a reply inbox/thread is chosen.
 - 2026-05-11 20:18 — **Green Country: two strategic decisions locked.** (1) **Monthly recurring revenue tier added:** $150/mo maintenance + hosting + GBP management + 1 round of small edits. Goal is to convert ~50% of build clients into recurring. By month 12: 5 retained × $150 = $9k/yr stack on top of build revenue; by month 24 the recurring base starts beating one-time. (2) **Madison = sole face of the company.** Brand stays "Green Country Web Co." (agency wrapper, separable asset), but every customer-facing surface is Madison-voice: outreach, social, hub footer, replies, closing calls. Jason joins calls only on technical escalation. Athena stays invisible. All hub copy + email templates need re-voicing.
 - 2026-05-11 20:18 — **Green Country Task 2 shipped: follow-up cadence enforcement.** Added `marquee-studio/scripts/greencountry-followups.mjs`; initialized `~/.hermes/state/greencountry-outreach.json` as empty; verified Day 7 due detection with a temp VR Electric record. Madison/Jason use `due`, `add`, `sent`, `skip`, and `reply` commands until Telegram ack wiring is added.
 - 2026-05-11 20:15 — **Green Country Task 1 MVP shipped: demo screenshot generation.** Added `marquee-studio/scripts/generate-demo-screenshot.mjs`; generated `demos/vr-electric-tulsa.png`; wrote `~/.hermes/state/greencountry-demo-screenshots.json` so Madison/Athena can find demo PNGs. True hosted image-gen is blocked until an image backend key is available (`FAL_KEY` missing in this cron env), so current method is a local concept renderer using the same option-b prompt.
@@ -43,7 +44,6 @@
 - 2026-05-11 11:55 — **Athena cleaned contractor-lead-system/app lint 166→0.** Categories: 136 `react/no-unescaped-entities` (scripted via positional ESLint JSON output), 14 unused imports/vars (mechanical), 1 `require()` → top-level import in `twilio-verify.ts`, 5 `prefer-const` (auto-fix), 10 `react-hooks/set-state-in-effect` disabled per-line with intent comments (SSR-safe localStorage hydration, hover/motion media-query feature detection, demo-URL routing, polling fetch). No logic changed.
 - 2026-05-10 22:18 — **Marquee Studio renamed to Green Country Web Co.** (regional brand — "Green Country" is NE Oklahoma's nickname). Tier names also renamed: Marquee/Marquee+ → Main Street/Main Street+. Hub repo path still `marquee-studio/` (folder rename deferred). All page copy + nav + contract + memory updated.
 - 2026-05-10 21:50 — **NEW PROJECT: Green Country Web Co.** (originally named Marquee). Jason's 4th income stream alongside FoamDial, Vantage/Apex, Kalshi. Side-income freelance web design for Tulsa-area local businesses. **Argus role:** twice-daily scrape of local biz directories (Yelp, Maps, BBB) → site-quality scoring (mobile + desktop) → top 5 candidates per scan to Telegram. **Madison:** outreach voice + cadence. **Jason:** closes. **Athena:** builds in Webflow + handoff. Pricing $1.5K-$3.5K one-time. Clean walk-away (client owns domain/host/email). **ARGUS — REVIEW REQUESTED:** see `marquee-studio/` hub + section 7 below for what we want from you.
-- 2026-05-10 21:55 — **Jason un-paused FoamDial Job Sites.** Reversing the 21:25 pause. Still confirming with him whether to resume work tonight or just remove from parked list.
 
 ---
 
@@ -92,8 +92,8 @@ Track who got Day 0 / Day 7 / Day 14 emails. **Shipped today:** `scripts/greenco
 - **How Madison closes the loop:** replies to the Telegram with "sent X" or "skip X" — Argus updates state accordingly (same Telegram-ack pattern as Kalshi journal)
 - **Edge:** if a prospect replies in between, status flips to "live" and follow-up halts
 
-### Task 3 — Reply triage
-When a prospect replies, classify (interested / not interested / wrong person / needs info / spam) and surface hot ones to Telegram instantly. Keeps Madison's time on live threads, not on sorting noise.
+### Task 3 — Reply triage — **MVP shipped 2026-05-11 20:22**
+When a prospect replies, classify (interested / not interested / wrong person / needs info / spam) and surface hot ones to Telegram instantly. **Shipped today:** `scripts/greencountry-triage-reply.mjs` accepts pasted text or a reply file, classifies into the five categories, updates `greencountry-outreach.json`, and prints a Telegram-ready alert. **Open upgrade:** choose inbox vs Telegram thread and replace keyword rules with Claude classification.
 
 - **Input source:** Madison forwards replies to a dedicated inbox, OR pastes into a Telegram thread Argus watches. **Argus picks the easier-to-build channel.**
 - **Process:** Claude classification prompt with five categories above; output category + 1-line summary + suggested next action
