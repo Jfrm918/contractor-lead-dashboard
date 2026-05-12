@@ -22,7 +22,8 @@
 
 - foam-dial-pro → https://foamdial.vercel.app (Vercel, deploy via `vercel --prod --yes` from project root)
 - vantage / contractor-lead-system → https://apexdataco.vercel.app/vantage (same)
-- Both share one Neon Postgres DATABASE_URL
+- **green-country-web → https://green-country-web-jfrm918s-projects.vercel.app** (permanent production alias, SSO protection disabled 2026-05-11 21:15, updates every deploy. Hub `noindex` keeps it out of search.)
+- All share one Neon Postgres DATABASE_URL
 
 ---
 
