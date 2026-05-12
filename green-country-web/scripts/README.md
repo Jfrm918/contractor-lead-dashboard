@@ -69,7 +69,7 @@ Argus's job is to feed URLs in and surface the top scorers. Suggested call shape
 
 ```bash
 # In Argus's scan loop
-node ~/.openclaw/workspace/marquee-studio/scripts/score-site.mjs --batch scraped.txt > scored.jsonl
+node ~/.openclaw/workspace/green-country-web/scripts/score-site.mjs --batch scraped.txt > scored.jsonl
 
 # Then sort by score, take top 5, format for Telegram digest
 jq -s 'sort_by(-.score) | .[:5]' scored.jsonl
