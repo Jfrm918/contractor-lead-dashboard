@@ -34,6 +34,7 @@
 
 ## 4. Recent decisions (last 10, newest first — older roll off)
 
+- 2026-05-11 20:18 — **Green Country: two strategic decisions locked.** (1) **Monthly recurring revenue tier added:** $150/mo maintenance + hosting + GBP management + 1 round of small edits. Goal is to convert ~50% of build clients into recurring. By month 12: 5 retained × $150 = $9k/yr stack on top of build revenue; by month 24 the recurring base starts beating one-time. (2) **Madison = sole face of the company.** Brand stays "Green Country Web Co." (agency wrapper, separable asset), but every customer-facing surface is Madison-voice: outreach, social, hub footer, replies, closing calls. Jason joins calls only on technical escalation. Athena stays invisible. All hub copy + email templates need re-voicing.
 - 2026-05-11 20:15 — **Green Country Task 1 MVP shipped: demo screenshot generation.** Added `marquee-studio/scripts/generate-demo-screenshot.mjs`; generated `demos/vr-electric-tulsa.png`; wrote `~/.hermes/state/greencountry-demo-screenshots.json` so Madison/Athena can find demo PNGs. True hosted image-gen is blocked until an image backend key is available (`FAL_KEY` missing in this cron env), so current method is a local concept renderer using the same option-b prompt.
 - 2026-05-11 19:42 — **Green Country: Argus task spec locked, building starts.** Three tasks ranked by impact: (1) demo screenshot generation, (2) follow-up cadence enforcement, (3) reply triage. Jason approved ~$30/month vision budget for task 1. Sections 4/5 defer until first paid build. Spec in §7. Athena's open work: `looks_dated` signal, wire `/pipeline` to live state, build email-draft step.
 - 2026-05-11 19:18 — **Green Country: hub deployed, scoring engine built + validated, Argus handoff spec written.** Hub at `marquee-studio-on5s2rtrq-jfrm918s-projects.vercel.app`. `scripts/score-site.mjs` is a Node-only batch scorer (no headless browser, runs in seconds for 55 URLs). Validation against 55 real Tulsa-area trade sites revealed the rubric needs a `looks_dated` AI vision signal — 76% of sites pass all 6 hard checks. Argus integration: `node scripts/score-site.mjs --batch urls.txt`. Project source still untracked in workspace repo (same as foam-dial-pro — Jason's call).
@@ -43,7 +44,6 @@
 - 2026-05-10 21:50 — **NEW PROJECT: Green Country Web Co.** (originally named Marquee). Jason's 4th income stream alongside FoamDial, Vantage/Apex, Kalshi. Side-income freelance web design for Tulsa-area local businesses. **Argus role:** twice-daily scrape of local biz directories (Yelp, Maps, BBB) → site-quality scoring (mobile + desktop) → top 5 candidates per scan to Telegram. **Madison:** outreach voice + cadence. **Jason:** closes. **Athena:** builds in Webflow + handoff. Pricing $1.5K-$3.5K one-time. Clean walk-away (client owns domain/host/email). **ARGUS — REVIEW REQUESTED:** see `marquee-studio/` hub + section 7 below for what we want from you.
 - 2026-05-10 21:55 — **Jason un-paused FoamDial Job Sites.** Reversing the 21:25 pause. Still confirming with him whether to resume work tonight or just remove from parked list.
 - 2026-05-10 21:24 — **Athena improved Kalshi alert readability** (`9cf4b7b`): Argus alerts/digests now show Kalshi-style % first with cents in parentheses, e.g. `23% (23¢)`.
-- 2026-05-10 21:20 — **Argus cleared his active WIP claim.** Kalshi C0→C2 is committed; remaining A3/A4 weekly retro + C4 ack-rate auto-tune are queued for tomorrow/cap reset, not active tonight.
 
 ---
 
@@ -51,6 +51,7 @@
 
 - **[2026-05-11 19:05] foam-dial-pro lint CLEAN (uncommitted).** Athena cleared all 11 warnings on disk (3 unused disable directives auto-fixed, 4 unused imports/vars, 1 useMemo dep removed, 3 `<img>` disabled per-line for user-uploaded photos). Build + typecheck + lint pass. **NOT COMMITTED** — foam-dial-pro source is not tracked in the workspace repo; awaiting Jason's decision whether to import the project into the monorepo.
 - **[2026-05-11 11:55] contractor-lead-system/app lint CLEAN.** Athena cleared all 166 problems (136 unescaped entities scripted, 14 unused imports/vars, 1 require()→import, 10 set-state-in-effect disabled per-line with intent comments). Build + typecheck still pass.
+- **[2026-05-11 20:15] Green Country Task 1 blocked on FAL_KEY.** Argus's `generate-demo-screenshot.mjs` works in concept-renderer fallback mode but real hosted image-gen needs an API key. **Options for Jason:** (a) set `FAL_KEY` env var ($0.04 per image at fal.ai), (b) switch to Anthropic/OpenAI image-gen, (c) use local stable-diffusion already wired via `mcp__stable-diffusion__generate_image` (Athena has access). Athena's pick: (c) — already paid-for, no key needed.
 
 ---
 
@@ -111,6 +112,35 @@ When a prospect replies, classify (interested / not interested / wrong person / 
 ### Open Athena work
 - Add `looks_dated` AI vision signal to `score-site.mjs` (60¢/month at scale, gets discrimination in the 0-30 bucket where 76% of prospects currently cluster).
 - Wire the hub's `/pipeline` page counts to read from `greencountry-outreach.json` so it shows real state, not zeros.
-- Build the email-draft step Madison runs (renders the demo screenshot + per-prospect signals into a copy-paste-ready email).
+- Build the email-draft step Madison runs (renders the demo screenshot + per-prospect signals into a copy-paste-ready email). **Re-voice for Madison-as-sole-face** (see §8 decision).
+- Add new $150/mo **Care Plan** tier to hub `/pricing` page. Listed as add-on to any Main Street/Main Street+ build. Includes: hosting, GBP management, 1 round of small edits/mo, uptime monitoring. Goal: 50% attach rate.
+- Sweep hub copy (`/`, `/pricing`, `/process`, `/discovery`, `/contract`, `/handoff`, `/roles`) to Madison-first voice. Drop any reference to "the team" / "we" that implies Jason or Athena are customer-facing. "Madison + studio" framing.
+
+### Athena image-gen unblock for Argus
+Athena has `mcp__stable-diffusion__generate_image` available (SDXL Turbo, local Apple Silicon, no API key). Faster path than FAL: refactor `generate-demo-screenshot.mjs` so option (b) calls a local stable-diffusion endpoint Athena exposes, or Athena pre-generates the day's demo batch ahead of Madison's send window. Decide approach after Jason confirms FAL_KEY path vs MCP path.
 
 **Argus — if anything in this spec is wrong or undercooked, push back in section 4. Otherwise ship.**
+
+---
+
+## 8. Green Country — durable brand & pricing decisions (Jason-approved 2026-05-11 20:18)
+
+These are directional choices that should NOT roll off section 4. Read these every Green Country session.
+
+### Brand framing: agency wrapper, single face
+- **Public face = Madison.** All cold outreach, social, replies, closing calls. Hub footer and About are Madison-voice. Customers should believe Madison runs the company.
+- **Brand name stays "Green Country Web Co."** — never rename to include Madison's name. The brand is a separable asset (resellable, hireable-into, doesn't depend on one person).
+- **Jason = silent operator + technical escalation only.** Joins customer calls if a tech question lands; otherwise invisible.
+- **Athena = invisible build engine.** Never named in customer-facing surfaces. Madison is "the studio."
+- **All hub + email copy must reflect this.** No "the team," no "we" that implies a multi-person customer-facing crew. "Madison + studio" or first-person Madison.
+
+### Pricing: build + recurring stack
+- **One-time builds:** Main Street $1,500 / Main Street+ $3,500 (unchanged).
+- **NEW — Care Plan: $150/mo add-on.** Hosting, GBP management, 1 round of small edits per month, uptime monitoring. Offered at handoff. **Goal: 50% attach rate** on builds → $9k/yr stacked by month 12 from first cohort, beats one-time revenue by month 24.
+- **Future tiers (do not build yet):** Site Audit productized at $200-500 (low-friction entry → upsells to builds); vertical specialization (HVAC-only / Plumbing-only positioning) after first 3 paid builds prove demand.
+
+### Operational consequence
+- Email-draft step Madison runs (Athena open task) must default to Madison-first voice.
+- `/pricing` page needs Care Plan tier with attach-rate logic.
+- `/discovery` and `/handoff` need a Care Plan checkbox / pitch step.
+- Validation kill criterion unchanged: 0 builds + <5% reply rate after 25+ sends. **But add:** "of first 4 paid builds, does 1+ attach to Care Plan?" If 0/4 attach, recurring model is unviable and pricing rethinks.
