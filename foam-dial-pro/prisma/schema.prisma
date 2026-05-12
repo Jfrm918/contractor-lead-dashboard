@@ -1,0 +1,202 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model FoamCompany {
+  id        String   @id @default(uuid())
+  name      String
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     FoamUser[]
+  jobs      FoamJob[]
+  jobSites  FoamJobSite[]
+  equipment FoamEquipment[]
+}
+
+model FoamUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("installer")
+  location     String?
+  companyId    String
+  company      FoamCompany @relation(fields: [companyId], references: [id])
+  jobs         FoamJob[]
+  jobSites     FoamJobSite[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model FoamSystem {
+  id           String  @id @default(uuid())
+  manufacturer String
+  product      String
+  type         String
+  rValue       Float
+  yieldPerSet  Int
+  ratio        String  @default("1:1")
+  minTemp      Int
+  maxTemp      Int
+  substrates   Json    @default("[]")
+  notes        String?
+  isDefault    Boolean @default(false)
+  jobs         FoamJob[]
+  jobSites     FoamJobSite[]
+  createdAt    DateTime @default(now())
+}
+
+model FoamJobSite {
+  id            String   @id @default(uuid())
+  companyId     String
+  company       FoamCompany @relation(fields: [companyId], references: [id])
+  userId        String
+  user          FoamUser @relation(fields: [userId], references: [id])
+  name          String
+  address       String?
+  jobType       String?
+  substrate     String?
+  foamSystemId  String?
+  foamSystem    FoamSystem? @relation(fields: [foamSystemId], references: [id])
+  estimatedSets Float?
+  totalGallons  Float?
+  status        String   @default("in_progress")
+  notes         String?
+  dailyLogs     FoamJob[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+  @@index([companyId])
+  @@index([status])
+}
+
+model FoamJob {
+  id            String   @id @default(uuid())
+  companyId     String
+  company       FoamCompany @relation(fields: [companyId], references: [id])
+  userId        String
+  user          FoamUser @relation(fields: [userId], references: [id])
+  foamSystemId  String?
+  foamSystem    FoamSystem? @relation(fields: [foamSystemId], references: [id])
+  jobSiteId     String?
+  jobSite       FoamJobSite? @relation(fields: [jobSiteId], references: [id])
+
+  date          DateTime
+  location      String
+  substrate     String?
+
+  // Dual-log lifecycle: "in_progress" = morning logged but day not closed,
+  // "complete" = EOD section filled in. Old single-shot records were complete.
+  status         String    @default("in_progress")
+  morningLoggedAt DateTime?
+  eodLoggedAt    DateTime?
+
+  // Equipment context (was previously buried in notes)
+  chamberSize   Int?
+
+  setsUsed      Float?
+  boardFeet     Float?
+  squareFeet    Float?
+  thickness     Float?
+  gallonsASide  Float?
+  gallonsBSide  Float?
+  gallonsTotal  Float?
+  jobType       String?
+
+  ambientTemp   Float?
+  substrateTemp Float?
+  humidity      Float?
+  dewPoint      Float?
+
+  hoseTempA     Float?
+  hoseTempB     Float?
+  drumTempA     Float?
+  drumTempB     Float?
+  pressureA     Float?
+  pressureB     Float?
+
+  rating        Int?
+  problems      Json     @default("[]")
+  notes         String?
+  photos        Json     @default("[]")
+
+  yieldActual   Float?
+  yieldTarget   Float?
+  yieldVariance Float?
+
+  events        FoamJobEvent[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([companyId])
+  @@index([userId])
+  @@index([date])
+  @@index([jobSiteId])
+  @@index([status])
+}
+
+// Mid-day timestamped events on a job — temp changes, pressure changes,
+// problems encountered, freeform notes. Each one captures what happened,
+// when, and how the conditions shifted.
+model FoamJobEvent {
+  id        String   @id @default(uuid())
+  jobId     String
+  job       FoamJob  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  companyId String
+  userId    String
+
+  timestamp DateTime @default(now())
+  // "temp_change", "pressure_change", "problem", "note", "yield_observation"
+  eventType String
+  // Flexible per-event-type data, e.g.
+  //   {"channel": "drumA", "from": 136, "to": 134, "unit": "F"} for temp_change
+  //   {"channel": "A", "from": 1100, "to": 1030, "unit": "PSI"} for pressure_change
+  //   {"problem": "Chamber clogging", "chamberSize": 4747} for problem
+  payload   Json     @default("{}")
+  notes     String?
+
+  createdAt DateTime @default(now())
+
+  @@index([jobId, timestamp])
+  @@index([companyId])
+  @@index([eventType])
+}
+
+model FoamEquipment {
+  id          String   @id @default(uuid())
+  companyId   String
+  company     FoamCompany @relation(fields: [companyId], references: [id])
+  name        String
+  serialNum   String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FoamDiagnostic {
+  id        String   @id @default(uuid())
+  problem   String
+  category  String
+  severity  String
+  causes    Json     @default("[]")
+  fixes     Json     @default("[]")
+  createdAt DateTime @default(now())
+}
+
+model FoamChatMessage {
+  id        String   @id @default(uuid())
+  userId    String
+  role      String
+  content   String
+  context   Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
