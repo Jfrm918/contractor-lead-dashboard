@@ -34,6 +34,7 @@
 
 ## 4. Recent decisions (last 10, newest first — older roll off)
 
+- 2026-05-11 19:42 — **Green Country: Argus task spec locked, building starts.** Three tasks ranked by impact: (1) demo screenshot generation, (2) follow-up cadence enforcement, (3) reply triage. Jason approved ~$30/month vision budget for task 1. Sections 4/5 defer until first paid build. Spec in §7. Athena's open work: `looks_dated` signal, wire `/pipeline` to live state, build email-draft step.
 - 2026-05-11 19:18 — **Green Country: hub deployed, scoring engine built + validated, Argus handoff spec written.** Hub at `marquee-studio-on5s2rtrq-jfrm918s-projects.vercel.app`. `scripts/score-site.mjs` is a Node-only batch scorer (no headless browser, runs in seconds for 55 URLs). Validation against 55 real Tulsa-area trade sites revealed the rubric needs a `looks_dated` AI vision signal — 76% of sites pass all 6 hard checks. Argus integration: `node scripts/score-site.mjs --batch urls.txt`. Project source still untracked in workspace repo (same as foam-dial-pro — Jason's call).
 - 2026-05-11 19:05 — **Apex prod deployed + foam-dial-pro lint 11→0 (uncommitted).** Apex commit `41a4736` pushed to GitHub; `vercel --prod` produced `apexdata-99y2p2wnl-jfrm918s-projects.vercel.app` (Ready 40s). foam-dial-pro lint cleared on disk but **NOT committed** — project source has never been tracked in the workspace repo; pending Jason's decision.
 - 2026-05-11 11:55 — **Athena cleaned contractor-lead-system/app lint 166→0.** Categories: 136 `react/no-unescaped-entities` (scripted via positional ESLint JSON output), 14 unused imports/vars (mechanical), 1 `require()` → top-level import in `twilio-verify.ts`, 5 `prefer-const` (auto-fix), 10 `react-hooks/set-state-in-effect` disabled per-line with intent comments (SSR-safe localStorage hydration, hover/motion media-query feature detection, demo-URL routing, polling fetch). No logic changed.
@@ -42,7 +43,6 @@
 - 2026-05-10 21:55 — **Jason un-paused FoamDial Job Sites.** Reversing the 21:25 pause. Still confirming with him whether to resume work tonight or just remove from parked list.
 - 2026-05-10 21:24 — **Athena improved Kalshi alert readability** (`9cf4b7b`): Argus alerts/digests now show Kalshi-style % first with cents in parentheses, e.g. `23% (23¢)`.
 - 2026-05-10 21:20 — **Argus cleared his active WIP claim.** Kalshi C0→C2 is committed; remaining A3/A4 weekly retro + C4 ack-rate auto-tune are queued for tomorrow/cap reset, not active tonight. `~/.hermes/cron/jobs.json` has scheduler timestamp drift only.
-- 2026-05-10 21:17 — **Argus shipped Kalshi C2 work-hours digest mode** (`648d62f`): Mon-Fri 7-17 CT candidates queue to `kalshi-pending-digest.json`; end-hour digest emits top remaining, journals emitted items, dry-run no-write verified.
 - 2026-05-10 21:17 — **Argus hit 5 `[argus auto]` commits/24h cap** in `~/.hermes`; defer A3/A4 weekly retro + C4 ack-rate auto-tune until cap resets or Jason explicitly overrides.
 
 ---
@@ -64,17 +64,53 @@
 
 ---
 
-## 7. Marquee Studio — ARGUS REVIEW REQUEST (Athena, 2026-05-10 21:50)
+## 7. Green Country Web Co. — ARGUS TASK SPEC (Jason-approved 2026-05-11 19:41)
 
-**The ask:** I built the v0.1 internal hub at `~/.openclaw/workspace/marquee-studio/` (Next.js 16, Tailwind v4, liquid-glass design, 8 pages). Before Jason deploys it, would value your read on the operational/prospecting side — that's your lane.
+**Status:** Hub deployed (`marquee-studio-on5s2rtrq-jfrm918s-projects.vercel.app`). Scoring engine validated against 55 Tulsa prospects — works, but needs `looks_dated` AI vision signal added later. Original review request (5 questions) is closed: Jason decided to ship and Argus's role is now build-the-pipeline, not review-the-rubric.
 
-**Specifically:**
-1. **Prospecting source mix.** Hub assumes Yelp + Google Maps + BBB scrapes. Anything I'm missing for Tulsa-area trades/restaurants/services? (Nextdoor business listings? Chamber of commerce? County business license public data?)
-2. **Site-quality scoring rubric** (see `/pipeline` page). I proposed weights for mobile-broken (+30), no-SSL (+20), old-design (+15), no-CTA (+15), slow-load (+10), stock-photo overload (+10). You've built more scoring rubrics than I have — push back if these weights are off or if I'm missing a signal.
-3. **Cadence.** Twice-daily Argus scan, top 5 per scan. That's 70/week — far more than Madison can outreach (target: 25 sends/wk). Should I drop to once-daily, or keep 2× and let Madison cherry-pick?
-4. **Validation phase metrics.** I set: 30-day window, kill if 0 builds + reply rate <5% on 25+ sends. Fair? Or too aggressive / too lenient?
-5. **Demo mock automation.** I want a v2 where Argus generates an AI-rebuilt static screenshot of the prospect's site BEFORE outreach goes out. Feasible in your stack? Or is that better as an Athena-side Webflow + Playwright job?
+**Cadence assumption:** Madison sends 5 emails/day Mon-Fri = 25/wk. Validation kill criterion: 0 builds + <5% reply rate after 25+ sends.
 
-**Not asking you to write anything tonight** — drop thoughts in section 4 (Recent decisions) when you have cycles. No urgency, this is validation-phase not build-now.
+**Three Argus tasks, ranked by impact. Build in this order:**
 
-**Files to skim:** `marquee-studio/src/app/pipeline/page.tsx` (scoring + validation), `marquee-studio/src/app/roles/page.tsx` (your role spec). Hub will run at localhost:3000 once Athena boots dev; not deployed.
+### Task 1 — Demo screenshot generation (highest leverage)
+For each prospect on Madison's send-today list, generate an AI-rebuilt screenshot of what their site COULD look like, and store it where Madison can attach it to the outreach email. **Why first:** turns cold outreach reply rate from 1-5% into 10-20% by making the pitch concrete instead of abstract. This is the single biggest revenue lever.
+
+- **Input:** prospect URL (one at a time, or batch)
+- **Process options Argus picks:**
+  - (a) Playwright headless screenshot of current site → Claude vision prompt "Redesign this as a modern small-biz site preserving brand colors and business name" → render to HTML/CSS → screenshot the rebuild
+  - (b) Simpler: Stable Diffusion / DALL-E "modern professional small-business website for [trade] in [city], hero with [biz name]" — no current-site reference, just a clean concept
+  - **Athena's recommendation:** start with (b). Faster, cheaper, looks good enough for outreach. Upgrade to (a) once we have one paid build and want to invest in conversion.
+- **Output:** PNG saved to a known path (suggest `~/.openclaw/workspace/marquee-studio/demos/<slug>.png`), URL written to a state file so Madison's email-draft step knows where to grab it
+- **Budget:** ~$0.05-0.20 per prospect. At 5/day = max $1/day = $30/month. Approved.
+
+### Task 2 — Follow-up cadence enforcement
+Track who got Day 0 / Day 7 / Day 14 emails. Ping Madison via Telegram when follow-ups are due. Follow-ups recover 50-70% of the replies that initial emails miss — without this we leave half the revenue on the table.
+
+- **State store:** `~/.hermes/state/greencountry-outreach.json` (suggested shape: `[{prospect_id, name, url, day0_sent_at, day7_sent_at, day14_sent_at, status}]`)
+- **Trigger:** daily scheduled job at, say, 09:00 CT — scans state, finds prospects whose Day 7 or Day 14 send is due (or overdue), emits a Telegram message to Madison/Jason with the list
+- **How Madison closes the loop:** replies to the Telegram with "sent X" or "skip X" — Argus updates state accordingly (same Telegram-ack pattern as Kalshi journal)
+- **Edge:** if a prospect replies in between, status flips to "live" and follow-up halts
+
+### Task 3 — Reply triage
+When a prospect replies, classify (interested / not interested / wrong person / needs info / spam) and surface hot ones to Telegram instantly. Keeps Madison's time on live threads, not on sorting noise.
+
+- **Input source:** Madison forwards replies to a dedicated inbox, OR pastes into a Telegram thread Argus watches. **Argus picks the easier-to-build channel.**
+- **Process:** Claude classification prompt with five categories above; output category + 1-line summary + suggested next action
+- **Output:** Telegram alert formatted similar to Kalshi alerts (clear category, business name, summary, "next: book call" / "next: send pricing" / "next: ignore")
+- **State:** append to `greencountry-outreach.json`, update prospect status to "live" / "dead"
+
+### Deferred (for after first paid build)
+- **Task 4 (personalized openers):** scrape each prospect's site, pull years/services/pain signals, draft Madison-voice opener. Defer until we know which opener angle gets replies — no point automating the wrong template.
+- **Task 5 (what's-working journaling):** track subject-line / opener / vertical reply rates over time. Defer until week 4 when there's enough volume to analyze.
+
+### Contract with Athena
+- Athena owns: the hub UI, the scoring engine (`marquee-studio/scripts/score-site.mjs`), the Webflow builds themselves, the email draft template Madison edits before sending.
+- Argus owns: scraping, scoring batch runs, demo gen, follow-up cadence, reply triage, journaling.
+- Shared state files live under `~/.hermes/state/greencountry-*.json` (Argus writes, Athena reads via the hub).
+
+### Open Athena work
+- Add `looks_dated` AI vision signal to `score-site.mjs` (60¢/month at scale, gets discrimination in the 0-30 bucket where 76% of prospects currently cluster).
+- Wire the hub's `/pipeline` page counts to read from `greencountry-outreach.json` so it shows real state, not zeros.
+- Build the email-draft step Madison runs (renders the demo screenshot + per-prospect signals into a copy-paste-ready email).
+
+**Argus — if anything in this spec is wrong or undercooked, push back in section 4. Otherwise ship.**
