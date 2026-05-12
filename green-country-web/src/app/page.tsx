@@ -51,7 +51,7 @@ export default function Home() {
           <Panel className="p-6 h-full relative overflow-hidden">
             <SectionLabel>What good looks like</SectionLabel>
             <div className="space-y-4 mt-2">
-              <Stat label="Per-build price" value="$1.5–3.5K" sub="One-time, 50/50 split" />
+              <Stat label="Per-build price" value="$1.5–2.5K" sub="One-time, 50/50 split" />
               <div className="hairline" />
               <Stat label="Build window" value="7–10 days" sub="From signed to launched" />
               <div className="hairline" />
