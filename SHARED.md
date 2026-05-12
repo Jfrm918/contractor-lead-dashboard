@@ -34,6 +34,7 @@
 
 ## 4. Recent decisions (last 10, newest first — older roll off)
 
+- 2026-05-11 19:05 — **Apex prod deployed + foam-dial-pro lint 11→0 (uncommitted).** Apex commit `41a4736` pushed to GitHub; `vercel --prod` produced `apexdata-99y2p2wnl-jfrm918s-projects.vercel.app` (Ready 40s). foam-dial-pro lint cleared on disk but **NOT committed** — project source has never been tracked in the workspace repo; pending Jason's decision.
 - 2026-05-11 11:55 — **Athena cleaned contractor-lead-system/app lint 166→0.** Categories: 136 `react/no-unescaped-entities` (scripted via positional ESLint JSON output), 14 unused imports/vars (mechanical), 1 `require()` → top-level import in `twilio-verify.ts`, 5 `prefer-const` (auto-fix), 10 `react-hooks/set-state-in-effect` disabled per-line with intent comments (SSR-safe localStorage hydration, hover/motion media-query feature detection, demo-URL routing, polling fetch). No logic changed.
 - 2026-05-10 22:18 — **Marquee Studio renamed to Green Country Web Co.** (regional brand — "Green Country" is NE Oklahoma's nickname). Tier names also renamed: Marquee/Marquee+ → Main Street/Main Street+. Hub repo path still `marquee-studio/` (folder rename deferred). All page copy + nav + contract + memory updated.
 - 2026-05-10 21:50 — **NEW PROJECT: Green Country Web Co.** (originally named Marquee). Jason's 4th income stream alongside FoamDial, Vantage/Apex, Kalshi. Side-income freelance web design for Tulsa-area local businesses. **Argus role:** twice-daily scrape of local biz directories (Yelp, Maps, BBB) → site-quality scoring (mobile + desktop) → top 5 candidates per scan to Telegram. **Madison:** outreach voice + cadence. **Jason:** closes. **Athena:** builds in Webflow + handoff. Pricing $1.5K-$3.5K one-time. Clean walk-away (client owns domain/host/email). **ARGUS — REVIEW REQUESTED:** see `marquee-studio/` hub + section 7 below for what we want from you.
@@ -43,13 +44,12 @@
 - 2026-05-10 21:17 — **Argus shipped Kalshi C2 work-hours digest mode** (`648d62f`): Mon-Fri 7-17 CT candidates queue to `kalshi-pending-digest.json`; end-hour digest emits top remaining, journals emitted items, dry-run no-write verified.
 - 2026-05-10 21:17 — **Argus hit 5 `[argus auto]` commits/24h cap** in `~/.hermes`; defer A3/A4 weekly retro + C4 ack-rate auto-tune until cap resets or Jason explicitly overrides.
 - 2026-05-10 21:05 — **Argus shipped Kalshi C1-C3 config+ack sweep** (`50df263`): defaults include work-hours/ack knobs; `kalshi-ack-sweep.py` runs every 30m no-agent.
-- 2026-05-10 21:03 — **Argus shipped Kalshi A1-A2 journal write-on-emit** (`a4e2f11`): emitted alerts append to `~/.hermes/state/kalshi-journal.json` with `ack_status=unseen`.
 
 ---
 
 ## 5. Open issues / known bugs (lowest-effort first)
 
-- **[2026-05-11 07:00] foam-dial-pro lint warnings remain:** build/typecheck pass; `npx eslint .` reports 11 warnings (unused imports/vars, unused disable comments, `<img>` optimization warnings, one hook dependency warning). Argus auto-fix skipped because `[argus auto]` 24h cap is already at 5.
+- **[2026-05-11 19:05] foam-dial-pro lint CLEAN (uncommitted).** Athena cleared all 11 warnings on disk (3 unused disable directives auto-fixed, 4 unused imports/vars, 1 useMemo dep removed, 3 `<img>` disabled per-line for user-uploaded photos). Build + typecheck + lint pass. **NOT COMMITTED** — foam-dial-pro source is not tracked in the workspace repo; awaiting Jason's decision whether to import the project into the monorepo.
 - **[2026-05-11 11:55] contractor-lead-system/app lint CLEAN.** Athena cleared all 166 problems (136 unescaped entities scripted, 14 unused imports/vars, 1 require()→import, 10 set-state-in-effect disabled per-line with intent comments). Build + typecheck still pass.
 
 ---
