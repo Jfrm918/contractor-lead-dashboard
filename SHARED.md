@@ -28,12 +28,13 @@
 
 ## 3. Work in flight (claim before starting; clear when done)
 
-- **[2026-05-10 21:50] Athena working on marquee-studio:hub build — eta tonight.** New project at `~/.openclaw/workspace/marquee-studio/`. Internal hub for Marquee Studio (local web design freelance, Tulsa-area trades, Webflow handoff model). Liquid-glass design, 8 pages (overview/pricing/process/roles/discovery/contract/handoff/pipeline). Not deployed yet — pending Jason's OK.
+- **[2026-05-11 19:18] Green Country hub deployed + scoring engine validated.** Hub live at `marquee-studio-on5s2rtrq-jfrm918s-projects.vercel.app`. Scoring engine at `marquee-studio/scripts/score-site.mjs` ran against 55 Tulsa prospects: 51/55 fetched, 39 scored 0-9, top prospect VR Electric @ 65. **Validation finding:** rubric is too coarse — needs a `looks_dated` AI vision signal to discriminate in the 0-30 bucket where most prospects cluster. See `marquee-studio/scripts/README.md` for Argus integration spec.
 
 ---
 
 ## 4. Recent decisions (last 10, newest first — older roll off)
 
+- 2026-05-11 19:18 — **Green Country: hub deployed, scoring engine built + validated, Argus handoff spec written.** Hub at `marquee-studio-on5s2rtrq-jfrm918s-projects.vercel.app`. `scripts/score-site.mjs` is a Node-only batch scorer (no headless browser, runs in seconds for 55 URLs). Validation against 55 real Tulsa-area trade sites revealed the rubric needs a `looks_dated` AI vision signal — 76% of sites pass all 6 hard checks. Argus integration: `node scripts/score-site.mjs --batch urls.txt`. Project source still untracked in workspace repo (same as foam-dial-pro — Jason's call).
 - 2026-05-11 19:05 — **Apex prod deployed + foam-dial-pro lint 11→0 (uncommitted).** Apex commit `41a4736` pushed to GitHub; `vercel --prod` produced `apexdata-99y2p2wnl-jfrm918s-projects.vercel.app` (Ready 40s). foam-dial-pro lint cleared on disk but **NOT committed** — project source has never been tracked in the workspace repo; pending Jason's decision.
 - 2026-05-11 11:55 — **Athena cleaned contractor-lead-system/app lint 166→0.** Categories: 136 `react/no-unescaped-entities` (scripted via positional ESLint JSON output), 14 unused imports/vars (mechanical), 1 `require()` → top-level import in `twilio-verify.ts`, 5 `prefer-const` (auto-fix), 10 `react-hooks/set-state-in-effect` disabled per-line with intent comments (SSR-safe localStorage hydration, hover/motion media-query feature detection, demo-URL routing, polling fetch). No logic changed.
 - 2026-05-10 22:18 — **Marquee Studio renamed to Green Country Web Co.** (regional brand — "Green Country" is NE Oklahoma's nickname). Tier names also renamed: Marquee/Marquee+ → Main Street/Main Street+. Hub repo path still `marquee-studio/` (folder rename deferred). All page copy + nav + contract + memory updated.
@@ -43,7 +44,6 @@
 - 2026-05-10 21:20 — **Argus cleared his active WIP claim.** Kalshi C0→C2 is committed; remaining A3/A4 weekly retro + C4 ack-rate auto-tune are queued for tomorrow/cap reset, not active tonight. `~/.hermes/cron/jobs.json` has scheduler timestamp drift only.
 - 2026-05-10 21:17 — **Argus shipped Kalshi C2 work-hours digest mode** (`648d62f`): Mon-Fri 7-17 CT candidates queue to `kalshi-pending-digest.json`; end-hour digest emits top remaining, journals emitted items, dry-run no-write verified.
 - 2026-05-10 21:17 — **Argus hit 5 `[argus auto]` commits/24h cap** in `~/.hermes`; defer A3/A4 weekly retro + C4 ack-rate auto-tune until cap resets or Jason explicitly overrides.
-- 2026-05-10 21:05 — **Argus shipped Kalshi C1-C3 config+ack sweep** (`50df263`): defaults include work-hours/ack knobs; `kalshi-ack-sweep.py` runs every 30m no-agent.
 
 ---
 
