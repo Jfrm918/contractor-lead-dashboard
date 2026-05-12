@@ -156,8 +156,24 @@ function main() {
   const prospects = loadProspects(args);
   const entries = [];
 
+  const existingState = readState(args.stateFile);
+  const existingById = new Map(existingState.map((e) => [e.prospect_id, e]));
+
   for (const prospect of prospects) {
     const pngPath = path.join(args.outputDir, `${prospect.slug}.png`);
+    // Skip rendering when a higher-quality demo already exists on disk.
+    // Athena pre-generates SDXL Turbo PNGs that the PIL fallback would regress.
+    const existing = existingById.get(prospect.prospect_id);
+    const isRealDemo = fs.existsSync(pngPath)
+      && existing
+      && existing.generation_method
+      && existing.generation_method !== 'local-concept-renderer';
+
+    if (isRealDemo) {
+      entries.push({ ...existing, status: 'ready_for_madison' });
+      continue;
+    }
+
     renderPng(prospect, pngPath);
     entries.push({
       prospect_id: prospect.prospect_id,
